@@ -4,6 +4,16 @@ schemas:
     properties:
       message:
         type: string
-        description: Error message
+        description: Error message for the developer
+        example: "User not found"
+      code:
+        type: string
+        description: i18n code
+        example: "errors.user_not_found"
+      params:
+        type: object
+        description: Parameters for the i18n code
+        additionalProperties: true
     required:
       - message
+      - code
