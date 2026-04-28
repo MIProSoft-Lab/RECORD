@@ -11,7 +11,7 @@ schemas:
         format: password
         example: "password123"
     required:
-      - user
+      - email
       - password
 
   RegisterRequest:
