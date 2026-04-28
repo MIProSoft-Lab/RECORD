@@ -1,0 +1,51 @@
+schemas:
+  LoginRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+        example: "user@example.com"
+      password:
+        type: string
+        format: password
+        example: "password123"
+    required:
+      - user
+      - password
+
+  RegisterRequest:
+    type: object
+    properties:
+      email:
+        type: string
+        format: email
+        example: "user@example.com"
+      firstName:
+        type: string
+        minLength: 2
+        example: "John"
+      lastName:
+        type: string
+        minLength: 2
+        example: "Doe"
+      password:
+        type: string
+        format: password
+        minLength: 8
+        example: "password123"
+    required:
+      - email
+      - firstName
+      - lastName
+      - password
+
+  AuthResponse:
+    type: object
+    properties:
+      token:
+        type: string
+        description: "JWT bearer token"
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    required:
+      - token

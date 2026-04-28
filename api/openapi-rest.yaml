@@ -1,0 +1,10 @@
+openapi: 3.0.3
+info:
+  title: REST API for RECORD
+  version: 1.0.0
+paths:
+  /auth/login:
+    $ref: "./auth/login.yaml"
+
+  /auth/register:
+    $ref: "./auth/register.yaml"

@@ -1,0 +1,31 @@
+post:
+  summary: Register a new user
+  operationId: register
+  tags:
+    - Auth
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/RegisterRequest"
+
+  responses:
+    "201":
+      description: User registered and logged in successfully
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/AuthResponse"
+    "400":
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "409":
+      description: Email already exists
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
