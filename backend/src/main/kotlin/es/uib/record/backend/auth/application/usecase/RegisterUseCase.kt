@@ -4,12 +4,11 @@ import es.uib.record.backend.auth.application.usecase.dto.AuthResponseDto
 import es.uib.record.backend.auth.application.usecase.dto.RegisterRequestDto
 import es.uib.record.backend.auth.domain.Token
 import es.uib.record.backend.auth.domain.TokenRepository
-import es.uib.record.backend.auth.infrastructure.persistence.TokenEntity
 import es.uib.record.backend.security.open.JwtService
 import es.uib.record.backend.users.open.UserFacade
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
-import java.util.UUID
+import java.util.*
 
 @Component
 class RegisterUseCase(
