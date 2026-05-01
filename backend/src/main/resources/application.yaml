@@ -1,3 +1,13 @@
 spring:
   application:
     name: backend
+  jpa:
+    hibernate:
+      ddl-auto: update
+application:
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET}
+      expiration: ${JWT_EXPIRATION}
+      refresh-token:
+        expiration: ${JWT_REFRESH_EXPIRATION}
