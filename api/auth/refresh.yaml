@@ -1,0 +1,25 @@
+post:
+  summary: Refresh an access token
+  operationId: refresh
+  tags:
+    - Auth
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/RefreshRequest"
+
+  responses:
+    "201":
+      description: Token refreshed successfully
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/AuthResponse"
+    "400":
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
