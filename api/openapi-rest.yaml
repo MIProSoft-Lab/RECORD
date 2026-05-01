@@ -8,3 +8,6 @@ paths:
 
   /auth/register:
     $ref: "./auth/register.yaml"
+
+  /auth/refresh:
+    $ref: "./auth/refresh.yaml"
