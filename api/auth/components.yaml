@@ -47,5 +47,20 @@ schemas:
         type: string
         description: "JWT bearer token"
         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      refreshToken:
+        type: string
+        description: "JWT refresh token"
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    required:
+      - token
+      - refreshToken
+
+  RefreshRequest:
+    type: object
+    properties:
+      token:
+        type: string
+        description: "JWT bearer token"
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     required:
       - token
