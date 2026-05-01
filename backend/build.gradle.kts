@@ -22,6 +22,7 @@ repositories {
 
 extra["springModulithVersion"] = "2.0.5"
 extra["springdocVersion"] = "2.8.17"
+extra["jjwtVersion"] = "0.12.5"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -33,11 +34,14 @@ dependencies {
 	implementation("org.springframework.modulith:spring-modulith-starter-jpa")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springdocVersion")}")
+	implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
 	runtimeOnly("org.postgresql:postgresql")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:${property("jjwtVersion")}")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${property("jjwtVersion")}")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
