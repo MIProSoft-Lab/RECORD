@@ -18,11 +18,11 @@ class RefreshUseCase(
     fun execute(refreshToken: String): AuthResponseDto {
         val email = this.jwtService.extractEmail(refreshToken)
 
-        val userId = this.userFacade.getUserIdByEmail(email)
-
-        if (!jwtService.isTokenValid(refreshToken)) {
+        if (email.isNullOrEmpty() || !jwtService.isTokenValid(refreshToken)) {
             throw InvalidRefreshTokenException()
         }
+
+        val userId = this.userFacade.getUserIdByEmail(email)
 
         val jwtToken = this.jwtService.generateToken(email)
         this.saveToken(jwtToken, userId)
