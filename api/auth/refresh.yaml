@@ -1,6 +1,7 @@
 post:
   summary: Refresh an access token
   operationId: refresh
+  security: []
   tags:
     - Auth
   requestBody:

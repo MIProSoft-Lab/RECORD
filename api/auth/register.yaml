@@ -1,6 +1,7 @@
 post:
   summary: Register a new user
   operationId: register
+  security: []
   tags:
     - Auth
   requestBody:

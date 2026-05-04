@@ -1,6 +1,7 @@
 post:
   summary: Login
   operationId: login
+  security: []
   tags:
     - Auth
   requestBody:
