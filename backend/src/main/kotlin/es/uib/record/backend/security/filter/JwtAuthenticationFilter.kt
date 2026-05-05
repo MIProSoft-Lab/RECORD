@@ -1,7 +1,8 @@
 package es.uib.record.backend.security.filter
 
-import es.uib.record.backend.auth.open.AuthFacade
 import es.uib.record.backend.security.open.JwtService
+import io.jsonwebtoken.ExpiredJwtException
+import io.jsonwebtoken.JwtException
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -17,7 +18,6 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtAuthenticationFilter(
     private val userDetailsService: UserDetailsService,
     private val jwtService: JwtService,
-    private val authFacade: AuthFacade
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
@@ -25,7 +25,8 @@ class JwtAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        if (request.servletPath.contains("/auth")) {
+        val path = request.servletPath
+        if (path == "/auth/login" || path == "/auth/register" || path == "/auth/refresh") {
             filterChain.doFilter(request, response)
             return
         }
@@ -37,22 +38,30 @@ class JwtAuthenticationFilter(
         }
 
         val jwtToken = authHeader.substringAfter("Bearer ")
-        val userEmail = this.jwtService.extractEmail(jwtToken)
 
-        if (userEmail != null && SecurityContextHolder.getContext().authentication == null) {
-            val userDetails = userDetailsService.loadUserByUsername(userEmail)
-            val isTokenActive = this.authFacade.isTokenActive(jwtToken)
+        try {
+            val userEmail = this.jwtService.extractEmail(jwtToken)
 
-            if (isTokenActive && this.jwtService.isTokenValid(jwtToken, userDetails)) {
-                val authToken = UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.authorities
-                )
+            if (userEmail != null && SecurityContextHolder.getContext().authentication == null) {
+                val userDetails = userDetailsService.loadUserByUsername(userEmail)
 
-                authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                SecurityContextHolder.getContext().authentication = authToken
+                if (this.jwtService.isTokenValid(jwtToken, userDetails)) {
+                    val authToken = UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.authorities
+                    )
+
+                    authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
+                    SecurityContextHolder.getContext().authentication = authToken
+                }
             }
+        } catch (e: ExpiredJwtException) {
+            println("JWT token expired")
+        } catch (e: JwtException) {
+            println("JWT token invalid: ${e.message}")
+        } catch (e: Exception) {
+            println("Error processing JWT token: ${e.message}")
         }
 
         filterChain.doFilter(request, response)
