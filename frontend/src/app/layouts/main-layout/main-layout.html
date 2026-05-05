@@ -1,0 +1,34 @@
+@let userObj = user();
+
+<div class="flex h-screen surface-ground">
+
+  <aside class="w-15rem surface-card border-right-1 surface-border p-3">
+    <h2>RECORD</h2>
+    <ul class="list-none p-0 m-0 flex flex-column gap-2">
+      <li><a routerLink="/dashboard" class="text-color text-decoration-none">Dashboard</a></li>
+    </ul>
+  </aside>
+
+  <div class="flex-1 flex flex-column ">
+    <header class="h-4rem surface-card border-bottom-1 surface-border flex align-items-center justify-content-between px-4">
+
+      <span class="font-bold">Bienvenido, {{ userObj?.firstName }}</span>
+
+      <div class="flex align-items-center">
+        <p-menu #userMenu [model]="userMenuItems" [popup]="true"></p-menu>
+
+        <p-avatar
+          [label]="userObj?.firstName ? userObj!.firstName.charAt(0).toUpperCase() : 'U'"
+          class="cursor-pointer mr-2"
+          size="large"
+          shape="circle"
+          (click)="userMenu.toggle($event)"
+        />
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 overflow-y-auto">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>
