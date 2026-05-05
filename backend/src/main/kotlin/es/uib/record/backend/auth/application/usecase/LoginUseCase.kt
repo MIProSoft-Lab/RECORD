@@ -31,13 +31,13 @@ class LoginUseCase(
         val jwtToken = this.jwtService.generateToken(loginRequestDto.email)
         val refreshToken = this.jwtService.generateRefreshToken(loginRequestDto.email)
 
-        this.saveToken(jwtToken, userId)
+        this.saveToken(refreshToken, userId)
 
         return AuthResponseDto(jwtToken, refreshToken)
     }
 
     private fun saveToken(jwt: String, userId: UUID) {
         val token = Token(userId = userId, token = jwt)
-        tokenRepository.save(token)
+        this.tokenRepository.save(token)
     }
 }

@@ -28,7 +28,7 @@ class RegisterUseCase(
         val jwtToken = this.jwtService.generateToken(registerRequestDto.email)
         val refreshToken = this.jwtService.generateRefreshToken(registerRequestDto.email)
 
-        this.saveToken(jwtToken, userId)
+        this.saveToken(refreshToken, userId)
 
         return AuthResponseDto(jwtToken, refreshToken)
     }
