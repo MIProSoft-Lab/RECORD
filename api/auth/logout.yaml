@@ -1,0 +1,27 @@
+post:
+  summary: Logout from the current session
+  operationId: logout
+  tags:
+    - Auth
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/LogoutRequest"
+
+  responses:
+    200:
+      description: Logout successful
+    400:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    401:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
