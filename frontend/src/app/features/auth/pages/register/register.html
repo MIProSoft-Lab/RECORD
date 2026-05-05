@@ -1,0 +1,106 @@
+<div class="flex align-items-center justify-content-center min-h-screen surface-ground">
+
+  <p-card header="Crear una cuenta" class="shadow-4 w-full md:w-30rem p-4">
+    @if (errorMessage()) {
+      <div class="p-error mb-4 text-center font-semibold">
+        <i class="pi pi-exclamation-triangle mr-2"></i>
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
+      <div class="flex flex-column gap-2">
+        <label for="firstName" class="font-semibold text-color">Nombre</label>
+        <input
+          pInputText
+          id="firstName"
+          type="text"
+          formControlName="firstName"
+          placeholder="John"
+          class="w-full"
+        />
+        @if (registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
+          <small class="p-error text-sm">Por favor, introduce un nombre válido.</small>
+        }
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="lastName" class="font-semibold text-color">Apellidos</label>
+        <input
+          pInputText
+          id="lastName"
+          type="text"
+          formControlName="lastName"
+          placeholder="Doe"
+          class="w-full"
+        />
+        @if (registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
+          <small class="p-error text-sm">Por favor, introduce un apellido válido.</small>
+        }
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="email" class="font-semibold text-color">Correo Electrónico</label>
+        <input
+          pInputText
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="usuario@uib.es"
+          class="w-full"
+        />
+        @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
+          <small class="p-error text-sm">Por favor, introduce un correo válido.</small>
+        }
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="password" class="font-semibold text-color">Contraseña</label>
+        <p-password
+          id="password"
+          formControlName="password"
+          [toggleMask]="true"
+          [feedback]="false"
+          placeholder="••••••••"
+          class="w-full"
+          inputStyleClass="w-full">
+        </p-password>
+        @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
+          <small class="p-error text-sm">La contraseña debe tener al menos 8 carácteres.</small>
+        }
+      </div>
+
+      <div class="flex flex-column gap-2">
+        <label for="confirmPassword" class="font-semibold text-color">Confirmar contraseña</label>
+        <p-password
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          [toggleMask]="true"
+          [feedback]="false"
+          placeholder="••••••••"
+          class="w-full"
+          inputStyleClass="w-full">
+        </p-password>
+        @if (registerForm.hasError('passwordsNotMatching') && registerForm.get('confirmPassword')?.touched) {
+          <small class="p-error text-sm">Las contraseñas no coinciden.</small>
+        }
+      </div>
+
+      <p-button
+        label="Crear cuenta"
+        type="submit"
+        [loading]="isLoading()"
+        [disabled]="registerForm.invalid"
+        styleClass="w-full mt-3">
+      </p-button>
+    </form>
+
+    <div class="mt-5 text-center text-color-secondary">
+      <span>¿Ya tienes cuenta? </span>
+      <a routerLink="/login" class="text-primary font-semibold no-underline cursor-pointer hover:underline">
+        Inicia sesión aquí
+      </a>
+    </div>
+  </p-card>
+</div>
+
