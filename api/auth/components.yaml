@@ -64,3 +64,13 @@ schemas:
         example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
     required:
       - token
+
+  LogoutRequest:
+    type: object
+    properties:
+      token:
+        type: string
+        description: "JWT bearer token"
+        example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+    required:
+      - token
