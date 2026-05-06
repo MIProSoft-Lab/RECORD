@@ -9,10 +9,11 @@ import { switchMap } from 'rxjs';
 import { UserState } from '@core/services/user-state';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Card } from 'primeng/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'record-login',
-  imports: [ReactiveFormsModule, InputText, Password, Button, RouterLink, Card],
+  imports: [ReactiveFormsModule, InputText, Password, Button, RouterLink, Card, TranslatePipe],
   templateUrl: './login.html',
 })
 export class Login {
@@ -27,7 +28,7 @@ export class Login {
   });
 
   isLoading = signal<boolean>(false);
-  errorMessage = signal<string>('');
+  error = signal<ErrorResponse | null>(null);
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -36,7 +37,7 @@ export class Login {
     }
 
     this.isLoading.set(true);
-    this.errorMessage.set('');
+    this.error.set(null);
 
     const request: LoginRequest = this.loginForm.getRawValue();
 
@@ -57,11 +58,12 @@ export class Login {
         error: (err: HttpErrorResponse) => {
           const errorResponse = err.error as ErrorResponse;
           this.isLoading.set(false);
-          this.errorMessage.set(errorResponse.message);
+          this.error.set(errorResponse);
         },
         complete: () => {
           this.isLoading.set(false);
         },
-      });
+      }
+    );
   }
 }

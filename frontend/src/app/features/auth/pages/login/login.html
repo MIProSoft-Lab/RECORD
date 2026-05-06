@@ -1,16 +1,19 @@
 <div class="flex align-items-center justify-content-center min-h-screen surface-ground">
 
-  <p-card header="Iniciar Sesión" class="shadow-4 w-full md:w-30rem p-4">
-    @if (errorMessage()) {
+  <p-card header="{{ 'AUTH.LOGIN_TITLE' | translate }}" class="shadow-4 w-full md:w-30rem p-4">
+    @let err = error();
+    @if (err) {
       <div class="p-error mb-4 text-center font-semibold">
         <i class="pi pi-exclamation-triangle mr-2"></i>
-        {{ errorMessage() }}
+        {{ err.code | translate: err.params }}
       </div>
     }
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
       <div class="flex flex-column gap-2">
-        <label for="email" class="font-semibold text-color">Correo Electrónico</label>
+        <label for="email" class="font-semibold text-color">
+          {{ 'COMMON.FIELDS.EMAIL' | translate }}*
+        </label>
         <input
           pInputText
           id="email"
@@ -20,12 +23,22 @@
           class="w-full"
         />
         @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
-          <small class="p-error text-sm">Por favor, introduce un correo válido.</small>
+          @if (loginForm.get('email')?.errors?.['required']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.EMAIL_REQUIRED' | translate }}
+            </small>
+          } @else if (loginForm.get('email')?.errors?.['email']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.INVALID_EMAIL' | translate }}
+            </small>
+          }
         }
       </div>
 
       <div class="flex flex-column gap-2">
-        <label for="password" class="font-semibold text-color">Contraseña</label>
+        <label for="password" class="font-semibold text-color">
+          {{ 'COMMON.FIELDS.PASSWORD' | translate }}*
+        </label>
         <p-password
           id="password"
           formControlName="password"
@@ -36,12 +49,20 @@
           inputStyleClass="w-full">
         </p-password>
         @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
-          <small class="p-error text-sm">La contraseña es obligatoria.</small>
+          @if (loginForm.get('password')?.errors?.['required']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.PASSWORD_REQUIRED' | translate }}
+            </small>
+          } @else if (loginForm.get('password')?.errors?.['minlength']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.PASSWORD_MINLENGTH' | translate }}
+            </small>
+          }
         }
       </div>
 
       <p-button
-        label="Entrar"
+        label="{{ 'COMMON.BUTTONS.LOGIN' | translate }}"
         type="submit"
         [loading]="isLoading()"
         [disabled]="loginForm.invalid"
@@ -50,9 +71,9 @@
     </form>
 
     <div class="mt-5 text-center text-color-secondary">
-      <span>¿No tienes cuenta? </span>
+      <span>{{ 'AUTH.DONT_HAVE_ACCOUNT' | translate }} </span>
       <a routerLink="/register" class="text-primary font-semibold no-underline cursor-pointer hover:underline">
-        Regístrate aquí
+        {{ 'AUTH.REGISTER_HERE' | translate }}
       </a>
     </div>
   </p-card>

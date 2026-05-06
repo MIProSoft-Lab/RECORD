@@ -9,10 +9,11 @@ import { InputText } from 'primeng/inputtext';
 import { Password } from 'primeng/password';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Card } from 'primeng/card';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'record-register',
-  imports: [Button, InputText, Password, ReactiveFormsModule, RouterLink, Card],
+  imports: [Button, InputText, Password, ReactiveFormsModule, RouterLink, Card, TranslatePipe],
   templateUrl: './register.html',
 })
 export class Register {
@@ -46,7 +47,7 @@ export class Register {
   );
 
   isLoading = signal<boolean>(false);
-  errorMessage = signal<string>('');
+  error = signal<ErrorResponse | null>(null);
 
   onSubmit() {
     if (this.registerForm.invalid) {
@@ -55,7 +56,7 @@ export class Register {
     }
 
     this.isLoading.set(true);
-    this.errorMessage.set('');
+    this.error.set(null);
 
     const { confirmPassword, ...userData } = this.registerForm.getRawValue();
     const registerRequest: RegisterRequest = userData;
@@ -77,7 +78,7 @@ export class Register {
         error: (err: HttpErrorResponse) => {
           const errorResponse = err.error as ErrorResponse;
           this.isLoading.set(false);
-          this.errorMessage.set(errorResponse.message);
+          this.error.set(errorResponse);
         },
         complete: () => {
           this.isLoading.set(false);
