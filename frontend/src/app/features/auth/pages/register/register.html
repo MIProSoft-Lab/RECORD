@@ -1,16 +1,19 @@
 <div class="flex align-items-center justify-content-center min-h-screen surface-ground">
 
-  <p-card header="Crear una cuenta" class="shadow-4 w-full md:w-30rem p-4">
-    @if (errorMessage()) {
-      <div class="p-error mb-4 text-center font-semibold">
+  <p-card header="{{ 'AUTH.REGISTER_TITLE' | translate }}" class="shadow-4 w-full md:w-30rem p-4">
+    @let err = error();
+    @if (err) {
+      <div class="p-error mb-4 text-center text-red-500 font-semibold">
         <i class="pi pi-exclamation-triangle mr-2"></i>
-        {{ errorMessage() }}
+        {{ 'ERROR.'.concat(err.code) | translate: err.params }}
       </div>
     }
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-column gap-4">
       <div class="flex flex-column gap-2">
-        <label for="firstName" class="font-semibold text-color">Nombre</label>
+        <label for="firstName" class="font-semibold text-color">
+          {{ 'COMMON.FIELDS.NAME' | translate }}*
+        </label>
         <input
           pInputText
           id="firstName"
@@ -20,12 +23,22 @@
           class="w-full"
         />
         @if (registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched) {
-          <small class="p-error text-sm">Por favor, introduce un nombre válido.</small>
+          @if (registerForm.get('firstName')?.errors?.['required']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.NAME_REQUIRED' | translate }}
+            </small>
+          } @else if (registerForm.get('firstName')?.errors?.['minlength']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.INVALID_NAME' | translate }}
+            </small>
+          }
         }
       </div>
 
       <div class="flex flex-column gap-2">
-        <label for="lastName" class="font-semibold text-color">Apellidos</label>
+        <label for="lastName" class="font-semibold text-color">
+          {{ 'COMMON.FIELDS.LASTNAME' | translate }}*
+        </label>
         <input
           pInputText
           id="lastName"
@@ -35,12 +48,22 @@
           class="w-full"
         />
         @if (registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched) {
-          <small class="p-error text-sm">Por favor, introduce un apellido válido.</small>
+          @if (registerForm.get('lastName')?.errors?.['required']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.LASTNAME_REQUIRED' | translate }}
+            </small>
+          } @else if (registerForm.get('lastName')?.errors?.['minlength']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.INVALID_LASTNAME' | translate }}
+            </small>
+          }
         }
       </div>
 
       <div class="flex flex-column gap-2">
-        <label for="email" class="font-semibold text-color">Correo Electrónico</label>
+        <label for="email" class="font-semibold text-color">
+          {{ 'COMMON.FIELDS.EMAIL' | translate }}*
+        </label>
         <input
           pInputText
           id="email"
@@ -50,12 +73,22 @@
           class="w-full"
         />
         @if (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) {
-          <small class="p-error text-sm">Por favor, introduce un correo válido.</small>
+          @if (registerForm.get('email')?.errors?.['required']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.EMAIL_REQUIRED' | translate }}
+            </small>
+          } @else if (registerForm.get('email')?.errors?.['email']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.INVALID_EMAIL' | translate }}
+            </small>
+          }
         }
       </div>
 
       <div class="flex flex-column gap-2">
-        <label for="password" class="font-semibold text-color">Contraseña</label>
+        <label for="password" class="font-semibold text-color">
+          {{ 'COMMON.FIELDS.PASSWORD' | translate }}*
+        </label>
         <p-password
           id="password"
           formControlName="password"
@@ -66,12 +99,22 @@
           inputStyleClass="w-full">
         </p-password>
         @if (registerForm.get('password')?.invalid && registerForm.get('password')?.touched) {
-          <small class="p-error text-sm">La contraseña debe tener al menos 8 carácteres.</small>
+          @if (registerForm.get('password')?.errors?.['required']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.PASSWORD_REQUIRED' | translate }}
+            </small>
+          } @else if (registerForm.get('password')?.errors?.['minlength']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.PASSWORD_MINLENGTH' | translate }}
+            </small>
+          }
         }
       </div>
 
       <div class="flex flex-column gap-2">
-        <label for="confirmPassword" class="font-semibold text-color">Confirmar contraseña</label>
+        <label for="confirmPassword" class="font-semibold text-color">
+          {{ 'COMMON.FIELDS.CONFIRM_PASSWORD' | translate }}*
+        </label>
         <p-password
           id="confirmPassword"
           formControlName="confirmPassword"
@@ -81,13 +124,21 @@
           class="w-full"
           inputStyleClass="w-full">
         </p-password>
-        @if (registerForm.hasError('passwordsNotMatching') && registerForm.get('confirmPassword')?.touched) {
-          <small class="p-error text-sm">Las contraseñas no coinciden.</small>
+        @if (registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched) {
+          @if (registerForm.get('confirmPassword')?.errors?.['passwordsNotMatching']) {
+            <small class="p-error text-sm text-red-500">
+              {{ 'ERRORS.VALIDATION.PASSWORDS_NOT_MATCHING' | translate }}
+            </small>
+          } @else if (registerForm.get('confirmPassword')?.errors?.['required']) {
+              <small class="p-error text-sm text-red-500">
+                {{ 'ERRORS.VALIDATION.CONFIRM_PASSWORD_REQUIRED' | translate }}
+              </small>
+          }
         }
       </div>
 
       <p-button
-        label="Crear cuenta"
+        label="{{'COMMON.BUTTONS.CREATE_ACCOUNT' | translate}}"
         type="submit"
         [loading]="isLoading()"
         [disabled]="registerForm.invalid"
@@ -96,9 +147,9 @@
     </form>
 
     <div class="mt-5 text-center text-color-secondary">
-      <span>¿Ya tienes cuenta? </span>
+      <span>{{ 'AUTH.ALREADY_HAVE_ACCOUNT' | translate }} </span>
       <a routerLink="/login" class="text-primary font-semibold no-underline cursor-pointer hover:underline">
-        Inicia sesión aquí
+        {{ 'AUTH.LOG_IN_HERE' | translate }}
       </a>
     </div>
   </p-card>

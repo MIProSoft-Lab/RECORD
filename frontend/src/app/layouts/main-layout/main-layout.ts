@@ -1,35 +1,48 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
-import { UserState } from '../../core/services/user-state';
-import { Button } from 'primeng/button';
-import { AuthService, LogoutRequest } from '../../core/api';
+import { UserState } from '@core/services/user-state';
+import { AuthService, LogoutRequest } from '@core/api';
 import { Avatar } from 'primeng/avatar';
 import { MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'record-main-layout',
-  imports: [RouterLink, RouterOutlet, Button, Avatar, Menu],
+  imports: [RouterLink, RouterOutlet, Avatar, Menu, TranslatePipe],
   templateUrl: './main-layout.html',
 })
-export class MainLayout {
-  userState = inject(UserState);
-  user = this.userState.currentUser;
+export class MainLayout implements OnInit {
   private router = inject(Router);
   private authApi = inject(AuthService);
+  private translate = inject(TranslateService);
 
-  userMenuItems: MenuItem[] = [
-    {
-      label: 'Ajustes',
-      icon: 'pi pi-cog',
-      command: () => this.router.navigate(['/settings']),
-    },
-    {
-      label: 'Cerrar sesión',
-      icon: 'pi pi-sign-out',
-      command: () => this.logout(),
-    },
-  ];
+  userState = inject(UserState);
+  user = this.userState.currentUser;
+  userMenuItems: MenuItem[] = [];
+
+  ngOnInit(): void {
+    this.buildMenu();
+
+    this.translate.onLangChange.subscribe((lang) => {
+      this.buildMenu();
+    });
+  }
+
+  private buildMenu() {
+    this.userMenuItems = [
+      {
+        label: this.translate.instant('COMMON.MENU.SETTINGS'),
+        icon: 'pi pi-cog',
+        command: () => this.router.navigate(['/settings']),
+      },
+      {
+        label: this.translate.instant('COMMON.MENU.LOGOUT'),
+        icon: 'pi pi-sign-out',
+        command: () => this.logout(),
+      },
+    ];
+  }
 
   protected logout() {
     const refreshToken = localStorage.getItem('refresh_token');
