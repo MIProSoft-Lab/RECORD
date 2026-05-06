@@ -1,0 +1,55 @@
+{
+  "AUTH": {
+    "ALREADY_HAVE_ACCOUNT": "¿Ya tienes cuenta?",
+    "DONT_HAVE_ACCOUNT": "¿No tienes cuenta?",
+    "LOGIN_TITLE": "Iniciar sesión",
+    "LOG_IN_HERE": "Inicia sesión aquí",
+    "REGISTER_HERE": "Regístrate aquí",
+    "REGISTER_TITLE": "Crear una cuenta"
+  },
+  "COMMON": {
+    "BUTTONS": {
+      "CREATE_ACCOUNT": "Crear cuenta",
+      "LOGIN": "Entrar"
+    },
+    "FIELDS": {
+      "CONFIRM_PASSWORD": "Confirmar contraseña",
+      "EMAIL": "Correo electrónico",
+      "LASTNAME": "Apellidos",
+      "NAME": "Nombre",
+      "PASSWORD": "Contraseña"
+    },
+    "MENU": {
+      "LOGOUT": "Cerrar sesión",
+      "SETTINGS": "Ajustes"
+    }
+  },
+  "CONFIG": {
+    "PREFERENCES": {
+      "LANGUAGE": {
+        "DESCRIPTION": "Elige en qué idioma quieres ver la aplicación.",
+        "TITLE": "Idioma de la interfaz"
+      },
+      "TITLE": "Preferencias"
+    },
+    "TITLE": "Configuración"
+  },
+  "DASHBOARD": {
+    "TITLE": "Inicio"
+  },
+  "ERRORS": {
+    "EMAIL_ALREADY_IN_USE": "El email {{ email }} ya está en uso.",
+    "VALIDATION": {
+        "CONFIRM_PASSWORD_REQUIRED": "Debes confirmar la contraseña.",
+        "EMAIL_REQUIRED": "El correo electrónico no puede estar vacío.",
+        "INVALID_EMAIL": "Por favor, introduce un correo electrónico válido.",
+        "INVALID_LASTNAME": "El apellido debe tener al menos 2 caracteres.",
+        "INVALID_NAME": "El nombre debe tener al menos 2 caracteres.",
+        "LASTNAME_REQUIRED": "Los apellidos no pueden estar vacíos.",
+        "NAME_REQUIRED": "El nombre no puede estar vacío.",
+        "PASSWORDS_NOT_MATCHING": "Las contraseñas deben coincidir.",
+        "PASSWORD_MINLENGTH": "La contraseña debe tener al menos 8 caracteres.",
+        "PASSWORD_REQUIRED": "La contraseña no puede estar vacía."
+    }
+  }
+}

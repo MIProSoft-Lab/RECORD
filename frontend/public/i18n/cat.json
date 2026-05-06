@@ -1,0 +1,55 @@
+{
+  "AUTH": {
+    "ALREADY_HAVE_ACCOUNT": "Ja tens compte?",
+    "DONT_HAVE_ACCOUNT": "No tens compte?",
+    "LOGIN_TITLE": "Inicia sessió",
+    "LOG_IN_HERE": "Inicia sessió aquí",
+    "REGISTER_HERE": "Registra't aquí",
+    "REGISTER_TITLE": "Crear un compte"
+  },
+  "COMMON": {
+    "BUTTONS": {
+      "CREATE_ACCOUNT": "Crear compte",
+      "LOGIN": "Entrar"
+    },
+    "FIELDS": {
+      "CONFIRM_PASSWORD": "Confirmar contrasenya",
+      "EMAIL": "Correu electrònic",
+      "LASTNAME": "Cognoms",
+      "NAME": "Nom",
+      "PASSWORD": "Contrasenya"
+    },
+    "MENU": {
+      "LOGOUT": "Tancar sessió",
+      "SETTINGS": "Ajusts"
+    }
+  },
+  "CONFIG": {
+    "PREFERENCES": {
+      "LANGUAGE": {
+        "DESCRIPTION": "Selecciona l'idioma en què vols veure l'aplicació.",
+        "TITLE": "Idioma de la interfície"
+      },
+      "TITLE": "Preferències"
+    },
+    "TITLE": "Configuració"
+  },
+  "DASHBOARD": {
+    "TITLE": "Inici"
+  },
+  "ERRORS": {
+    "EMAIL_ALREADY_IN_USE": "L'email {{ email }} ja s'està emprant.",
+    "VALIDATION": {
+      "CONFIRM_PASSWORD_REQUIRED": "Cal confirmar la contrasenya.",
+      "EMAIL_REQUIRED": "El correu electrònic no pot estar buit.",
+      "INVALID_EMAIL": "Si us plau, introdueix un correu electrònic vàlid.",
+      "INVALID_LASTNAME": "El cognom ha de tenir almenys 2 caràcters.",
+      "INVALID_NAME": "El nom ha de tenir almenys 2 caràcters.",
+      "LASTNAME_REQUIRED": "Els cognoms no poden estar buits.",
+      "NAME_REQUIRED": "El nom no pot estar buit.",
+      "PASSWORDS_NOT_MATCHING": "Les contrasenyes han de coincidir.",
+      "PASSWORD_MINLENGTH": "La contrasenya ha de tenir almenys 8 caràcters.",
+      "PASSWORD_REQUIRED": "La contrasenya no pot estar buida."
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "AUTH": {
+    "ALREADY_HAVE_ACCOUNT": "Already have an account?",
+    "DONT_HAVE_ACCOUNT": "Don't have an account?",
+    "LOGIN_TITLE": "Log in",
+    "LOG_IN_HERE": "Log in here",
+    "REGISTER_HERE": "Register here",
+    "REGISTER_TITLE": "Create an account"
+  },
+  "COMMON": {
+    "BUTTONS": {
+      "CREATE_ACCOUNT": "Create account",
+      "LOGIN": "Log in"
+    },
+    "FIELDS": {
+      "CONFIRM_PASSWORD": "Confirm password",
+      "EMAIL": "Email",
+      "LASTNAME": "Last name",
+      "NAME": "Name",
+      "PASSWORD": "Password"
+    },
+    "MENU": {
+      "LOGOUT": "Log out",
+      "SETTINGS": "Settings"
+    }
+  },
+  "CONFIG": {
+    "PREFERENCES": {
+      "LANGUAGE": {
+        "DESCRIPTION": "Choose the language for the application interface.",
+        "TITLE": "Interface language"
+      },
+      "TITLE": "Preferences"
+    },
+    "TITLE": "Configuration"
+  },
+  "DASHBOARD": {
+    "TITLE": "Dashboard"
+  },
+  "ERRORS": {
+    "EMAIL_ALREADY_IN_USE": "The email {{ email }} is already in use.",
+    "VALIDATION": {
+      "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required.",
+      "EMAIL_REQUIRED": "Email cannot be empty.",
+      "INVALID_EMAIL": "Please provide a valid email address.",
+      "INVALID_LASTNAME": "Last name must be at least 2 characters long.",
+      "INVALID_NAME": "Name must be at least 2 characters long.",
+      "LASTNAME_REQUIRED": "Last name cannot be empty.",
+      "NAME_REQUIRED": "Name cannot be empty.",
+      "PASSWORDS_NOT_MATCHING": "The passwords must match.",
+      "PASSWORD_MINLENGTH": "The password must be at least 8 characters long.",
+      "PASSWORD_REQUIRED": "Password cannot be empty."
+    }
+  }
+}
