@@ -20,6 +20,6 @@ export class App {
       return
     }
 
-    this.translate.use(browserLang?.match(/en|es|cat/) ? browserLang : 'es');
+    this.translate.use(browserLang?.match(/en|es|cat/) ? browserLang : 'en');
   }
 }
