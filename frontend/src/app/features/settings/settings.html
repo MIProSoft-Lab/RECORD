@@ -1,1 +1,33 @@
-<p>settings works!</p>
+<div class="min-h-screen surface-ground p-4 ">
+  <div class="max-w-50rem mx-auto w-full">
+    <div class="flex align-items-center gap-3 mb-5">
+      <p-button icon="pi pi-arrow-left" [rounded]="true" [text]="true" severity="secondary" routerLink="/dashboard"/>
+      <h1 class="m-0 text-3xl font-semibold">{{ 'CONFIG.TITLE' | translate }}</h1>
+    </div>
+
+    <div class="flex flex-column gap-4">
+      <p-card header="{{ 'CONFIG.PREFERENCES.TITLE' | translate }}" class="shadow-2">
+        <div class="flex flex-column gap-5">
+          <div class="flex align-items-center justify-content-between">
+            <div class="flex flex-column gap-1">
+              <span class="font-semibold text-color">
+                {{ 'CONFIG.PREFERENCES.LANGUAGE.TITLE' | translate }}
+              </span>
+              <span class="text-color-secondary text-sm">
+                {{ 'CONFIG.PREFERENCES.LANGUAGE.DESCRIPTION' | translate }}
+              </span>
+            </div>
+            <p-select
+              [options]="availableLanguages()"
+              [(ngModel)]="selectedLanguage"
+              optionLabel="name"
+              (onChange)="onLanguageChange($event)"
+              class="w-10rem"
+            >
+            </p-select>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </div>
+</div>
