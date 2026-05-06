@@ -10,12 +10,13 @@ import { routes } from './app.routes';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { BASE_PATH } from '@core/api';
 import { environment } from '../environments/environment';
 import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { UserState } from '@core/services/user-state';
-import { of } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { provideTranslateService, TranslateLoader, TranslationObject } from '@ngx-translate/core';
 
 export function initializeApp() {
   return () => {
@@ -28,6 +29,18 @@ export function initializeApp() {
   };
 }
 
+export class CustomTranslateLoader implements TranslateLoader {
+  constructor(private http: HttpClient) {}
+
+  getTranslation(lang: string): Observable<TranslationObject> {
+    return this.http.get<TranslationObject>(`./i18n/${lang}.json`);
+  }
+}
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new CustomTranslateLoader(http);
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
@@ -35,6 +48,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAppInitializer(initializeApp()),
     provideAnimationsAsync(),
+    provideTranslateService({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient],
+      }
+    }),
     providePrimeNG({
       ripple: true,
       theme: {
