@@ -38,18 +38,19 @@
     "TITLE": "Inicio"
   },
   "ERRORS": {
+    "BAD_CREDENTIALS": "Credenciales incorrectas.",
     "EMAIL_ALREADY_IN_USE": "El email {{ email }} ya está en uso.",
     "VALIDATION": {
-        "CONFIRM_PASSWORD_REQUIRED": "Debes confirmar la contraseña.",
-        "EMAIL_REQUIRED": "El correo electrónico no puede estar vacío.",
-        "INVALID_EMAIL": "Por favor, introduce un correo electrónico válido.",
-        "INVALID_LASTNAME": "El apellido debe tener al menos 2 caracteres.",
-        "INVALID_NAME": "El nombre debe tener al menos 2 caracteres.",
-        "LASTNAME_REQUIRED": "Los apellidos no pueden estar vacíos.",
-        "NAME_REQUIRED": "El nombre no puede estar vacío.",
-        "PASSWORDS_NOT_MATCHING": "Las contraseñas deben coincidir.",
-        "PASSWORD_MINLENGTH": "La contraseña debe tener al menos 8 caracteres.",
-        "PASSWORD_REQUIRED": "La contraseña no puede estar vacía."
+      "CONFIRM_PASSWORD_REQUIRED": "Debes confirmar la contraseña.",
+      "EMAIL_REQUIRED": "El correo electrónico no puede estar vacío.",
+      "INVALID_EMAIL": "Por favor, introduce un correo electrónico válido.",
+      "INVALID_LASTNAME": "El apellido debe tener al menos 2 caracteres.",
+      "INVALID_NAME": "El nombre debe tener al menos 2 caracteres.",
+      "LASTNAME_REQUIRED": "Los apellidos no pueden estar vacíos.",
+      "NAME_REQUIRED": "El nombre no puede estar vacío.",
+      "PASSWORDS_NOT_MATCHING": "Las contraseñas deben coincidir.",
+      "PASSWORD_MINLENGTH": "La contraseña debe tener al menos 8 caracteres.",
+      "PASSWORD_REQUIRED": "La contraseña no puede estar vacía."
     }
   }
 }

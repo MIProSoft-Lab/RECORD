@@ -3,9 +3,9 @@
   <p-card header="{{ 'AUTH.LOGIN_TITLE' | translate }}" class="shadow-4 w-full md:w-30rem p-4">
     @let err = error();
     @if (err) {
-      <div class="p-error mb-4 text-center font-semibold">
+      <div class="p-error mb-4 text-center text-red-500 font-semibold">
         <i class="pi pi-exclamation-triangle mr-2"></i>
-        {{ err.code | translate: err.params }}
+        {{ 'ERRORS.'.concat(err.code) | translate: err.params }}
       </div>
     }
 

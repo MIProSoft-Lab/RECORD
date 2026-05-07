@@ -38,6 +38,7 @@
     "TITLE": "Inici"
   },
   "ERRORS": {
+    "BAD_CREDENTIALS": "Credencials incorrectes.",
     "EMAIL_ALREADY_IN_USE": "L'email {{ email }} ja s'està emprant.",
     "VALIDATION": {
       "CONFIRM_PASSWORD_REQUIRED": "Cal confirmar la contrasenya.",

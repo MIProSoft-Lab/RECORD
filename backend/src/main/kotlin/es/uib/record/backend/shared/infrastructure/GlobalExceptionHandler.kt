@@ -3,6 +3,7 @@ package es.uib.record.backend.shared.infrastructure
 import es.uib.record.backend.model.ErrorResponse
 import es.uib.record.backend.shared.exception.DomainException
 import es.uib.record.backend.shared.exception.ErrorType
+import io.jsonwebtoken.ExpiredJwtException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
@@ -41,12 +42,22 @@ class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BadCredentialsException::class)
-    fun handleBadCredentialsException(e: BadCredentialsException): ResponseEntity<ErrorResponse> {
+    fun handleBadCredentialsException(): ResponseEntity<ErrorResponse> {
         val response = ErrorResponse(
             message = "Invalid email or password",
-            code = ""
+            code = "BAD_CREDENTIALS",
         )
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response)
+    }
+
+    @ExceptionHandler(ExpiredJwtException::class)
+    fun handleExpiredJwtException(): ResponseEntity<ErrorResponse> {
+        val response = ErrorResponse(
+            message = "JWT token has expired",
+            code = "JWT_EXPIRED",
+        )
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response)
     }
 }

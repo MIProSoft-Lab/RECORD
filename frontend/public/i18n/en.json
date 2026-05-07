@@ -38,6 +38,7 @@
     "TITLE": "Dashboard"
   },
   "ERRORS": {
+    "BAD_CREDENTIALS": "Invalid credentials.",
     "EMAIL_ALREADY_IN_USE": "The email {{ email }} is already in use.",
     "VALIDATION": {
       "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required.",
