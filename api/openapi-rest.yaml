@@ -27,4 +27,7 @@ paths:
     $ref: "./auth/logout.yaml"
 
   /users/me:
-    $ref: "./users/me.yaml"
+    $ref: "./users/get-user.yaml"
+
+  /users/me/update:
+    $ref: "./users/update-user.yaml"

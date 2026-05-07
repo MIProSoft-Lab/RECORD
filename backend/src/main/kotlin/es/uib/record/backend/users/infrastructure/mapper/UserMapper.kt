@@ -1,6 +1,8 @@
 package es.uib.record.backend.users.infrastructure.mapper
 
 import es.uib.record.backend.model.UserResponse
+import es.uib.record.backend.model.UserUpdateRequest
+import es.uib.record.backend.users.application.usecase.dto.UserUpdateRequestDto
 import es.uib.record.backend.users.domain.User
 import es.uib.record.backend.users.infrastructure.persistence.UserEntity
 
@@ -29,4 +31,9 @@ fun User.toResponse() = UserResponse(
     this.firstName,
     this.lastName,
     this.email
+)
+
+fun UserUpdateRequest.toDto() = UserUpdateRequestDto(
+    this.firstName,
+    this.lastName
 )
