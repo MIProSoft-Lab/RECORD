@@ -17,6 +17,7 @@ import { authInterceptor } from '@core/interceptors/auth.interceptor';
 import { UserState } from '@core/services/user-state';
 import { Observable, of } from 'rxjs';
 import { provideTranslateService, TranslateLoader, TranslationObject } from '@ngx-translate/core';
+import { MessageService } from 'primeng/api';
 
 export function initializeApp() {
   return () => {
@@ -48,6 +49,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     provideAppInitializer(initializeApp()),
     provideAnimationsAsync(),
+    MessageService,
     provideTranslateService({
       loader: {
         provide: TranslateLoader,
