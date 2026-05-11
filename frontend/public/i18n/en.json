@@ -26,22 +26,29 @@
     }
   },
   "CONFIG": {
+    "TITLE": "Configuration",
     "PROFILE": {
       "TITLE": "User Profile",
-      "DESCRIPTION": "Update your personal information."
+      "DESCRIPTION": "Update your personal information.",
+      "AVATAR_TITLE": "Profile picture",
+      "AVATAR_DESCRIPTION": "Upload an image to identify yourself."
     },
     "PREFERENCES": {
       "LANGUAGE": {
         "DESCRIPTION": "Choose the language for the application interface.",
         "TITLE": "Interface language"
       },
+      "DARKMODE": {
+        "DESCRIPTION": "Enable dark mode to reduce eye strain.",
+        "TITLE": "Dark mode"
+      },
     "TITLE": "Preferences"
   },
   "TOASTS": {
     "SUCCESS": "Success",
-    "PROFILE_UPDATED": "Profile updated successfully."
-  },
-  "TITLE": "Configuration"
+    "PROFILE_UPDATED": "Profile updated successfully.",
+    "AVATAR_UPDATED": "Profile picture updated successfully."
+  }
 },
   "DASHBOARD": {
     "TITLE": "Dashboard"

@@ -26,22 +26,29 @@
     }
   },
   "CONFIG": {
+    "TITLE": "Configuració",
     "PROFILE": {
       "TITLE": "Perfil d'usuari",
-      "DESCRIPTION": "Actualitza la teva informació personal."
+      "DESCRIPTION": "Actualitza la teva informació personal.",
+      "AVATAR_TITLE": "Foto de perfil",
+      "AVATAR_DESCRIPTION": "Puja una imatge per identificar-te."
     },
     "PREFERENCES": {
       "LANGUAGE": {
         "DESCRIPTION": "Selecciona l'idioma en què vols veure l'aplicació.",
         "TITLE": "Idioma de la interfície"
       },
+      "DARKMODE": {
+        "DESCRIPTION": "Activa el mode fosc per reduir la fatiga visual.",
+        "TITLE": "Mode fosc"
+      },
     "TITLE": "Preferències"
   },
   "TOASTS": {
     "SUCCESS": "Èxit",
-    "PROFILE_UPDATED": "Perfil actualitzat correctament."
-  },
-  "TITLE": "Configuració"
+    "PROFILE_UPDATED": "Perfil actualitzat correctament.",
+    "AVATAR_UPDATED": "Foto de perfil actualitzada correctament."
+  }
 },
   "DASHBOARD": {
     "TITLE": "Inici"
