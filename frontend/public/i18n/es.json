@@ -10,7 +10,8 @@
   "COMMON": {
     "BUTTONS": {
       "CREATE_ACCOUNT": "Crear cuenta",
-      "LOGIN": "Entrar"
+      "LOGIN": "Entrar",
+      "SAVE": "Guardar"
     },
     "FIELDS": {
       "CONFIRM_PASSWORD": "Confirmar contraseña",
@@ -25,15 +26,23 @@
     }
   },
   "CONFIG": {
+    "PROFILE": {
+      "TITLE": "Perfil de usuario",
+      "DESCRIPTION": "Actualiza tu información personal."
+    },
     "PREFERENCES": {
       "LANGUAGE": {
         "DESCRIPTION": "Elige en qué idioma quieres ver la aplicación.",
         "TITLE": "Idioma de la interfaz"
       },
-      "TITLE": "Preferencias"
-    },
-    "TITLE": "Configuración"
+    "TITLE": "Preferencias"
   },
+  "TOASTS": {
+    "SUCCESS": "Éxito",
+    "PROFILE_UPDATED": "Perfil actualizado correctamente."
+  },
+  "TITLE": "Configuración"
+},
   "DASHBOARD": {
     "TITLE": "Inicio"
   },

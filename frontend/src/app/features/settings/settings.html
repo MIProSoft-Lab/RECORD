@@ -6,6 +6,50 @@
     </div>
 
     <div class="flex flex-column gap-4">
+      <p-card header="{{ 'CONFIG.PROFILE.TITLE' | translate }}" class="shadow-2">
+        <div class="flex flex-column gap-5">
+          <div class="flex flex-column gap-1 mb-2">
+            <span class="text-color-secondary text-sm">
+              {{ 'CONFIG.PROFILE.DESCRIPTION' | translate }}
+            </span>
+          </div>
+
+          <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()" class="flex flex-column gap-4">
+            <div class="flex flex-column gap-2">
+              <label for="email" class="font-semibold">{{ 'COMMON.FIELDS.EMAIL' | translate }}</label>
+              <input pInputText id="email" formControlName="email" class="w-full md:w-20rem" />
+            </div>
+
+            <div class="flex flex-column md:flex-row gap-4">
+              <div class="flex flex-column gap-2 flex-1">
+                <label for="firstName" class="font-semibold">{{ 'COMMON.FIELDS.NAME' | translate }}</label>
+                <input pInputText id="firstName" formControlName="firstName" class="w-full" />
+                @if (profileForm.get('firstName')?.invalid && profileForm.get('firstName')?.touched) {
+                  <small class="p-error">{{ 'ERRORS.VALIDATION.INVALID_NAME' | translate }}</small>
+                }
+              </div>
+
+              <div class="flex flex-column gap-2 flex-1">
+                <label for="lastName" class="font-semibold">{{ 'COMMON.FIELDS.LASTNAME' | translate }}</label>
+                <input pInputText id="lastName" formControlName="lastName" class="w-full" />
+                @if (profileForm.get('lastName')?.invalid && profileForm.get('lastName')?.touched) {
+                  <small class="p-error">{{ 'ERRORS.VALIDATION.INVALID_LASTNAME' | translate }}</small>
+                }
+              </div>
+            </div>
+
+            <div class="flex justify-content-end mt-2">
+              <p-button 
+                type="submit" 
+                [label]="'COMMON.BUTTONS.SAVE' | translate" 
+                [disabled]="profileForm.invalid || isSaving() || !hasChanges()"
+                [loading]="isSaving()">
+              </p-button>
+            </div>
+          </form>
+        </div>
+      </p-card>
+
       <p-card header="{{ 'CONFIG.PREFERENCES.TITLE' | translate }}" class="shadow-2">
         <div class="flex flex-column gap-5">
           <div class="flex align-items-center justify-content-between">

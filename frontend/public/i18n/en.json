@@ -10,7 +10,8 @@
   "COMMON": {
     "BUTTONS": {
       "CREATE_ACCOUNT": "Create account",
-      "LOGIN": "Log in"
+      "LOGIN": "Log in",
+      "SAVE": "Save"
     },
     "FIELDS": {
       "CONFIRM_PASSWORD": "Confirm password",
@@ -25,15 +26,23 @@
     }
   },
   "CONFIG": {
+    "PROFILE": {
+      "TITLE": "User Profile",
+      "DESCRIPTION": "Update your personal information."
+    },
     "PREFERENCES": {
       "LANGUAGE": {
         "DESCRIPTION": "Choose the language for the application interface.",
         "TITLE": "Interface language"
       },
-      "TITLE": "Preferences"
-    },
-    "TITLE": "Configuration"
+    "TITLE": "Preferences"
   },
+  "TOASTS": {
+    "SUCCESS": "Success",
+    "PROFILE_UPDATED": "Profile updated successfully."
+  },
+  "TITLE": "Configuration"
+},
   "DASHBOARD": {
     "TITLE": "Dashboard"
   },
