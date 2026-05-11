@@ -5,3 +5,4 @@ export * from './logoutRequest';
 export * from './refreshRequest';
 export * from './registerRequest';
 export * from './userResponse';
+export * from './userUpdateRequest';
