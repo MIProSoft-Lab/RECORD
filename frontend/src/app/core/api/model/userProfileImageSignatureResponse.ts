@@ -9,11 +9,12 @@
  */
 
 
-export interface UserResponse { 
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    profileImageUrl?: string;
+export interface UserProfileImageSignatureResponse { 
+    signature: string;
+    timestamp: string;
+    api_key: string;
+    cloud_name: string;
+    transformation: string;
+    folder: string;
 }
 

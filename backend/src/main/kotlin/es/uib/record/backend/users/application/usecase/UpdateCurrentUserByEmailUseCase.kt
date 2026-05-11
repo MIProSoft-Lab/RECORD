@@ -15,7 +15,8 @@ class UpdateCurrentUserByEmailUseCase(
 
         val updatedUser = existingUser.copy(
             firstName = userUpdateRequestDto.firstName,
-            lastName = userUpdateRequestDto.lastName
+            lastName = userUpdateRequestDto.lastName,
+            profileImageUrl = userUpdateRequestDto.profileImageUrl ?: existingUser.profileImageUrl
         )
 
         return userRepository.save(updatedUser)

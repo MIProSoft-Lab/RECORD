@@ -11,3 +11,9 @@ application:
       expiration: ${JWT_EXPIRATION}
       refresh-token:
         expiration: ${JWT_REFRESH_EXPIRATION}
+  cloudinary:
+    cloud-name: ${CLOUDINARY_CLOUD_NAME}
+    api-key: ${CLOUDINARY_API_KEY}
+    api-secret: ${CLOUDINARY_API_SECRET}
+    user-avatar-folder: ${CLOUDINARY_USER_AVATAR_FOLDER}
+    user-transformation: ${CLOUDINARY_USER_TRANSFORMATION}

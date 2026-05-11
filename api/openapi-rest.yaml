@@ -31,3 +31,6 @@ paths:
 
   /users/me/update:
     $ref: "./users/update-user.yaml"
+
+  /users/me/profile-image-signature:
+    $ref: "./users/user-profile-image-signature.yaml"

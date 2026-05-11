@@ -14,6 +14,42 @@
             </span>
           </div>
 
+          <div class="flex align-items-center gap-4 mb-4">
+            <div class="relative">
+              @if (currentUser()?.profileImageUrl) {
+                <img [src]="currentUser()?.profileImageUrl" alt="Avatar" class="w-8rem h-8rem border-circle border-2 border-primary object-cover" />
+              } @else {
+                <div class="w-8rem h-8rem border-circle border-2 border-primary flex align-items-center justify-content-center bg-primary-reverse text-primary text-4xl font-bold">
+                  {{ currentUser()?.firstName?.charAt(0) | uppercase }}
+                </div>
+              }
+
+              @if (isUploadingAvatar()) {
+                <div class="absolute top-0 left-0 w-full h-full border-circle surface-overlay opacity-70 flex align-items-center justify-content-center">
+                  <i class="pi pi-spin pi-spinner text-3xl text-primary"></i>
+                </div>
+              }
+            </div>
+            <div class="flex flex-column gap-2">
+              <span class="font-semibold">{{ 'CONFIG.PROFILE.AVATAR_TITLE' | translate | uppercase }}</span>
+              <span class="text-color-secondary text-sm">{{ 'CONFIG.PROFILE.AVATAR_DESCRIPTION' | translate }}</span>
+
+              <p-fileupload
+                mode="basic"
+                chooseLabel="Upload Image"
+                chooseIcon="pi pi-upload"
+                name="file"
+                accept="image/*"
+                [maxFileSize]="5000000"
+                [auto]="true"
+                [customUpload]="true"
+                (uploadHandler)="onFileSelected($event)"
+                [disabled]="isUploadingAvatar()"
+                class="mt-2">
+              </p-fileupload>
+            </div>
+          </div>
+
           <form [formGroup]="profileForm" (ngSubmit)="onSaveProfile()" class="flex flex-column gap-4">
             <div class="flex flex-column gap-2">
               <label for="email" class="font-semibold">{{ 'COMMON.FIELDS.EMAIL' | translate }}</label>
@@ -39,9 +75,9 @@
             </div>
 
             <div class="flex justify-content-end mt-2">
-              <p-button 
-                type="submit" 
-                [label]="'COMMON.BUTTONS.SAVE' | translate" 
+              <p-button
+                type="submit"
+                [label]="'COMMON.BUTTONS.SAVE' | translate"
                 [disabled]="profileForm.invalid || isSaving() || !hasChanges()"
                 [loading]="isSaving()">
               </p-button>
@@ -69,6 +105,21 @@
               class="w-10rem"
             >
             </p-select>
+          </div>
+
+          <div class="flex align-items-center justify-content-between">
+            <div class="flex flex-column gap-1">
+              <span class="font-semibold text-color">
+                {{ 'CONFIG.PREFERENCES.DARKMODE.TITLE' | translate }}
+              </span>
+              <span class="text-color-secondary text-sm">
+                {{ 'CONFIG.PREFERENCES.DARKMODE.DESCRIPTION' | translate }}
+              </span>
+            </div>
+            <p-toggleswitch
+              [(ngModel)]="isDarkMode"
+              (onChange)="onDarkModeToggle($event)">
+            </p-toggleswitch>
           </div>
         </div>
       </p-card>

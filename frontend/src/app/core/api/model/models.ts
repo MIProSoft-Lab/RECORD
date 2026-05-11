@@ -4,5 +4,6 @@ export * from './loginRequest';
 export * from './logoutRequest';
 export * from './refreshRequest';
 export * from './registerRequest';
+export * from './userProfileImageSignatureResponse';
 export * from './userResponse';
 export * from './userUpdateRequest';

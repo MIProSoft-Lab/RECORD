@@ -23,6 +23,7 @@ repositories {
 extra["springModulithVersion"] = "2.0.5"
 extra["springdocVersion"] = "2.8.17"
 extra["jjwtVersion"] = "0.12.5"
+extra["cloudinaryVersion"] = "2.0.0"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -35,6 +36,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springdocVersion")}")
 	implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
+	implementation("com.cloudinary:cloudinary-http5:${property("cloudinaryVersion")}")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")

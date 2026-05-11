@@ -1,0 +1,18 @@
+get:
+  summary: Get user profile image signature
+  operationId: getUserProfileImageSignature
+  tags:
+    - Users
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/UserProfileImageSignatureResponse"
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

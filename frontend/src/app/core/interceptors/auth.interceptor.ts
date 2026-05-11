@@ -18,7 +18,11 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const accessToken = localStorage.getItem('access_token');
 
   let authReq = req;
-  if (accessToken) {
+  
+  // Skip Authorization header for Cloudinary uploads (they use signature-based auth)
+  const isCloudinaryUpload = req.url.includes('cloudinary.com');
+  
+  if (accessToken && !isCloudinaryUpload) {
     authReq = addTokenHeader(req, accessToken)
   }
 

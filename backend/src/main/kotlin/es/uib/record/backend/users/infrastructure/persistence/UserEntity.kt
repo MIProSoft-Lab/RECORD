@@ -31,6 +31,9 @@ class UserEntity (
     @Column(nullable = false)
     var pushNotifications: Boolean = true,
 
+    @Column(nullable = true)
+    var profileImageUrl: String? = null,
+
     @Column(nullable = false, updatable = false)
     var createdAt: Instant = Instant.now(),
 )

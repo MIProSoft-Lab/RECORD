@@ -20,7 +20,7 @@
         <p-menu #userMenu [model]="userMenuItems" [popup]="true"></p-menu>
 
         <p-avatar
-          [label]="userObj?.firstName ? userObj!.firstName.charAt(0).toUpperCase() : 'U'"
+          [image]="userObj?.profileImageUrl"
           class="cursor-pointer mr-2"
           size="large"
           shape="circle"

@@ -10,5 +10,6 @@ data class User(
     val firstName: String,
     val lastName: String,
     val pushNotifications: Boolean = true,
+    val profileImageUrl: String? = null,
     val createdAt: Instant = Instant.now(),
 )

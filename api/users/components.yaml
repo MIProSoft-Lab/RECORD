@@ -21,6 +21,9 @@ schemas:
         minLength: 5
         maxLength: 254
         example: "john.doe@example.com"
+      profileImageUrl:
+        type: string
+        example: "https://res.cloudinary.com/dngaan1ba/image/upload/v12345/user_profile_images/xxx.jpg"
     required:
       - id
       - firstName
@@ -40,6 +43,31 @@ schemas:
         minLength: 2
         maxLength: 100
         example: "Doe"
+      profileImageUrl:
+        type: string
     required:
       - firstName
       - lastName
+
+  UserProfileImageSignatureResponse:
+    type: object
+    properties:
+      signature:
+        type: string
+      timestamp:
+        type: string
+      api_key:
+        type: string
+      cloud_name:
+        type: string
+      transformation:
+        type: string
+      folder:
+        type: string
+    required:
+      - signature
+      - timestamp
+      - api_key
+      - cloud_name
+      - transformation
+      - folder
