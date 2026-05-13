@@ -9,12 +9,10 @@
  */
 
 
-export interface UserResponse { 
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    profileImageUrl: string;
+export interface UserUpdatePushNotificationRequest { 
+    /**
+     * Whether push notifications are enabled for the user.
+     */
     pushNotifications: boolean;
 }
 

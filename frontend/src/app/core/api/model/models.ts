@@ -6,4 +6,5 @@ export * from './refreshRequest';
 export * from './registerRequest';
 export * from './userProfileImageSignatureResponse';
 export * from './userResponse';
+export * from './userUpdatePushNotificationRequest';
 export * from './userUpdateRequest';

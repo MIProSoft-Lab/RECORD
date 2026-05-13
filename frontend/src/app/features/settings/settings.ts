@@ -56,6 +56,7 @@ export class Settings implements OnDestroy {
   hasChanges = signal(false);
   isUploadingAvatar = signal(false);
   isDarkMode = signal(localStorage.getItem('dark_mode') === 'true');
+  isPushNotifications = signal(false);
   private sub?: Subscription;
 
   constructor() {
@@ -74,6 +75,7 @@ export class Settings implements OnDestroy {
           },
           { emitEvent: false },
         );
+        this.isPushNotifications.set(user.pushNotifications);
         this.checkChanges();
       }
     });
@@ -126,6 +128,30 @@ export class Settings implements OnDestroy {
     } else {
       document.documentElement.classList.remove('dark');
     }
+  }
+
+  onPushNotificationsToggle(event: any) {
+    const isEnabled = event.checked;
+    this.usersService.updatePushNotifications({ pushNotifications: isEnabled }).subscribe({
+      next: (updatedUser) => {
+        this.userState.currentUser.set(updatedUser);
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translate.instant('CONFIG.TOASTS.SUCCESS'),
+          detail: this.translate.instant('CONFIG.TOASTS.PUSH_NOTIFICATIONS_UPDATED') || 'Push notifications updated successfully.',
+        });
+      },
+      error: (err) => {
+        console.error('Error updating push notifications:', err);
+        // Revert the toggle state if API call fails
+        this.isPushNotifications.set(!isEnabled);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Could not update push notification preferences.',
+        });
+      },
+    });
   }
 
   onSaveProfile() {

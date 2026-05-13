@@ -26,30 +26,35 @@
     }
   },
   "CONFIG": {
-    "TITLE": "Configuració",
-    "PROFILE": {
-      "TITLE": "Perfil d'usuari",
-      "DESCRIPTION": "Actualitza la teva informació personal.",
-      "AVATAR_TITLE": "Foto de perfil",
-      "AVATAR_DESCRIPTION": "Puja una imatge per identificar-te."
-    },
     "PREFERENCES": {
-      "LANGUAGE": {
-        "DESCRIPTION": "Selecciona l'idioma en què vols veure l'aplicació.",
-        "TITLE": "Idioma de la interfície"
-      },
       "DARKMODE": {
         "DESCRIPTION": "Activa el mode fosc per reduir la fatiga visual.",
         "TITLE": "Mode fosc"
       },
-    "TITLE": "Preferències"
+      "LANGUAGE": {
+        "DESCRIPTION": "Selecciona l'idioma en què vols veure l'aplicació.",
+        "TITLE": "Idioma de la interfície"
+      },
+      "PUSH_NOTIFICATIONS": {
+        "DESCRIPTION": "Rep notificacions al teu correu electrònic sobre actualitzacions.",
+        "TITLE": "Notificacions push"
+      },
+      "TITLE": "Preferències"
+    },
+    "PROFILE": {
+      "AVATAR_DESCRIPTION": "Puja una imatge per identificar-te.",
+      "AVATAR_TITLE": "Foto de perfil",
+      "DESCRIPTION": "Actualitza la teva informació personal.",
+      "TITLE": "Perfil d'usuari"
+    },
+    "TITLE": "Configuració",
+    "TOASTS": {
+      "AVATAR_UPDATED": "Foto de perfil actualitzada correctament.",
+      "PROFILE_UPDATED": "Perfil actualitzat correctament.",
+      "PUSH_NOTIFICATIONS_UPDATED": "Preferències de notificacions actualitzades.",
+      "SUCCESS": "Èxit"
+    }
   },
-  "TOASTS": {
-    "SUCCESS": "Èxit",
-    "PROFILE_UPDATED": "Perfil actualitzat correctament.",
-    "AVATAR_UPDATED": "Foto de perfil actualitzada correctament."
-  }
-},
   "DASHBOARD": {
     "TITLE": "Inici"
   },

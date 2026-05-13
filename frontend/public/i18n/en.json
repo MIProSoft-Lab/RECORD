@@ -26,30 +26,35 @@
     }
   },
   "CONFIG": {
-    "TITLE": "Configuration",
-    "PROFILE": {
-      "TITLE": "User Profile",
-      "DESCRIPTION": "Update your personal information.",
-      "AVATAR_TITLE": "Profile picture",
-      "AVATAR_DESCRIPTION": "Upload an image to identify yourself."
-    },
     "PREFERENCES": {
-      "LANGUAGE": {
-        "DESCRIPTION": "Choose the language for the application interface.",
-        "TITLE": "Interface language"
-      },
       "DARKMODE": {
         "DESCRIPTION": "Enable dark mode to reduce eye strain.",
         "TITLE": "Dark mode"
       },
-    "TITLE": "Preferences"
+      "LANGUAGE": {
+        "DESCRIPTION": "Choose the language for the application interface.",
+        "TITLE": "Interface language"
+      },
+      "PUSH_NOTIFICATIONS": {
+        "DESCRIPTION": "Receive notifications on your email about updates.",
+        "TITLE": "Push notifications"
+      },
+      "TITLE": "Preferences"
+    },
+    "PROFILE": {
+      "AVATAR_DESCRIPTION": "Upload an image to identify yourself.",
+      "AVATAR_TITLE": "Profile picture",
+      "DESCRIPTION": "Update your personal information.",
+      "TITLE": "User Profile"
+    },
+    "TITLE": "Configuration",
+    "TOASTS": {
+      "AVATAR_UPDATED": "Profile picture updated successfully.",
+      "PROFILE_UPDATED": "Profile updated successfully.",
+      "PUSH_NOTIFICATIONS_UPDATED": "Notification preferences updated.",
+      "SUCCESS": "Success"
+    }
   },
-  "TOASTS": {
-    "SUCCESS": "Success",
-    "PROFILE_UPDATED": "Profile updated successfully.",
-    "AVATAR_UPDATED": "Profile picture updated successfully."
-  }
-},
   "DASHBOARD": {
     "TITLE": "Dashboard"
   },

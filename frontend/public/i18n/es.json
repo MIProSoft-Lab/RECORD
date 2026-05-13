@@ -26,30 +26,35 @@
     }
   },
   "CONFIG": {
-    "TITLE": "Configuración",
-    "PROFILE": {
-      "TITLE": "Perfil de usuario",
-      "DESCRIPTION": "Actualiza tu información personal.",
-      "AVATAR_TITLE": "Foto de perfil",
-      "AVATAR_DESCRIPTION": "Sube una imagen para identificarte."
-    },
     "PREFERENCES": {
-      "LANGUAGE": {
-        "DESCRIPTION": "Elige en qué idioma quieres ver la aplicación.",
-        "TITLE": "Idioma de la interfaz"
-      },
       "DARKMODE": {
         "DESCRIPTION": "Activa el modo oscuro para reducir la fatiga visual.",
         "TITLE": "Modo oscuro"
       },
-    "TITLE": "Preferencias"
+      "LANGUAGE": {
+        "DESCRIPTION": "Elige en qué idioma quieres ver la aplicación.",
+        "TITLE": "Idioma de la interfaz"
+      },
+      "PUSH_NOTIFICATIONS": {
+        "DESCRIPTION": "Recibe notificaciones en tu correo electrónico sobre actualizaciones.",
+        "TITLE": "Notificaciones push"
+      },
+      "TITLE": "Preferencias"
+    },
+    "PROFILE": {
+      "AVATAR_DESCRIPTION": "Sube una imagen para identificarte.",
+      "AVATAR_TITLE": "Foto de perfil",
+      "DESCRIPTION": "Actualiza tu información personal.",
+      "TITLE": "Perfil de usuario"
+    },
+    "TITLE": "Configuración",
+    "TOASTS": {
+      "AVATAR_UPDATED": "Foto de perfil actualizada correctamente.",
+      "PROFILE_UPDATED": "Perfil actualizado correctamente.",
+      "PUSH_NOTIFICATIONS_UPDATED": "Preferencias de notificaciones actualizadas.",
+      "SUCCESS": "Éxito"
+    }
   },
-  "TOASTS": {
-    "SUCCESS": "Éxito",
-    "PROFILE_UPDATED": "Perfil actualizado correctamente.",
-    "AVATAR_UPDATED": "Foto de perfil actualizada correctamente."
-  }
-},
   "DASHBOARD": {
     "TITLE": "Inicio"
   },

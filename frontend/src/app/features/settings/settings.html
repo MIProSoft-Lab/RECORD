@@ -121,6 +121,21 @@
               (onChange)="onDarkModeToggle($event)">
             </p-toggleswitch>
           </div>
+
+          <div class="flex align-items-center justify-content-between">
+            <div class="flex flex-column gap-1">
+              <span class="font-semibold text-color">
+                {{ 'CONFIG.PREFERENCES.PUSH_NOTIFICATIONS.TITLE' | translate }}
+              </span>
+              <span class="text-color-secondary text-sm">
+                {{ 'CONFIG.PREFERENCES.PUSH_NOTIFICATIONS.DESCRIPTION' | translate }}
+              </span>
+            </div>
+            <p-toggleswitch
+              [ngModel]="isPushNotifications()"
+              (onChange)="onPushNotificationsToggle($event)">
+            </p-toggleswitch>
+          </div>
         </div>
       </p-card>
     </div>
