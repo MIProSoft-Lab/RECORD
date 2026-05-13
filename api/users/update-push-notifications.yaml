@@ -1,0 +1,38 @@
+patch:
+  summary: Update push notifications
+  description: Update the push notification preferences for the current user.
+  tags:
+    - Users
+  operationId: updatePushNotifications
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/UserUpdatePushNotificationRequest"
+
+  responses:
+    "200":
+      description: Push notification preferences updated successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/UserResponse"
+    "400":
+      description: Bad request. Invalid input data.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

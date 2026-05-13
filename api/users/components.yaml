@@ -24,11 +24,16 @@ schemas:
       profileImageUrl:
         type: string
         example: "https://res.cloudinary.com/dngaan1ba/image/upload/v12345/user_profile_images/xxx.jpg"
+      pushNotifications:
+        type: boolean
+        example: true
     required:
       - id
       - firstName
       - lastName
       - email
+      - profileImageUrl
+      - pushNotifications
 
   UserUpdateRequest:
     type: object
@@ -71,3 +76,13 @@ schemas:
       - cloud_name
       - transformation
       - folder
+
+  UserUpdatePushNotificationRequest:
+    type: object
+    properties:
+      pushNotifications:
+        type: boolean
+        description: Whether push notifications are enabled for the user.
+        example: true
+    required:
+      - pushNotifications

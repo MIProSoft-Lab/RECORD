@@ -35,7 +35,8 @@ fun User.toResponse() = UserResponse(
     this.firstName,
     this.lastName,
     this.email,
-    this.profileImageUrl
+    this.profileImageUrl!!,
+    this.pushNotifications
 )
 
 fun UserUpdateRequest.toDto() = UserUpdateRequestDto(
