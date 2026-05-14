@@ -30,14 +30,12 @@ fun Token.toEntity() = TokenEntity(
     this.id,
     this.userId,
     this.token,
-    this.revoked,
-    this.expired
+    this.revoked
 )
 
 fun TokenEntity.toDomain() = Token(
     this.id,
     this.userId,
     this.token,
-    this.revoked,
-    this.expired
+    this.revoked
 )

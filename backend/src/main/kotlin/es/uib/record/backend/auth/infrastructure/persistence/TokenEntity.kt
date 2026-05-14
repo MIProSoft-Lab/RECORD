@@ -22,6 +22,4 @@ class TokenEntity(
     var token: String,
 
     var revoked: Boolean,
-
-    var expired: Boolean
 )

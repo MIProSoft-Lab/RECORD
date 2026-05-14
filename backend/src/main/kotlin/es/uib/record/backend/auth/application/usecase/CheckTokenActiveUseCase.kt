@@ -10,6 +10,6 @@ class CheckTokenActiveUseCase(
     fun execute(token: String): Boolean {
         val savedToken = this.tokenRepository.findByToken(token) ?: return false
 
-        return !savedToken.expired && !savedToken.revoked
+        return !savedToken.revoked
     }
 }

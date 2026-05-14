@@ -7,5 +7,4 @@ data class Token(
     val userId: UUID,
     val token: String,
     val revoked: Boolean = false,
-    val expired: Boolean = false,
 )

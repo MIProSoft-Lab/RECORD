@@ -27,7 +27,6 @@ class RevokeTokenUseCase(
             savedToken.userId,
             savedToken.token,
             true,
-            savedToken.expired
         )
 
         this.tokenRepository.save(revokedToken)
