@@ -37,6 +37,8 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${property("springdocVersion")}")
 	implementation("io.jsonwebtoken:jjwt-api:${property("jjwtVersion")}")
 	implementation("com.cloudinary:cloudinary-http5:${property("cloudinaryVersion")}")
+	implementation("org.flywaydb:flyway-core")
+	implementation("org.flywaydb:flyway-database-postgresql")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")

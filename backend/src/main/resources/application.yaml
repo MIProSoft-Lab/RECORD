@@ -3,7 +3,10 @@ spring:
     name: backend
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+  flyway:
+    enabled: true
+
 application:
   security:
     jwt:
