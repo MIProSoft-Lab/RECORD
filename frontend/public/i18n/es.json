@@ -9,6 +9,7 @@
   },
   "COMMON": {
     "BUTTONS": {
+      "CANCEL": "Cancelar",
       "CREATE_ACCOUNT": "Crear cuenta",
       "LOGIN": "Entrar",
       "SAVE": "Guardar"
@@ -57,6 +58,24 @@
   },
   "DASHBOARD": {
     "TITLE": "Inicio"
+  },
+  "GROUPS": {
+    "CREATE_BUTTON": "Crear grupo",
+    "DIALOG": {
+      "CREATE_BUTTON": "Crear",
+      "DESCRIPTION_LABEL": "Descripción",
+      "DESCRIPTION_PLACEHOLDER": "Describe las actividades de investigación del grupo...",
+      "NAME_LABEL": "Nombre",
+      "NAME_PLACEHOLDER": "p. ej. Inteligencia Artificial Aplicada",
+      "NAME_REQUIRED": "El nombre es obligatorio (mín. 3 caracteres).",
+      "TITLE": "Crear grupo de investigación"
+    },
+    "EMPTY_STATE": "Todavía no hay grupos. Crea uno para empezar.",
+    "TITLE": "Grupos",
+    "TOASTS": {
+      "GROUP_CREATED": "Grupo de investigación creado correctamente.",
+      "SUCCESS": "Éxito"
+    }
   },
   "ERRORS": {
     "BAD_CREDENTIALS": "Credenciales incorrectas.",

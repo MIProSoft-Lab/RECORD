@@ -9,6 +9,7 @@
   },
   "COMMON": {
     "BUTTONS": {
+      "CANCEL": "Cancel·lar",
       "CREATE_ACCOUNT": "Crear compte",
       "LOGIN": "Entrar",
       "SAVE": "Guardar"
@@ -57,6 +58,24 @@
   },
   "DASHBOARD": {
     "TITLE": "Inici"
+  },
+  "GROUPS": {
+    "CREATE_BUTTON": "Crear grup",
+    "DIALOG": {
+      "CREATE_BUTTON": "Crear",
+      "DESCRIPTION_LABEL": "Descripció",
+      "DESCRIPTION_PLACEHOLDER": "Descriu les activitats de recerca del grup...",
+      "NAME_LABEL": "Nom",
+      "NAME_PLACEHOLDER": "p. ex. Intel·ligència Artificial Aplicada",
+      "NAME_REQUIRED": "El nom és obligatori (mín. 3 caràcters).",
+      "TITLE": "Crear grup de recerca"
+    },
+    "EMPTY_STATE": "Encara no hi ha grups. Crea'n un per començar.",
+    "TITLE": "Grups",
+    "TOASTS": {
+      "GROUP_CREATED": "Grup de recerca creat correctament.",
+      "SUCCESS": "Èxit"
+    }
   },
   "ERRORS": {
     "BAD_CREDENTIALS": "Credencials incorrectes.",

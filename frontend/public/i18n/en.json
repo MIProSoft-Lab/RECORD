@@ -9,6 +9,7 @@
   },
   "COMMON": {
     "BUTTONS": {
+      "CANCEL": "Cancel",
       "CREATE_ACCOUNT": "Create account",
       "LOGIN": "Log in",
       "SAVE": "Save"
@@ -57,6 +58,24 @@
   },
   "DASHBOARD": {
     "TITLE": "Dashboard"
+  },
+  "GROUPS": {
+    "CREATE_BUTTON": "Create group",
+    "DIALOG": {
+      "CREATE_BUTTON": "Create",
+      "DESCRIPTION_LABEL": "Description",
+      "DESCRIPTION_PLACEHOLDER": "Describe the group's research activities...",
+      "NAME_LABEL": "Name",
+      "NAME_PLACEHOLDER": "e.g. Applied Artificial Intelligence",
+      "NAME_REQUIRED": "Name is required (min. 3 characters).",
+      "TITLE": "Create research group"
+    },
+    "EMPTY_STATE": "No groups yet. Create one to get started.",
+    "TITLE": "Groups",
+    "TOASTS": {
+      "GROUP_CREATED": "Research group created successfully.",
+      "SUCCESS": "Success"
+    }
   },
   "ERRORS": {
     "BAD_CREDENTIALS": "Invalid credentials.",
