@@ -8,7 +8,7 @@ import jakarta.persistence.Enumerated
 import java.util.UUID
 
 @Embeddable
-class GroupMember(
+class GroupMemberEntity(
     @Column(name = "user_id", nullable = false, updatable = false)
     var userId: UUID,
 

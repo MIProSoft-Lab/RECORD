@@ -19,7 +19,7 @@ class GroupEntity (
     @GeneratedValue(strategy = GenerationType.UUID)
     var id: UUID? = null,
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     var name: String,
 
     var description: String? = null,
@@ -35,5 +35,5 @@ class GroupEntity (
         name = "group_members",
         joinColumns = [JoinColumn(name = "group_id")]
     )
-    var members: MutableSet<GroupMember> = mutableSetOf()
+    var members: MutableSet<GroupMemberEntity> = mutableSetOf()
 )
