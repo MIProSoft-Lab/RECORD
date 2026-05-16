@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from '@features/auth/pages/login/login';
 import { MainLayout } from '@layouts/main-layout/main-layout';
 import { Dashboard } from '@features/dashboard/dashboard';
+import { Groups } from '@features/groups/groups';
 import { guestGuard } from '@core/guards/guest.guard';
 import { authGuard } from '@core/guards/auth.guard';
 import { Register } from '@features/auth/pages/register/register';
@@ -31,6 +32,10 @@ export const routes: Routes = [
       {
         path: 'dashboard',
         component: Dashboard
+      },
+      {
+        path: 'groups',
+        component: Groups
       },
       {
         path: '',

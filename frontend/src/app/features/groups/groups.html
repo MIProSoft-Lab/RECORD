@@ -1,0 +1,71 @@
+<div class="min-h-screen surface-ground p-4">
+  <div class="flex align-items-center justify-content-between mb-4">
+    <h1 class="m-0">{{ 'GROUPS.TITLE' | translate }}</h1>
+    <p-button
+      [label]="'GROUPS.CREATE_BUTTON' | translate"
+      icon="pi pi-plus"
+      (onClick)="openCreateDialog()"
+    />
+  </div>
+
+  <p class="text-color-secondary">{{ 'GROUPS.EMPTY_STATE' | translate }}</p>
+</div>
+
+<p-dialog
+  [header]="'GROUPS.DIALOG.TITLE' | translate"
+  [(visible)]="showCreateDialog"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <form [formGroup]="createForm" class="flex flex-column gap-3 pt-2">
+
+    <div class="flex flex-column gap-1">
+      <label for="group-name" class="font-medium">
+        {{ 'GROUPS.DIALOG.NAME_LABEL' | translate }}
+      </label>
+      <input
+        id="group-name"
+        pInputText
+        formControlName="name"
+        [placeholder]="'GROUPS.DIALOG.NAME_PLACEHOLDER' | translate"
+        class="w-full"
+      />
+      @if (createForm.controls.name.invalid && createForm.controls.name.touched) {
+        <small class="text-red-500">{{ 'GROUPS.DIALOG.NAME_REQUIRED' | translate }}</small>
+      }
+    </div>
+
+    <div class="flex flex-column gap-1">
+      <label for="group-description" class="font-medium">
+        {{ 'GROUPS.DIALOG.DESCRIPTION_LABEL' | translate }}
+      </label>
+      <textarea
+        id="group-description"
+        pTextarea
+        formControlName="description"
+        [placeholder]="'GROUPS.DIALOG.DESCRIPTION_PLACEHOLDER' | translate"
+        rows="4"
+        class="w-full"
+      ></textarea>
+    </div>
+
+  </form>
+
+  <ng-template #footer>
+    <p-button
+      [label]="'COMMON.BUTTONS.CANCEL' | translate"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="closeCreateDialog()"
+      [disabled]="isSaving()"
+    />
+    <p-button
+      [label]="'GROUPS.DIALOG.CREATE_BUTTON' | translate"
+      (onClick)="onCreateGroup()"
+      [loading]="isSaving()"
+      [disabled]="createForm.invalid"
+    />
+  </ng-template>
+</p-dialog>
