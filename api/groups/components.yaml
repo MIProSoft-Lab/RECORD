@@ -1,0 +1,35 @@
+schemas:
+  CreateGroupRequest:
+    type: object
+    properties:
+      name:
+        type: string
+        minLength: 3
+        maxLength: 255
+        description: "El nombre del grupo de investigación. Debe ser único."
+        example: "Inteligencia Artificial Aplicada"
+      description:
+        type: string
+        maxLength: 2000
+        description: "Descripción detallada de las actividades del grupo."
+        example: "Grupo dedicado a la investigación de redes neuronales y machine learning."
+    required:
+      - name
+
+  GroupResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      description:
+        type: string
+      createdBy:
+        type: string
+        format: uuid
+    required:
+      - id
+      - name
+      - createdBy

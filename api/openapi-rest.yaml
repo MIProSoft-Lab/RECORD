@@ -37,3 +37,6 @@ paths:
 
   /users/me/update-push-notifications:
     $ref: "./users/update-push-notifications.yaml"
+
+  /groups/create:
+    $ref: "./groups/create.yaml"
