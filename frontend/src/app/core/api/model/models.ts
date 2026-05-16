@@ -1,5 +1,7 @@
 export * from './authResponse';
+export * from './createGroupRequest';
 export * from './errorResponse';
+export * from './groupResponse';
 export * from './loginRequest';
 export * from './logoutRequest';
 export * from './refreshRequest';
