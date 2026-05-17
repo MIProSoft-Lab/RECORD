@@ -5,4 +5,5 @@ import java.util.UUID
 
 interface SpringDataJpaGroupRepository : JpaRepository<GroupEntity, UUID> {
     fun findByName(name: String): GroupEntity?
+    fun findAllByMembersUserId(userId: UUID): List<GroupEntity>
 }

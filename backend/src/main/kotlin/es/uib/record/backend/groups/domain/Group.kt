@@ -19,4 +19,12 @@ class Group (
     fun addMember(userId: UUID, role: GroupRole = GroupRole.MEMBER) {
         _members.add(GroupMember(userId, role))
     }
+
+    fun getMemberRole(userId: UUID): GroupRole {
+        return _members.first { it.userId == userId }.role
+    }
+
+    fun getMembersCount(): Int {
+        return _members.size
+    }
 }
