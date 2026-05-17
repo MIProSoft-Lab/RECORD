@@ -40,3 +40,6 @@ paths:
 
   /groups/create:
     $ref: "./groups/create.yaml"
+
+  /groups/me:
+    $ref: "./groups/list-groups.yaml"

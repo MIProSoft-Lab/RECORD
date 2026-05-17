@@ -33,3 +33,32 @@ schemas:
       - id
       - name
       - createdBy
+
+  GroupSummaryResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+        description: "Group name."
+      description:
+        type: string
+        description: "Group description."
+      role:
+        $ref: "../common.yaml#/schemas/GroupRole"
+      memberCount:
+        type: integer
+        description: "Number of members in the group."
+        example: 10
+      isOwner:
+        type: boolean
+        description: "Whether the user is the owner of the group."
+        example: false
+    required:
+      - id
+      - name
+      - role
+      - memberCount
+      - isOwner

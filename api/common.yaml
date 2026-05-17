@@ -17,3 +17,10 @@ schemas:
     required:
       - message
       - code
+
+  GroupRole:
+    type: string
+    enum:
+      - MEMBER
+      - ADMIN
+    example: "MEMBER"
