@@ -71,6 +71,19 @@
       "TITLE": "Crear grup de recerca"
     },
     "EMPTY_STATE": "Encara no hi ha grups. Crea'n un per començar.",
+    "LIST": {
+      "COLUMNS": {
+        "MEMBERS": "Membres",
+        "NAME": "Nom",
+        "OWNER": "Propietari",
+        "ROLE": "El teu rol"
+      },
+      "OWNER_BADGE": "Propietari"
+    },
+    "ROLES": {
+      "ADMIN": "Administrador",
+      "MEMBER": "Membre"
+    },
     "TITLE": "Grups",
     "TOASTS": {
       "GROUP_CREATED": "Grup de recerca creat correctament.",

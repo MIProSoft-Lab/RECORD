@@ -71,6 +71,19 @@
       "TITLE": "Crear grupo de investigación"
     },
     "EMPTY_STATE": "Todavía no hay grupos. Crea uno para empezar.",
+    "LIST": {
+      "COLUMNS": {
+        "MEMBERS": "Miembros",
+        "NAME": "Nombre",
+        "OWNER": "Propietario",
+        "ROLE": "Tu rol"
+      },
+      "OWNER_BADGE": "Propietario"
+    },
+    "ROLES": {
+      "ADMIN": "Administrador",
+      "MEMBER": "Miembro"
+    },
     "TITLE": "Grupos",
     "TOASTS": {
       "GROUP_CREATED": "Grupo de investigación creado correctamente.",

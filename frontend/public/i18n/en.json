@@ -71,6 +71,19 @@
       "TITLE": "Create research group"
     },
     "EMPTY_STATE": "No groups yet. Create one to get started.",
+    "LIST": {
+      "COLUMNS": {
+        "MEMBERS": "Members",
+        "NAME": "Name",
+        "OWNER": "Owner",
+        "ROLE": "Your role"
+      },
+      "OWNER_BADGE": "Owner"
+    },
+    "ROLES": {
+      "ADMIN": "Admin",
+      "MEMBER": "Member"
+    },
     "TITLE": "Groups",
     "TOASTS": {
       "GROUP_CREATED": "Research group created successfully.",
