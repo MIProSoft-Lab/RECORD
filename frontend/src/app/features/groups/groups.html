@@ -8,7 +8,66 @@
     />
   </div>
 
-  <p class="text-color-secondary">{{ 'GROUPS.EMPTY_STATE' | translate }}</p>
+  @if (!isLoading() && groups().length === 0) {
+    <p class="text-color-secondary">{{ 'GROUPS.EMPTY_STATE' | translate }}</p>
+  } @else {
+    <p-table
+      [value]="groups()"
+      [loading]="isLoading()"
+      [rowHover]="true"
+      sortField="name"
+      [sortOrder]="1"
+      dataKey="id"
+      class="p-datatable-sm"
+    >
+      <ng-template #header>
+        <tr>
+          <th pSortableColumn="name">
+            {{ 'GROUPS.LIST.COLUMNS.NAME' | translate }}
+            <p-sortIcon field="name" />
+          </th>
+          <th pSortableColumn="memberCount" style="width: 10rem">
+            {{ 'GROUPS.LIST.COLUMNS.MEMBERS' | translate }}
+            <p-sortIcon field="memberCount" />
+          </th>
+          <th style="width: 10rem">{{ 'GROUPS.LIST.COLUMNS.ROLE' | translate }}</th>
+          <th style="width: 8rem">{{ 'GROUPS.LIST.COLUMNS.OWNER' | translate }}</th>
+        </tr>
+      </ng-template>
+      <ng-template #body let-group>
+        <tr>
+          <td>
+            <div class="font-medium">{{ group.name }}</div>
+            @if (group.description) {
+              <div class="text-color-secondary text-sm mt-1">{{ group.description }}</div>
+            }
+          </td>
+          <td>{{ group.memberCount }}</td>
+          <td>
+            <p-tag
+              [value]="'GROUPS.ROLES.' + group.role | translate"
+              [severity]="group.role === 'ADMIN' ? 'warn' : 'info'"
+            />
+          </td>
+          <td>
+            @if (group.isOwner) {
+              <i
+                class="pi pi-star-fill text-yellow-500"
+                [title]="'GROUPS.LIST.OWNER_BADGE' | translate"
+              ></i>
+            }
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template #emptymessage>
+        <tr>
+          <td colspan="4" class="text-center text-color-secondary p-4">
+            {{ 'GROUPS.EMPTY_STATE' | translate }}
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  }
 </div>
 
 <p-dialog
