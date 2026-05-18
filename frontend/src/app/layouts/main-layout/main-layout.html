@@ -17,7 +17,7 @@
   <div class="flex-1 flex flex-column ">
     <header class="h-4rem surface-card border-bottom-1 surface-border flex align-items-center justify-content-between px-4">
 
-      <span class="font-bold">Bienvenido, {{ userObj?.firstName }}</span>
+      <record-breadcrumbs />
 
       <div class="flex align-items-center">
         <p-menu #userMenu [model]="userMenuItems" [popup]="true"></p-menu>

@@ -6,10 +6,11 @@ import { Avatar } from 'primeng/avatar';
 import { MenuItem } from 'primeng/api';
 import { Menu } from 'primeng/menu';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { Breadcrumbs } from '@shared/components/breadcrumbs/breadcrumbs';
 
 @Component({
   selector: 'record-main-layout',
-  imports: [RouterLink, RouterOutlet, Avatar, Menu, TranslatePipe],
+  imports: [RouterLink, RouterOutlet, Avatar, Menu, TranslatePipe, Breadcrumbs],
   templateUrl: './main-layout.html',
 })
 export class MainLayout implements OnInit {

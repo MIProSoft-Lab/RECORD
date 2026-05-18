@@ -32,15 +32,20 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: Dashboard
+        component: Dashboard,
+        data: { breadcrumb: 'DASHBOARD.TITLE' }
       },
       {
         path: 'groups',
-        component: Groups
-      },
-      {
-        path: 'groups/:id',
-        component: GroupDetail
+        data: { breadcrumb: 'GROUPS.TITLE' },
+        children: [
+          { path: '', component: Groups },
+          {
+            path: ':id',
+            component: GroupDetail,
+            data: { breadcrumb: 'GROUPS.TITLE' }
+          }
+        ]
       },
       {
         path: '',

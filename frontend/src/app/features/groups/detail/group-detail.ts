@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -8,18 +8,22 @@ import { TabsModule } from 'primeng/tabs';
 import { Tag } from 'primeng/tag';
 import { HttpErrorResponse } from '@angular/common/http';
 import { GroupDetailResponse, GroupsService } from '@core/api';
+import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 
 @Component({
   selector: 'record-group-detail',
   imports: [DatePipe, TranslatePipe, TableModule, TabsModule, Tag],
   templateUrl: './group-detail.html',
 })
-export class GroupDetail implements OnInit {
+export class GroupDetail implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly groupsService = inject(GroupsService);
   private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
+  private readonly breadcrumbService = inject(BreadcrumbService);
+
+  private breadcrumbUrl: string | null = null;
 
   group = signal<GroupDetailResponse | null>(null);
   isLoading = signal(false);
@@ -42,6 +46,8 @@ export class GroupDetail implements OnInit {
       next: (group) => {
         this.group.set(group);
         this.isLoading.set(false);
+        this.breadcrumbUrl = this.router.url;
+        this.breadcrumbService.setDynamicLabel(this.breadcrumbUrl, group.name);
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);
@@ -59,5 +65,11 @@ export class GroupDetail implements OnInit {
         this.router.navigate(['/groups']);
       },
     });
+  }
+
+  ngOnDestroy() {
+    if (this.breadcrumbUrl) {
+      this.breadcrumbService.clearDynamicLabel(this.breadcrumbUrl);
+    }
   }
 }
