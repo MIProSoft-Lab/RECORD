@@ -62,3 +62,64 @@ schemas:
       - role
       - memberCount
       - isOwner
+
+  GroupDetailResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      description:
+        type: string
+      createdBy:
+        type: string
+        format: uuid
+      createdAt:
+        type: string
+        format: date-time
+      members:
+        type: array
+        items:
+          $ref: "#/schemas/GroupMemberDetail"
+    required:
+      - id
+      - name
+      - createdBy
+      - createdAt
+      - members
+
+  GroupMemberDetail:
+    type: object
+    properties:
+      userId:
+        type: string
+        format: uuid
+        description: "Unique identifier of the user."
+      firstName:
+        type: string
+        description: "First name of the user."
+      lastName:
+        type: string
+        description: "Last name of the user."
+      email:
+        type: string
+        format: email
+        description: "Email of the user."
+      role:
+        $ref: "../common.yaml#/schemas/GroupRole"
+      profileImageUrl:
+        type: string
+        description: "URL of the user's profile image."
+      isCreator:
+        type: boolean
+        description: "Whether the user is the creator of the group."
+        example: false
+    required:
+      - userId
+      - firstName
+      - lastName
+      - email
+      - role
+      - isCreator

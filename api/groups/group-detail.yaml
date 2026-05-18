@@ -1,0 +1,50 @@
+get:
+  summary: Get group detail
+  operationId: getGroupDetail
+  tags:
+    - Groups
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      description: Unique identifier of the group.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Group detail retrieved successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/GroupDetailResponse"
+    "400":
+      description: Bad request. Invalid input data.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. User is not a member of the group.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Group not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

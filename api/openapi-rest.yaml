@@ -43,3 +43,6 @@ paths:
 
   /groups/me:
     $ref: "./groups/list-groups.yaml"
+
+  /groups/{groupId}:
+    $ref: "./groups/group-detail.yaml"
