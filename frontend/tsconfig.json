@@ -7,7 +7,8 @@
     "paths": {
       "@core/*": ["src/app/core/*"],
       "@features/*": ["src/app/features/*"],
-      "@layouts/*": ["src/app/layouts/*"]
+      "@layouts/*": ["src/app/layouts/*"],
+      "@shared/*": ["src/app/shared/*"]
     },
     "strict": true,
     "noImplicitOverride": true,
