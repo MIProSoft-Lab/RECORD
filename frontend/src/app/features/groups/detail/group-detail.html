@@ -1,0 +1,126 @@
+<div class="min-h-screen surface-ground p-4">
+  @if (group(); as g) {
+    <div class="flex align-items-center justify-content-between mb-4">
+      <h1 class="m-0">{{ g.name }}</h1>
+    </div>
+
+    <p-tabs [(value)]="activeTab">
+      <p-tablist>
+        <p-tab value="about">{{ 'GROUPS.DETAIL.TABS.ABOUT' | translate }}</p-tab>
+        <p-tab value="posts">{{ 'GROUPS.DETAIL.TABS.POSTS' | translate }}</p-tab>
+        <p-tab value="settings">{{ 'GROUPS.DETAIL.TABS.SETTINGS' | translate }}</p-tab>
+      </p-tablist>
+
+      <p-tabpanels>
+        <p-tabpanel value="about">
+          <div class="flex flex-column gap-4 pt-3">
+            <div>
+              <h3 class="m-0 mb-2">
+                {{ 'GROUPS.DETAIL.ABOUT.DESCRIPTION_LABEL' | translate }}
+              </h3>
+              <p class="m-0 text-color-secondary">
+                {{ g.description || ('GROUPS.DETAIL.ABOUT.NO_DESCRIPTION' | translate) }}
+              </p>
+            </div>
+
+            <div>
+              <h3 class="m-0 mb-2">
+                {{ 'GROUPS.DETAIL.ABOUT.CREATED_AT_LABEL' | translate }}
+              </h3>
+              <p class="m-0 text-color-secondary">
+                {{ g.createdAt | date: 'mediumDate' }}
+              </p>
+            </div>
+
+            <div>
+              <h3 class="m-0 mb-3">
+                {{ 'GROUPS.DETAIL.ABOUT.MEMBERS_TITLE' | translate }}
+                <span class="text-color-secondary font-normal">({{ members().length }})</span>
+              </h3>
+              <p-table
+                [value]="members()"
+                [rowHover]="true"
+                dataKey="userId"
+                class="p-datatable-sm"
+              >
+                <ng-template #header>
+                  <tr>
+                    <th>{{ 'GROUPS.DETAIL.ABOUT.COLUMNS.MEMBER' | translate }}</th>
+                    <th style="width: 16rem">
+                      {{ 'GROUPS.DETAIL.ABOUT.COLUMNS.EMAIL' | translate }}
+                    </th>
+                    <th style="width: 8rem">
+                      {{ 'GROUPS.DETAIL.ABOUT.COLUMNS.ROLE' | translate }}
+                    </th>
+                    <th style="width: 8rem">
+                      {{ 'GROUPS.DETAIL.ABOUT.COLUMNS.CREATOR' | translate }}
+                    </th>
+                  </tr>
+                </ng-template>
+                <ng-template #body let-member>
+                  <tr>
+                    <td>
+                      <div class="flex align-items-center gap-2">
+                        @if (member.profileImageUrl) {
+                          <img
+                            [src]="member.profileImageUrl"
+                            [alt]="member.firstName + ' ' + member.lastName"
+                            class="border-circle border-1 surface-border object-cover"
+                            style="width: 2rem; height: 2rem"
+                          />
+                        } @else {
+                          <div
+                            class="border-circle surface-200 flex align-items-center justify-content-center"
+                            style="width: 2rem; height: 2rem"
+                          >
+                            <i class="pi pi-user text-color-secondary"></i>
+                          </div>
+                        }
+                        <span class="font-medium">
+                          {{ member.firstName }} {{ member.lastName }}
+                        </span>
+                      </div>
+                    </td>
+                    <td class="text-color-secondary">{{ member.email }}</td>
+                    <td>
+                      <p-tag
+                        [value]="'GROUPS.ROLES.' + member.role | translate"
+                        [severity]="member.role === 'ADMIN' ? 'warn' : 'info'"
+                      />
+                    </td>
+                    <td>
+                      @if (member.isCreator) {
+                        <i
+                          class="pi pi-star-fill text-yellow-500"
+                          [title]="'GROUPS.DETAIL.ABOUT.CREATOR_BADGE' | translate"
+                        ></i>
+                      }
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </p-tabpanel>
+
+        <p-tabpanel value="posts">
+          <div class="flex align-items-center justify-content-center p-6 text-color-secondary">
+            <i class="pi pi-info-circle mr-2"></i>
+            {{ 'GROUPS.DETAIL.POSTS.COMING_SOON' | translate }}
+          </div>
+        </p-tabpanel>
+
+        <p-tabpanel value="settings">
+          <div class="flex align-items-center justify-content-center p-6 text-color-secondary">
+            <i class="pi pi-info-circle mr-2"></i>
+            {{ 'GROUPS.DETAIL.SETTINGS.COMING_SOON' | translate }}
+          </div>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  } @else if (isLoading()) {
+    <div class="flex align-items-center justify-content-center p-6">
+      <i class="pi pi-spin pi-spinner text-2xl"></i>
+    </div>
+  }
+</div>

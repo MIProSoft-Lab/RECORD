@@ -35,7 +35,7 @@
         </tr>
       </ng-template>
       <ng-template #body let-group>
-        <tr>
+        <tr (click)="openGroupDetail(group.id)" style="cursor: pointer">
           <td>
             <div class="font-medium">{{ group.name }}</div>
             @if (group.description) {

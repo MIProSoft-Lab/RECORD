@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
@@ -29,6 +30,7 @@ export class Groups implements OnInit {
   private readonly groupsService = inject(GroupsService);
   private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
+  private readonly router = inject(Router);
 
   groups = signal<GroupSummaryResponse[]>([]);
   isLoading = signal(false);
@@ -55,6 +57,10 @@ export class Groups implements OnInit {
         this.isLoading.set(false);
       },
     });
+  }
+
+  openGroupDetail(groupId: string) {
+    this.router.navigate(['/groups', groupId]);
   }
 
   openCreateDialog() {
