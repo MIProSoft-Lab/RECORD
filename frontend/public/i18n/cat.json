@@ -61,6 +61,38 @@
   },
   "GROUPS": {
     "CREATE_BUTTON": "Crear grup",
+    "DETAIL": {
+      "TABS": {
+        "ABOUT": "Sobre",
+        "POSTS": "Publicacions",
+        "SETTINGS": "Configuració"
+      },
+      "ABOUT": {
+        "DESCRIPTION_LABEL": "Descripció",
+        "NO_DESCRIPTION": "Sense descripció.",
+        "CREATED_AT_LABEL": "Data de creació",
+        "MEMBERS_TITLE": "Membres",
+        "CREATOR_BADGE": "Creador",
+        "COLUMNS": {
+          "MEMBER": "Membre",
+          "EMAIL": "Email",
+          "ROLE": "Rol",
+          "CREATOR": "Creador"
+        }
+      },
+      "POSTS": {
+        "COMING_SOON": "Pròximament."
+      },
+      "SETTINGS": {
+        "COMING_SOON": "Pròximament."
+      },
+      "ERRORS": {
+        "TITLE": "Error",
+        "NOT_FOUND": "Grup no trobat.",
+        "FORBIDDEN": "No ets membre d'aquest grup.",
+        "GENERIC": "No s'ha pogut carregar el grup."
+      }
+    },
     "DIALOG": {
       "CREATE_BUTTON": "Crear",
       "DESCRIPTION_LABEL": "Descripció",

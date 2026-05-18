@@ -61,6 +61,38 @@
   },
   "GROUPS": {
     "CREATE_BUTTON": "Create group",
+    "DETAIL": {
+      "TABS": {
+        "ABOUT": "About",
+        "POSTS": "Posts",
+        "SETTINGS": "Settings"
+      },
+      "ABOUT": {
+        "DESCRIPTION_LABEL": "Description",
+        "NO_DESCRIPTION": "No description provided.",
+        "CREATED_AT_LABEL": "Created on",
+        "MEMBERS_TITLE": "Members",
+        "CREATOR_BADGE": "Creator",
+        "COLUMNS": {
+          "MEMBER": "Member",
+          "EMAIL": "Email",
+          "ROLE": "Role",
+          "CREATOR": "Creator"
+        }
+      },
+      "POSTS": {
+        "COMING_SOON": "Coming soon."
+      },
+      "SETTINGS": {
+        "COMING_SOON": "Coming soon."
+      },
+      "ERRORS": {
+        "TITLE": "Error",
+        "NOT_FOUND": "Group not found.",
+        "FORBIDDEN": "You are not a member of this group.",
+        "GENERIC": "Could not load the group."
+      }
+    },
     "DIALOG": {
       "CREATE_BUTTON": "Create",
       "DESCRIPTION_LABEL": "Description",
