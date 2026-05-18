@@ -1,7 +1,7 @@
 package es.uib.record.backend.groups.infrastructure.persistence.entity
 
-import es.uib.record.backend.groups.domain.Group
-import es.uib.record.backend.groups.domain.GroupRepository
+import es.uib.record.backend.groups.domain.model.Group
+import es.uib.record.backend.groups.domain.repository.GroupRepository
 import es.uib.record.backend.groups.infrastructure.mapper.toDomain
 import es.uib.record.backend.groups.infrastructure.mapper.toEntity
 import org.springframework.stereotype.Repository

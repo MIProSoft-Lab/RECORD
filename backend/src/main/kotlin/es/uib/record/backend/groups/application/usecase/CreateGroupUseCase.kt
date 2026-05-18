@@ -1,9 +1,9 @@
 package es.uib.record.backend.groups.application.usecase
 
 import es.uib.record.backend.groups.application.usecase.dto.CreateGroupRequestDto
-import es.uib.record.backend.groups.domain.Group
-import es.uib.record.backend.groups.domain.GroupRepository
-import es.uib.record.backend.groups.domain.GroupRole
+import es.uib.record.backend.groups.domain.model.Group
+import es.uib.record.backend.groups.domain.repository.GroupRepository
+import es.uib.record.backend.groups.domain.model.GroupRole
 import es.uib.record.backend.users.open.UserFacade
 import org.springframework.stereotype.Component
 

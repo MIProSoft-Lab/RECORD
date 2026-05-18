@@ -1,5 +1,6 @@
-package es.uib.record.backend.groups.domain
+package es.uib.record.backend.groups.domain.repository
 
+import es.uib.record.backend.groups.domain.model.Group
 import java.util.UUID
 
 interface GroupRepository {

@@ -2,8 +2,8 @@ package es.uib.record.backend.groups.application.usecase
 
 import es.uib.record.backend.groups.application.usecase.dto.GroupDetailResponseDto
 import es.uib.record.backend.groups.application.usecase.dto.GroupMemberDetailDto
-import es.uib.record.backend.groups.domain.GroupMember
-import es.uib.record.backend.groups.domain.GroupRepository
+import es.uib.record.backend.groups.domain.model.GroupMember
+import es.uib.record.backend.groups.domain.repository.GroupRepository
 import es.uib.record.backend.groups.domain.exception.GroupNotFoundException
 import es.uib.record.backend.groups.domain.exception.NotGroupMemberException
 import es.uib.record.backend.users.open.UserFacade

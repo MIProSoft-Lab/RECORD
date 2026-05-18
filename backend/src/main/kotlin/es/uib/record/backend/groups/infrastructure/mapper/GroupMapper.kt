@@ -1,7 +1,7 @@
 package es.uib.record.backend.groups.infrastructure.mapper
 
-import es.uib.record.backend.groups.domain.Group
-import es.uib.record.backend.groups.domain.GroupMember
+import es.uib.record.backend.groups.domain.model.Group
+import es.uib.record.backend.groups.domain.model.GroupMember
 import es.uib.record.backend.groups.infrastructure.persistence.entity.GroupEntity
 import es.uib.record.backend.groups.infrastructure.persistence.entity.GroupMemberEntity
 

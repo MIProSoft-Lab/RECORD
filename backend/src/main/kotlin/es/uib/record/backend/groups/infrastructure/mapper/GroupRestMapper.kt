@@ -4,8 +4,8 @@ import es.uib.record.backend.groups.application.usecase.dto.CreateGroupRequestDt
 import es.uib.record.backend.groups.application.usecase.dto.GroupDetailResponseDto
 import es.uib.record.backend.groups.application.usecase.dto.GroupMemberDetailDto
 import es.uib.record.backend.groups.application.usecase.dto.GroupSummaryResponseDto
-import es.uib.record.backend.groups.domain.Group
-import es.uib.record.backend.groups.domain.GroupRole
+import es.uib.record.backend.groups.domain.model.Group
+import es.uib.record.backend.groups.domain.model.GroupRole
 import es.uib.record.backend.model.CreateGroupRequest
 import es.uib.record.backend.model.GroupDetailResponse
 import es.uib.record.backend.model.GroupMemberDetail

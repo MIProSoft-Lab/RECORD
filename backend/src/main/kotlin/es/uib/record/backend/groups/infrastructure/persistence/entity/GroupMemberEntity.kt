@@ -1,6 +1,6 @@
 package es.uib.record.backend.groups.infrastructure.persistence.entity
 
-import es.uib.record.backend.groups.domain.GroupRole
+import es.uib.record.backend.groups.domain.model.GroupRole
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
 import jakarta.persistence.EnumType

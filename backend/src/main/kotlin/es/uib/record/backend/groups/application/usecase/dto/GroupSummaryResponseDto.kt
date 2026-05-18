@@ -1,6 +1,6 @@
 package es.uib.record.backend.groups.application.usecase.dto
 
-import es.uib.record.backend.groups.domain.GroupRole
+import es.uib.record.backend.groups.domain.model.GroupRole
 import java.util.UUID
 
 data class GroupSummaryResponseDto(

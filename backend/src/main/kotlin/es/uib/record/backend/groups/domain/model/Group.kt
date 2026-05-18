@@ -1,4 +1,4 @@
-package es.uib.record.backend.groups.domain
+package es.uib.record.backend.groups.domain.model
 
 import java.time.Instant
 import java.util.UUID
