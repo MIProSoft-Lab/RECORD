@@ -7,3 +7,17 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.H2Dialect
 
+application:
+  security:
+    jwt:
+      secret-key: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000
+  cloudinary:
+    cloud-name: "test-cloud"
+    api-key: "test-key"
+    api-secret: "test-secret"
+    user-avatar-folder: "test-folder"
+    user-transformation: "test-transform"
+
