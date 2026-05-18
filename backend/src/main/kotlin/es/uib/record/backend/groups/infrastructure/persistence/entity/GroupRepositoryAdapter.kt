@@ -24,4 +24,8 @@ class GroupRepositoryAdapter(
     override fun findAllByMemberId(memberId: UUID): List<Group> {
         return this.springDataJpaGroupRepository.findAllByMembersUserId(memberId).map { it.toDomain() }
     }
+
+    override fun findById(id: UUID): Group? {
+        return this.springDataJpaGroupRepository.findById(id).orElse(null)?.toDomain()
+    }
 }

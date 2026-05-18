@@ -7,6 +7,7 @@ import es.uib.record.backend.users.application.usecase.dto.UserProfileImageSigna
 import es.uib.record.backend.users.application.usecase.dto.UserUpdateRequestDto
 import es.uib.record.backend.users.domain.User
 import es.uib.record.backend.users.infrastructure.persistence.UserEntity
+import es.uib.record.backend.users.open.UserOpenDto
 
 fun User.toEntity() = UserEntity(
     this.id,
@@ -52,4 +53,12 @@ fun UserProfileImageSignatureResponseDto.toResponse() = UserProfileImageSignatur
     this.cloudName,
     this.transformation,
     this.folder
+)
+
+fun User.toOpenDto() = UserOpenDto(
+    this.id!!,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.profileImageUrl
 )

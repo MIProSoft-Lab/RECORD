@@ -4,4 +4,5 @@ enum class ErrorType {
     NOT_FOUND,
     CONFLICT,
     UNAUTHORIZED,
+    FORBIDDEN
 }

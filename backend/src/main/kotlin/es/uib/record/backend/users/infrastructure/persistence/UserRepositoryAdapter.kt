@@ -5,6 +5,7 @@ import es.uib.record.backend.users.domain.UserRepository
 import es.uib.record.backend.users.infrastructure.mapper.toDomain
 import es.uib.record.backend.users.infrastructure.mapper.toEntity
 import org.springframework.stereotype.Repository
+import java.util.UUID
 
 @Repository
 class UserRepositoryAdapter(
@@ -18,5 +19,9 @@ class UserRepositoryAdapter(
 
     override fun findByEmail(email: String): User? {
         return this.springDataJpaUserRepository.findByEmail(email)?.toDomain()
+    }
+
+    override fun findAllByIds(userIds: List<UUID>): List<User> {
+        return this.springDataJpaUserRepository.findAllById(userIds).map { it.toDomain() }
     }
 }

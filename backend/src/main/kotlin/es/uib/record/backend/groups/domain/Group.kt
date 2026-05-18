@@ -27,4 +27,12 @@ class Group (
     fun getMembersCount(): Int {
         return _members.size
     }
+
+    fun isMember(userId: UUID): Boolean {
+        return _members.any { it.userId == userId }
+    }
+
+    fun getMembersIds(): List<UUID> {
+        return _members.map { it.userId }
+    }
 }
