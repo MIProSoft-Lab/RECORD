@@ -20,7 +20,7 @@ repositories {
 	mavenCentral()
 }
 
-extra["springModulithVersion"] = "2.0.5"
+extra["springModulithVersion"] = "1.4.11"
 extra["springdocVersion"] = "2.8.17"
 extra["jjwtVersion"] = "0.12.5"
 extra["cloudinaryVersion"] = "2.0.0"
@@ -91,6 +91,9 @@ openApiGenerate {
 
 sourceSets {
 	main {
+		java {
+			srcDir("src/main/kotlin")
+		}
 		kotlin {
 			srcDir(layout.buildDirectory.dir("generated/openapi/src/main/kotlin"))
 		}
