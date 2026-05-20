@@ -1,9 +1,10 @@
-package es.uib.record.backend.groups.infrastructure.persistence.entity
+package es.uib.record.backend.groups.infrastructure.persistence.adapter
 
 import es.uib.record.backend.groups.domain.model.Group
 import es.uib.record.backend.groups.domain.repository.GroupRepository
 import es.uib.record.backend.groups.infrastructure.mapper.toDomain
 import es.uib.record.backend.groups.infrastructure.mapper.toEntity
+import es.uib.record.backend.groups.infrastructure.persistence.repository.SpringDataJpaGroupRepository
 import org.springframework.stereotype.Repository
 import java.util.UUID
 

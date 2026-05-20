@@ -1,5 +1,6 @@
-package es.uib.record.backend.groups.infrastructure.persistence.entity
+package es.uib.record.backend.groups.infrastructure.persistence.repository
 
+import es.uib.record.backend.groups.infrastructure.persistence.entity.GroupEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import java.util.UUID
 
