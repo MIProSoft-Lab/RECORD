@@ -9,6 +9,6 @@ data class GroupMemberDetailDto(
     val lastName: String,
     val email: String,
     val role: GroupRole,
-    val profileImageUrl: String?,
+    val profileImageUrl: String,
     val isCreator: Boolean
 )

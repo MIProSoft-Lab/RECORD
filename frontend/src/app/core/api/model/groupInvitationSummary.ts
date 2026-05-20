@@ -9,14 +9,17 @@
  */
 
 
+/**
+ * A summary of the group where the user is invited.
+ */
 export interface GroupInvitationSummary { 
     /**
      * The unique identifier of the group
      */
-    groupId?: string;
+    groupId: string;
     /**
      * The name of the group
      */
-    groupName?: string;
+    groupName: string;
 }
 

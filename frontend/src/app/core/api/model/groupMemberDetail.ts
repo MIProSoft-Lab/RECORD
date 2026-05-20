@@ -31,7 +31,7 @@ export interface GroupMemberDetail {
     /**
      * URL of the user\'s profile image.
      */
-    profileImageUrl?: string;
+    profileImageUrl: string;
     /**
      * Whether the user is the creator of the group.
      */

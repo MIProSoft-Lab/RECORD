@@ -38,7 +38,7 @@ class GetInvitationsByUserIdUseCase(
                 user.userId,
                 user.firstName,
                 user.lastName,
-                user.profileImageUrl!!
+                user.profileImageUrl
             ),
             createdAt = invitation.createdAt
         )

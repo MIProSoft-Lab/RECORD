@@ -9,22 +9,25 @@
  */
 
 
+/**
+ * A summary of the inviter.
+ */
 export interface InviterSummary { 
     /**
      * The unique identifier of the inviter
      */
-    id?: string;
+    id: string;
     /**
      * The first name of the inviter
      */
-    firstName?: string;
+    firstName: string;
     /**
      * The last name of the inviter
      */
-    lastName?: string;
+    lastName: string;
     /**
      * The URL of the profile image of the inviter
      */
-    profileImageUrl?: string;
+    profileImageUrl: string;
 }
 

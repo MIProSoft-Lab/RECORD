@@ -11,16 +11,19 @@ import { InviterSummary } from './inviterSummary';
 import { GroupInvitationSummary } from './groupInvitationSummary';
 
 
+/**
+ * The response containing the invitation details.
+ */
 export interface InvitationResponse { 
     /**
      * The unique identifier of the invitation
      */
-    id?: string;
-    group?: GroupInvitationSummary;
-    inviter?: InviterSummary;
+    id: string;
+    group: GroupInvitationSummary;
+    inviter: InviterSummary;
     /**
      * The date and time the invitation was created
      */
-    createdAt?: string;
+    createdAt: string;
 }
 

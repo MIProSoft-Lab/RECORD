@@ -122,4 +122,5 @@ schemas:
       - lastName
       - email
       - role
+      - profileImageUrl
       - isCreator

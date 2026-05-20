@@ -14,10 +14,6 @@ class CreateUserUseCase(
             .findByEmail(user.email)
             ?.let { throw EmailAlreadyInUseException(user.email) }
 
-        val toSave = user.copy(
-            profileImageUrl = "https://api.dicebear.com/7.x/identicon/svg?seed=${user.email}"
-        )
-
-        return this.userRepository.save(toSave)
+        return this.userRepository.save(user)
     }
 }

@@ -7,5 +7,5 @@ data class UserOpenDto(
     val firstName: String,
     val lastName: String,
     val email: String,
-    val profileImageUrl: String?,
+    val profileImageUrl: String,
 )
