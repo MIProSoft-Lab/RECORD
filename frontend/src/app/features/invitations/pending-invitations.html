@@ -1,9 +1,9 @@
-@if (isLoading() || invitations().length > 0) {
+@if (showLoader() || invitations().length > 0) {
   <p-card>
     <div class="flex flex-column gap-3">
       <h2 class="text-xl m-0">{{ 'INVITATIONS.TITLE' | translate }}</h2>
 
-      @if (isLoading()) {
+      @if (showLoader()) {
         <div class="flex flex-column gap-3">
           @for (placeholder of [1, 2]; track placeholder) {
             <div class="flex align-items-center gap-3">

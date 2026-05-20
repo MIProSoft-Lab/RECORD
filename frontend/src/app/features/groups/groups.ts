@@ -11,6 +11,9 @@ import { Tag } from 'primeng/tag';
 import { MessageService } from 'primeng/api';
 import { GroupsService, GroupSummaryResponse } from '@core/api';
 
+/** Show the loading indicator only if the request is still pending after this delay. */
+const LOADER_DELAY_MS = 250;
+
 @Component({
   selector: 'record-groups',
   imports: [
@@ -34,6 +37,8 @@ export class Groups implements OnInit {
 
   groups = signal<GroupSummaryResponse[]>([]);
   isLoading = signal(false);
+  showLoader = signal(false);
+  hasLoaded = signal(false);
   showCreateDialog = signal(false);
   isSaving = signal(false);
 
@@ -48,13 +53,23 @@ export class Groups implements OnInit {
 
   loadGroups() {
     this.isLoading.set(true);
+    const loaderTimer = setTimeout(() => {
+      if (this.isLoading()) this.showLoader.set(true);
+    }, LOADER_DELAY_MS);
+
     this.groupsService.listGroups().subscribe({
       next: (groups) => {
+        clearTimeout(loaderTimer);
         this.groups.set(groups);
         this.isLoading.set(false);
+        this.showLoader.set(false);
+        this.hasLoaded.set(true);
       },
       error: () => {
+        clearTimeout(loaderTimer);
         this.isLoading.set(false);
+        this.showLoader.set(false);
+        this.hasLoaded.set(true);
       },
     });
   }

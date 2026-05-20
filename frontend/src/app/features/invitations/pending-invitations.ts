@@ -8,6 +8,9 @@ import { Skeleton } from 'primeng/skeleton';
 import { MessageService } from 'primeng/api';
 import { InvitationsService, InvitationResponse, InviterSummary } from '@core/api';
 
+/** Show the loading skeleton only if the request is still pending after this delay. */
+const LOADER_DELAY_MS = 250;
+
 @Component({
   selector: 'record-pending-invitations',
   imports: [TranslatePipe, DatePipe, Button, Card, Avatar, Skeleton],
@@ -23,6 +26,7 @@ export class PendingInvitations implements OnInit {
 
   invitations = signal<InvitationResponse[]>([]);
   isLoading = signal(false);
+  showLoader = signal(false);
   processingId = signal<string | null>(null);
 
   ngOnInit() {
@@ -31,13 +35,21 @@ export class PendingInvitations implements OnInit {
 
   loadInvitations() {
     this.isLoading.set(true);
+    const loaderTimer = setTimeout(() => {
+      if (this.isLoading()) this.showLoader.set(true);
+    }, LOADER_DELAY_MS);
+
     this.invitationsService.listInvitations().subscribe({
       next: (invitations) => {
+        clearTimeout(loaderTimer);
         this.invitations.set(invitations);
         this.isLoading.set(false);
+        this.showLoader.set(false);
       },
       error: () => {
+        clearTimeout(loaderTimer);
         this.isLoading.set(false);
+        this.showLoader.set(false);
       },
     });
   }
