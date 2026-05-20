@@ -122,6 +122,18 @@
       "SUCCESS": "Success"
     }
   },
+  "INVITATIONS": {
+    "TITLE": "Pending invitations",
+    "INVITED_BY": "Invited by",
+    "RECEIVED": "Received on",
+    "ACCEPT": "Accept",
+    "REJECT": "Reject",
+    "TOASTS": {
+      "SUCCESS": "Success",
+      "ACCEPTED": "You have joined the group.",
+      "REJECTED": "Invitation rejected."
+    }
+  },
   "ERRORS": {
     "BAD_CREDENTIALS": "Invalid credentials.",
     "EMAIL_ALREADY_IN_USE": "The email {{ email }} is already in use.",
