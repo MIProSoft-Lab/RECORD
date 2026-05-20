@@ -1,0 +1,60 @@
+schemas:
+  InvitationResponse:
+    type: object
+    description: The response containing the invitation details.
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: The unique identifier of the invitation
+      group:
+        $ref: "#/schemas/GroupInvitationSummary"
+      inviter:
+        $ref: "#/schemas/InviterSummary"
+      createdAt:
+        type: string
+        format: date-time
+        description: The date and time the invitation was created
+    required:
+      - id
+      - group
+      - inviter
+      - createdAt
+
+  GroupInvitationSummary:
+    type: object
+    description: A summary of the group where the user is invited.
+    properties:
+      groupId:
+        type: string
+        format: uuid
+        description: The unique identifier of the group
+      groupName:
+        type: string
+        description: The name of the group
+    required:
+      - groupId
+      - groupName
+
+  InviterSummary:
+    type: object
+    description: A summary of the inviter.
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: The unique identifier of the inviter
+      firstName:
+        type: string
+        description: The first name of the inviter
+      lastName:
+        type: string
+        description: The last name of the inviter
+      profileImageUrl:
+        type: string
+        description: The URL of the profile image of the inviter
+    required:
+      - id
+      - firstName
+      - lastName
+      - profileImageUrl

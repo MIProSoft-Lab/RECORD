@@ -1,0 +1,33 @@
+post:
+  summary: Accept an invitation
+  operationId: acceptInvitation
+  tags:
+    - Invitations
+  parameters:
+    - name: invitationId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Invitation accepted successfully
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Invitation not found
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

@@ -1,0 +1,32 @@
+get:
+  summary: List all invitations for a user
+  operationId: listInvitations
+  tags:
+    - Invitations
+  responses:
+    "200":
+      description: A list of invitations
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "./components.yaml#/schemas/InvitationResponse"
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
