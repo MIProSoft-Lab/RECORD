@@ -6,5 +6,5 @@ data class UserProfileImageSignatureResponseDto(
     val apiKey: String,
     val cloudName: String,
     val transformation: String,
-    val folder: String
+    val folder: String,
 )

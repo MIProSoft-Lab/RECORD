@@ -7,5 +7,5 @@ data class InvitationResponseDto(
     val id: UUID,
     val group: GroupInvitationSummaryDto,
     val inviter: InviterSummaryDto,
-    val createdAt: Instant
+    val createdAt: Instant,
 )

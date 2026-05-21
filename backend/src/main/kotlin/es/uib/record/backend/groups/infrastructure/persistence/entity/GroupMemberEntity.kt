@@ -9,10 +9,6 @@ import java.util.UUID
 
 @Embeddable
 class GroupMemberEntity(
-    @Column(name = "user_id", nullable = false, updatable = false)
-    var userId: UUID,
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    var role: GroupRole
+    @Column(name = "user_id", nullable = false, updatable = false) var userId: UUID,
+    @Enumerated(EnumType.STRING) @Column(name = "role", nullable = false) var role: GroupRole,
 )

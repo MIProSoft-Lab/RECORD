@@ -7,12 +7,10 @@ import org.springframework.modulith.core.ApplicationModules
 @SpringBootTest
 class BackendApplicationTests {
 
-	@Test
-	fun contextLoads() {
-	}
+    @Test fun contextLoads() {}
 
-	@Test
-	fun verifyModulithic() {
-		ApplicationModules.of(BackendApplication::class.java).verify()
-	}
+    @Test
+    fun verifyModulithic() {
+        ApplicationModules.of(BackendApplication::class.java).verify()
+    }
 }

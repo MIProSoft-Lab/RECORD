@@ -10,6 +10,6 @@ data class User(
     val firstName: String,
     val lastName: String,
     val pushNotifications: Boolean = true,
-    val profileImageUrl: String ="https://api.dicebear.com/7.x/identicon/svg?seed=$email",
+    val profileImageUrl: String = "https://api.dicebear.com/7.x/identicon/svg?seed=$email",
     val createdAt: Instant = Instant.now(),
 )

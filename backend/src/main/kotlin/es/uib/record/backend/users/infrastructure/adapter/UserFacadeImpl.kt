@@ -7,28 +7,26 @@ import es.uib.record.backend.users.domain.User
 import es.uib.record.backend.users.infrastructure.mapper.toOpenDto
 import es.uib.record.backend.users.open.UserFacade
 import es.uib.record.backend.users.open.UserOpenDto
-import org.springframework.stereotype.Component
 import java.util.UUID
+import org.springframework.stereotype.Component
 
 @Component
 class UserFacadeImpl(
     private val createUserUseCase: CreateUserUseCase,
     private val getUserByEmailUseCase: GetUserByEmailUseCase,
-    private val getAllUsersByIdsUseCase: GetAllUsersByIdsUseCase
+    private val getAllUsersByIdsUseCase: GetAllUsersByIdsUseCase,
 ) : UserFacade {
 
     override fun createUser(
         email: String,
         firstName: String,
         lastName: String,
-        password: String
+        password: String,
     ): UUID {
-        val createdUser = this.createUserUseCase.execute(User(
-            email = email,
-            firstName = firstName,
-            lastName = lastName,
-            password = password
-        ))
+        val createdUser =
+            this.createUserUseCase.execute(
+                User(email = email, firstName = firstName, lastName = lastName, password = password)
+            )
 
         return createdUser.id!!
     }

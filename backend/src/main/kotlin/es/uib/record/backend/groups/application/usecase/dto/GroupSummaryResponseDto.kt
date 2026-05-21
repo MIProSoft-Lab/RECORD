@@ -9,5 +9,5 @@ data class GroupSummaryResponseDto(
     val description: String?,
     val role: GroupRole,
     val memberCount: Int,
-    val isOwner: Boolean
+    val isOwner: Boolean,
 )

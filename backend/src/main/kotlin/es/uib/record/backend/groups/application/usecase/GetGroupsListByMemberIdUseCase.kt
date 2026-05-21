@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 @Component
 class GetGroupsListByMemberIdUseCase(
     private val groupRepository: GroupRepository,
-    private val userFacade: UserFacade
+    private val userFacade: UserFacade,
 ) {
     fun execute(email: String): List<GroupSummaryResponseDto> {
         val userId = this.userFacade.getUserIdByEmail(email)
@@ -20,7 +20,7 @@ class GetGroupsListByMemberIdUseCase(
                 description = group.description,
                 role = group.getMemberRole(userId),
                 memberCount = group.getMembersCount(),
-                isOwner = group.createdBy == userId
+                isOwner = group.createdBy == userId,
             )
         }
     }

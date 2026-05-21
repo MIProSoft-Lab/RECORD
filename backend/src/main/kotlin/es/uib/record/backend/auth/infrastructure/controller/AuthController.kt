@@ -20,7 +20,7 @@ class AuthController(
     private val registerUseCase: RegisterUseCase,
     private val loginUseCase: LoginUseCase,
     private val refreshUseCase: RefreshUseCase,
-    private val revokeTokenUseCase: RevokeTokenUseCase
+    private val revokeTokenUseCase: RevokeTokenUseCase,
 ) : AuthApi {
 
     override fun login(loginRequest: LoginRequest): ResponseEntity<AuthResponse> {
@@ -34,7 +34,8 @@ class AuthController(
     }
 
     override fun register(registerRequest: RegisterRequest): ResponseEntity<AuthResponse> {
-        val authResponse: AuthResponse = registerUseCase.execute(registerRequest.toDto()).toResponse()
+        val authResponse: AuthResponse =
+            registerUseCase.execute(registerRequest.toDto()).toResponse()
         return ResponseEntity.ok(authResponse)
     }
 

@@ -10,19 +10,21 @@ import es.uib.record.backend.model.CreateGroupRequest
 import es.uib.record.backend.model.GroupDetailResponse
 import es.uib.record.backend.model.GroupResponse
 import es.uib.record.backend.model.GroupSummaryResponse
+import java.util.UUID
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
-import java.util.UUID
 
 @RestController
 class GroupController(
     private val createGroupUseCase: CreateGroupUseCase,
     private val getGroupsListByMemberIdUseCase: GetGroupsListByMemberIdUseCase,
-    private val getGroupDetailUseCase: GetGroupDetailUseCase
+    private val getGroupDetailUseCase: GetGroupDetailUseCase,
 ) : GroupsApi {
 
-    override fun createGroup(createGroupRequest: CreateGroupRequest): ResponseEntity<GroupResponse> {
+    override fun createGroup(
+        createGroupRequest: CreateGroupRequest
+    ): ResponseEntity<GroupResponse> {
         val email = SecurityContextHolder.getContext().authentication.name
         val createdGroup = this.createGroupUseCase.execute(createGroupRequest.toDto(), email)
 

@@ -8,9 +8,8 @@ import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service
 
 @Service
-class UserSecurityAdapter(
-    private val getUserByEmailUseCase: GetUserByEmailUseCase
-) : UserDetailsService {
+class UserSecurityAdapter(private val getUserByEmailUseCase: GetUserByEmailUseCase) :
+    UserDetailsService {
 
     override fun loadUserByUsername(email: String): UserDetails {
         try {

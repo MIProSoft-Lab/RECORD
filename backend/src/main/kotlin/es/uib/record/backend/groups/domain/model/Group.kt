@@ -3,13 +3,13 @@ package es.uib.record.backend.groups.domain.model
 import java.time.Instant
 import java.util.UUID
 
-class Group (
+class Group(
     val id: UUID? = null,
     val name: String,
     val description: String? = null,
     val createdBy: UUID,
     val createdAt: Instant = Instant.now(),
-    members: List<GroupMember> = emptyList()
+    members: List<GroupMember> = emptyList(),
 ) {
     private val _members: MutableList<GroupMember> = members.toMutableList()
 

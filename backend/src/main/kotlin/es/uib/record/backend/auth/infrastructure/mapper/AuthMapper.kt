@@ -9,33 +9,13 @@ import es.uib.record.backend.model.AuthResponse
 import es.uib.record.backend.model.LoginRequest
 import es.uib.record.backend.model.RegisterRequest
 
-fun RegisterRequest.toDto() = RegisterRequestDto(
-    this.email,
-    this.firstName,
-    this.lastName,
-    this.password
-)
+fun RegisterRequest.toDto() =
+    RegisterRequestDto(this.email, this.firstName, this.lastName, this.password)
 
-fun LoginRequest.toDto() = LoginRequestDto(
-    this.email,
-    this.password
-)
+fun LoginRequest.toDto() = LoginRequestDto(this.email, this.password)
 
-fun AuthResponseDto.toResponse() = AuthResponse(
-    this.token,
-    this.refreshToken
-)
+fun AuthResponseDto.toResponse() = AuthResponse(this.token, this.refreshToken)
 
-fun Token.toEntity() = TokenEntity(
-    this.id,
-    this.userId,
-    this.token,
-    this.revoked
-)
+fun Token.toEntity() = TokenEntity(this.id, this.userId, this.token, this.revoked)
 
-fun TokenEntity.toDomain() = Token(
-    this.id,
-    this.userId,
-    this.token,
-    this.revoked
-)
+fun TokenEntity.toDomain() = Token(this.id, this.userId, this.token, this.revoked)

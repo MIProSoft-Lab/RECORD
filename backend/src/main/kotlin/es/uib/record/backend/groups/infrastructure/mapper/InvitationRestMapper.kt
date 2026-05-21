@@ -8,21 +8,15 @@ import es.uib.record.backend.model.InvitationResponse
 import es.uib.record.backend.model.InviterSummary
 import java.time.ZoneOffset
 
-fun InvitationResponseDto.toResponse() = InvitationResponse(
-    this.id,
-    this.group.toGroupSummary(),
-    this.inviter.toInviterSummary(),
-    this.createdAt.atOffset(ZoneOffset.UTC)
-)
+fun InvitationResponseDto.toResponse() =
+    InvitationResponse(
+        this.id,
+        this.group.toGroupSummary(),
+        this.inviter.toInviterSummary(),
+        this.createdAt.atOffset(ZoneOffset.UTC),
+    )
 
-fun GroupInvitationSummaryDto.toGroupSummary() = GroupInvitationSummary(
-    this.id,
-    this.groupName
-)
+fun GroupInvitationSummaryDto.toGroupSummary() = GroupInvitationSummary(this.id, this.groupName)
 
-fun InviterSummaryDto.toInviterSummary() = InviterSummary(
-    this.id,
-    this.firstName,
-    this.lastName,
-    this.profileImageUrl
-)
+fun InviterSummaryDto.toInviterSummary() =
+    InviterSummary(this.id, this.firstName, this.lastName, this.profileImageUrl)

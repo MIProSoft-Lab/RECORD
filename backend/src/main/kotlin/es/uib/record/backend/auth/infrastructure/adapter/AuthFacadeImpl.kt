@@ -5,9 +5,7 @@ import es.uib.record.backend.auth.open.AuthFacade
 import org.springframework.stereotype.Component
 
 @Component
-class AuthFacadeImpl(
-    private val checkTokenActiveUseCase: CheckTokenActiveUseCase
-) : AuthFacade {
+class AuthFacadeImpl(private val checkTokenActiveUseCase: CheckTokenActiveUseCase) : AuthFacade {
     override fun isTokenActive(token: String): Boolean {
         return this.checkTokenActiveUseCase.execute(token)
     }

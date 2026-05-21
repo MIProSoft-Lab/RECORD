@@ -5,7 +5,10 @@ import java.util.UUID
 
 interface GroupRepository {
     fun save(group: Group): Group
+
     fun findByName(name: String): Group?
+
     fun findAllByMemberId(memberId: UUID): List<Group>
+
     fun findById(id: UUID): Group?
 }

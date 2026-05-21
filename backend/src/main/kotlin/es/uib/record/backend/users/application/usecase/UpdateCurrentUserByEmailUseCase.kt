@@ -7,17 +7,17 @@ import es.uib.record.backend.users.domain.exception.UserNotFoundException
 import org.springframework.stereotype.Component
 
 @Component
-class UpdateCurrentUserByEmailUseCase(
-    private val userRepository: UserRepository
-) {
+class UpdateCurrentUserByEmailUseCase(private val userRepository: UserRepository) {
     fun execute(email: String, userUpdateRequestDto: UserUpdateRequestDto): User {
         val existingUser = userRepository.findByEmail(email) ?: throw UserNotFoundException(email)
 
-        val updatedUser = existingUser.copy(
-            firstName = userUpdateRequestDto.firstName,
-            lastName = userUpdateRequestDto.lastName,
-            profileImageUrl = userUpdateRequestDto.profileImageUrl ?: existingUser.profileImageUrl
-        )
+        val updatedUser =
+            existingUser.copy(
+                firstName = userUpdateRequestDto.firstName,
+                lastName = userUpdateRequestDto.lastName,
+                profileImageUrl =
+                    userUpdateRequestDto.profileImageUrl ?: existingUser.profileImageUrl,
+            )
 
         return userRepository.save(updatedUser)
     }

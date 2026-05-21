@@ -6,8 +6,8 @@ import es.uib.record.backend.model.UserResponse
 import es.uib.record.backend.model.UserUpdatePushNotificationRequest
 import es.uib.record.backend.model.UserUpdateRequest
 import es.uib.record.backend.users.application.usecase.GetUserByEmailUseCase
-import es.uib.record.backend.users.application.usecase.UpdateCurrentUserByEmailUseCase
 import es.uib.record.backend.users.application.usecase.GetUserProfileImageSignatureUseCase
+import es.uib.record.backend.users.application.usecase.UpdateCurrentUserByEmailUseCase
 import es.uib.record.backend.users.application.usecase.UpdateUserPushNotificationsUseCase
 import es.uib.record.backend.users.infrastructure.mapper.toDto
 import es.uib.record.backend.users.infrastructure.mapper.toResponse
@@ -20,7 +20,7 @@ class UserController(
     private val getUserByEmailUseCase: GetUserByEmailUseCase,
     private val updateCurrentUserByEmailUseCase: UpdateCurrentUserByEmailUseCase,
     private val getUserProfileImageSignatureUseCase: GetUserProfileImageSignatureUseCase,
-    private val updateUserPushNotificationsUseCase: UpdateUserPushNotificationsUseCase
+    private val updateUserPushNotificationsUseCase: UpdateUserPushNotificationsUseCase,
 ) : UsersApi {
     override fun getCurrentUser(): ResponseEntity<UserResponse> {
         val authentication = SecurityContextHolder.getContext().authentication
@@ -36,7 +36,9 @@ class UserController(
         return ResponseEntity.ok(dto.toResponse())
     }
 
-    override fun updateCurrentUser(userUpdateRequest: UserUpdateRequest): ResponseEntity<UserResponse> {
+    override fun updateCurrentUser(
+        userUpdateRequest: UserUpdateRequest
+    ): ResponseEntity<UserResponse> {
         val authentication = SecurityContextHolder.getContext().authentication
         val email = authentication.name
 
@@ -45,12 +47,17 @@ class UserController(
         return ResponseEntity.ok(user.toResponse())
     }
 
-    override fun updatePushNotifications(userUpdatePushNotificationRequest: UserUpdatePushNotificationRequest): ResponseEntity<UserResponse> {
+    override fun updatePushNotifications(
+        userUpdatePushNotificationRequest: UserUpdatePushNotificationRequest
+    ): ResponseEntity<UserResponse> {
         val authentication = SecurityContextHolder.getContext().authentication
         val email = authentication.name
 
-        val user = this.updateUserPushNotificationsUseCase
-            .execute(email, userUpdatePushNotificationRequest.pushNotifications)
+        val user =
+            this.updateUserPushNotificationsUseCase.execute(
+                email,
+                userUpdatePushNotificationRequest.pushNotifications,
+            )
 
         return ResponseEntity.ok(user.toResponse())
     }

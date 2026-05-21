@@ -7,26 +7,27 @@ import es.uib.record.backend.groups.domain.repository.GroupRepository
 import es.uib.record.backend.groups.domain.repository.InvitationRepository
 import es.uib.record.backend.users.open.UserFacade
 import jakarta.transaction.Transactional
-import org.springframework.stereotype.Component
 import java.util.UUID
+import org.springframework.stereotype.Component
 
 @Component
 class AcceptInvitationByIdUseCase(
     private val groupRepository: GroupRepository,
     private val invitationRepository: InvitationRepository,
-    private val userFacade: UserFacade
+    private val userFacade: UserFacade,
 ) {
     @Transactional
     fun execute(invitationId: UUID, email: String) {
-        val invitation = this.invitationRepository.findById(invitationId)
-            ?: throw InvitationNotFoundException(invitationId)
+        val invitation =
+            this.invitationRepository.findById(invitationId)
+                ?: throw InvitationNotFoundException(invitationId)
         val userId = this.userFacade.getUserIdByEmail(email)
 
-        if (invitation.inviteeUserId != userId)
-            throw InvitationDoesNotBelongToTheUserException()
+        if (invitation.inviteeUserId != userId) throw InvitationDoesNotBelongToTheUserException()
 
-        val group = this.groupRepository.findById(invitation.groupId)
-            ?: throw GroupNotFoundException(invitation.groupId)
+        val group =
+            this.groupRepository.findById(invitation.groupId)
+                ?: throw GroupNotFoundException(invitation.groupId)
 
         group.addMember(userId)
         this.groupRepository.save(group)

@@ -1,23 +1,20 @@
 package es.uib.record.backend.security.open
 
-import es.uib.record.backend.auth.domain.Token
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
+import java.util.Date
+import javax.crypto.SecretKey
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
-import java.util.Date
-import javax.crypto.SecretKey
 
 @Service
 class JwtService(
-    @Value($$"${application.security.jwt.secret-key}")
-    private val jwtSecretKey: String,
-    @Value($$"${application.security.jwt.expiration}")
-    private val jwtExpiration: Long,
+    @Value($$"${application.security.jwt.secret-key}") private val jwtSecretKey: String,
+    @Value($$"${application.security.jwt.expiration}") private val jwtExpiration: Long,
     @Value($$"${application.security.jwt.refresh-token.expiration}")
-    private val jwtRefreshExpiration: Long
+    private val jwtRefreshExpiration: Long,
 ) {
     private val signInKey: SecretKey
         get() = Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecretKey))
@@ -44,6 +41,7 @@ class JwtService(
 
         return (email == userDetails.username) && !this.isTokenExpired(token)
     }
+
     fun isTokenValid(token: String): Boolean {
         return !this.isTokenExpired(token)
     }
@@ -53,21 +51,13 @@ class JwtService(
     }
 
     fun extractEmail(token: String): String? {
-        val jwtToken = Jwts.parser()
-            .verifyWith(signInKey)
-            .build()
-            .parseSignedClaims(token)
-            .payload
+        val jwtToken = Jwts.parser().verifyWith(signInKey).build().parseSignedClaims(token).payload
 
         return jwtToken.subject
     }
 
     private fun extractExpiration(token: String): Date {
-        val jwtToken = Jwts.parser()
-            .verifyWith(signInKey)
-            .build()
-            .parseSignedClaims(token)
-            .payload
+        val jwtToken = Jwts.parser().verifyWith(signInKey).build().parseSignedClaims(token).payload
 
         return jwtToken.expiration
     }

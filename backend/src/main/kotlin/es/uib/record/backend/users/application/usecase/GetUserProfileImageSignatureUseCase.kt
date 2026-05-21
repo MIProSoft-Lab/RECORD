@@ -12,22 +12,30 @@ class GetUserProfileImageSignatureUseCase(
     @Value($$"${application.cloudinary.api-secret}") private val apiSecret: String,
     @Value($$"${application.cloudinary.cloud-name}") private val cloudName: String,
     @Value($$"${application.cloudinary.user-avatar-folder}") private val avatarFolder: String,
-    @Value($$"${application.cloudinary.user-transformation}") private val avatarTransformation: String
+    @Value($$"${application.cloudinary.user-transformation}")
+    private val avatarTransformation: String,
 ) {
     fun execute(): UserProfileImageSignatureResponseDto {
-        val cloudinary = Cloudinary(ObjectUtils.asMap(
-            "cloud_name", cloudName,
-            "api_key", apiKey,
-            "api_secret", apiSecret
-        ))
+        val cloudinary =
+            Cloudinary(
+                ObjectUtils.asMap(
+                    "cloud_name",
+                    cloudName,
+                    "api_key",
+                    apiKey,
+                    "api_secret",
+                    apiSecret,
+                )
+            )
 
         val timestamp = (System.currentTimeMillis() / 1000L).toString()
-        
-        val paramsToSign = mutableMapOf<String, Any>(
-            "timestamp" to timestamp,
-            "folder" to avatarFolder,
-            "transformation" to avatarTransformation
-        )
+
+        val paramsToSign =
+            mutableMapOf<String, Any>(
+                "timestamp" to timestamp,
+                "folder" to avatarFolder,
+                "transformation" to avatarTransformation,
+            )
 
         val signature = cloudinary.apiSignRequest(paramsToSign, apiSecret)
 
@@ -37,7 +45,7 @@ class GetUserProfileImageSignatureUseCase(
             apiKey = apiKey,
             cloudName = cloudName,
             transformation = avatarTransformation,
-            folder = avatarFolder
+            folder = avatarFolder,
         )
     }
 }

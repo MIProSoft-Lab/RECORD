@@ -6,9 +6,7 @@ import es.uib.record.backend.security.open.JwtService
 import org.springframework.stereotype.Component
 
 @Component
-class RefreshUseCase(
-    private val jwtService: JwtService,
-) {
+class RefreshUseCase(private val jwtService: JwtService) {
     fun execute(refreshToken: String): AuthResponseDto {
         val email = this.jwtService.extractEmail(refreshToken)
 

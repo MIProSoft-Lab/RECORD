@@ -19,18 +19,17 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-class SecurityConfig(
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter
-) {
-    private val publicEndpoints = arrayOf(
-        "/auth/login",
-        "/auth/register",
-        "/auth/refresh",
-        "/v3/api-docs/**",
-        "/swagger-ui/**",
-        "/swagger-ui.html",
-        "/error"
-    )
+class SecurityConfig(private val jwtAuthenticationFilter: JwtAuthenticationFilter) {
+    private val publicEndpoints =
+        arrayOf(
+            "/auth/login",
+            "/auth/register",
+            "/auth/refresh",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html",
+            "/error",
+        )
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -41,24 +40,26 @@ class SecurityConfig(
                 exceptions.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
             }
             .authorizeHttpRequests { req ->
-                req
-                    .requestMatchers(*publicEndpoints).permitAll()
-                    .anyRequest().authenticated()
+                req.requestMatchers(*publicEndpoints).permitAll().anyRequest().authenticated()
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter::class.java,
+            )
 
         return http.build()
     }
 
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration().apply {
-            allowedOrigins = listOf("http://localhost:4200")
-            allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
-            allowedHeaders = listOf("Authorization", "Content-Type", "Accept")
-            allowCredentials = true
-        }
+        val configuration =
+            CorsConfiguration().apply {
+                allowedOrigins = listOf("http://localhost:4200")
+                allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                allowedHeaders = listOf("Authorization", "Content-Type", "Accept")
+                allowCredentials = true
+            }
 
         return UrlBasedCorsConfigurationSource().apply {
             registerCorsConfiguration("/**", configuration)

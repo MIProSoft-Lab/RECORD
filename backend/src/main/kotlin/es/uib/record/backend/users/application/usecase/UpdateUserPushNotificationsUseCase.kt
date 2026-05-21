@@ -6,15 +6,11 @@ import es.uib.record.backend.users.domain.exception.UserNotFoundException
 import org.springframework.stereotype.Component
 
 @Component
-class UpdateUserPushNotificationsUseCase(
-    private val userRepository: UserRepository
-) {
+class UpdateUserPushNotificationsUseCase(private val userRepository: UserRepository) {
     fun execute(email: String, pushNotificationsEnabled: Boolean): User {
         val existingUser = userRepository.findByEmail(email) ?: throw UserNotFoundException(email)
 
-        val updatedUser = existingUser.copy(
-            pushNotifications = pushNotificationsEnabled
-        )
+        val updatedUser = existingUser.copy(pushNotifications = pushNotificationsEnabled)
 
         return userRepository.save(updatedUser)
     }

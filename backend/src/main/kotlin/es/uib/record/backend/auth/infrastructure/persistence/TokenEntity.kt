@@ -11,15 +11,8 @@ import java.util.UUID
 @Entity
 @Table(name = "token")
 class TokenEntity(
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    var id: UUID? = null,
-
-    @Column(name = "user_id", nullable = false)
-    var userId: UUID,
-
-    @Column(unique = true)
-    var token: String,
-
+    @Id @GeneratedValue(strategy = GenerationType.UUID) var id: UUID? = null,
+    @Column(name = "user_id", nullable = false) var userId: UUID,
+    @Column(unique = true) var token: String,
     var revoked: Boolean,
 )

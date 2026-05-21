@@ -9,5 +9,5 @@ data class GroupDetailResponseDto(
     val description: String?,
     val createdBy: UUID,
     val createdAt: Instant,
-    val members: List<GroupMemberDetailDto>
+    val members: List<GroupMemberDetailDto>,
 )

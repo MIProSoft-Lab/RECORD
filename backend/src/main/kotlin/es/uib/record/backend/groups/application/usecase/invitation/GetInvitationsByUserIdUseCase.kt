@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 class GetInvitationsByUserIdUseCase(
     private val invitationRepository: InvitationRepository,
     private val groupRepository: GroupRepository,
-    private val userFacade: UserFacade
+    private val userFacade: UserFacade,
 ) {
     fun execute(email: String): List<InvitationResponseDto> {
         val userId = this.userFacade.getUserIdByEmail(email)
@@ -24,23 +24,17 @@ class GetInvitationsByUserIdUseCase(
     }
 
     fun toResponseDto(invitation: Invitation): InvitationResponseDto {
-        val group = this.groupRepository.findById(invitation.groupId)
-            ?: throw GroupNotFoundException(invitation.groupId)
+        val group =
+            this.groupRepository.findById(invitation.groupId)
+                ?: throw GroupNotFoundException(invitation.groupId)
         val user = this.userFacade.getUsersByIds(listOf(invitation.inviterUserId)).first()
 
         return InvitationResponseDto(
             id = invitation.id!!,
-            group = GroupInvitationSummaryDto(
-                group.id!!,
-                group.name
-            ),
-            inviter = InviterSummaryDto(
-                user.userId,
-                user.firstName,
-                user.lastName,
-                user.profileImageUrl
-            ),
-            createdAt = invitation.createdAt
+            group = GroupInvitationSummaryDto(group.id!!, group.name),
+            inviter =
+                InviterSummaryDto(user.userId, user.firstName, user.lastName, user.profileImageUrl),
+            createdAt = invitation.createdAt,
         )
     }
 }

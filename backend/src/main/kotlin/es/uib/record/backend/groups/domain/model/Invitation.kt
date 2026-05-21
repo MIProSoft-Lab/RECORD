@@ -8,5 +8,5 @@ data class Invitation(
     val groupId: UUID,
     val inviteeUserId: UUID,
     val inviterUserId: UUID,
-    val createdAt: Instant = Instant.now()
+    val createdAt: Instant = Instant.now(),
 )

@@ -4,9 +4,7 @@ import es.uib.record.backend.auth.domain.TokenRepository
 import org.springframework.stereotype.Component
 
 @Component
-class CheckTokenActiveUseCase(
-    private val tokenRepository: TokenRepository,
-) {
+class CheckTokenActiveUseCase(private val tokenRepository: TokenRepository) {
     fun execute(token: String): Boolean {
         val savedToken = this.tokenRepository.findByToken(token) ?: return false
 

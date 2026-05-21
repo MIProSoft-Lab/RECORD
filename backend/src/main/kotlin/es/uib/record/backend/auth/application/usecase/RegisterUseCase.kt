@@ -6,24 +6,25 @@ import es.uib.record.backend.auth.domain.Token
 import es.uib.record.backend.auth.domain.TokenRepository
 import es.uib.record.backend.security.open.JwtService
 import es.uib.record.backend.users.open.UserFacade
+import java.util.*
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
-import java.util.*
 
 @Component
 class RegisterUseCase(
     private val passwordEncoder: PasswordEncoder,
     private val jwtService: JwtService,
     private val userFacade: UserFacade,
-    private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository,
 ) {
     fun execute(registerRequestDto: RegisterRequestDto): AuthResponseDto {
-        val userId = this.userFacade.createUser(
-            registerRequestDto.email,
-            registerRequestDto.firstName,
-            registerRequestDto.lastName,
-            this.passwordEncoder.encode(registerRequestDto.password)
-        )
+        val userId =
+            this.userFacade.createUser(
+                registerRequestDto.email,
+                registerRequestDto.firstName,
+                registerRequestDto.lastName,
+                this.passwordEncoder.encode(registerRequestDto.password),
+            )
 
         val jwtToken = this.jwtService.generateToken(registerRequestDto.email)
         val refreshToken = this.jwtService.generateRefreshToken(registerRequestDto.email)

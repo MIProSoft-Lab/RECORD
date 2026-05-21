@@ -6,24 +6,21 @@ import es.uib.record.backend.auth.domain.Token
 import es.uib.record.backend.auth.domain.TokenRepository
 import es.uib.record.backend.security.open.JwtService
 import es.uib.record.backend.users.open.UserFacade
+import java.util.UUID
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Component
-import java.util.UUID
 
 @Component
 class LoginUseCase(
     private val authenticationManager: AuthenticationManager,
     private val userFacade: UserFacade,
     private val jwtService: JwtService,
-    private val tokenRepository: TokenRepository
+    private val tokenRepository: TokenRepository,
 ) {
     fun execute(loginRequestDto: LoginRequestDto): AuthResponseDto {
         this.authenticationManager.authenticate(
-           UsernamePasswordAuthenticationToken(
-               loginRequestDto.email,
-               loginRequestDto.password
-           )
+            UsernamePasswordAuthenticationToken(loginRequestDto.email, loginRequestDto.password)
         )
 
         val userId = this.userFacade.getUserIdByEmail(loginRequestDto.email)

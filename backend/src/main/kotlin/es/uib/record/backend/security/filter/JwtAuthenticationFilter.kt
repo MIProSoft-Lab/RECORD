@@ -19,13 +19,13 @@ import org.springframework.web.servlet.HandlerExceptionResolver
 class JwtAuthenticationFilter(
     private val userDetailsService: UserDetailsService,
     private val jwtService: JwtService,
-    private val handlerExceptionResolver: HandlerExceptionResolver
+    private val handlerExceptionResolver: HandlerExceptionResolver,
 ) : OncePerRequestFilter() {
 
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
-        filterChain: FilterChain
+        filterChain: FilterChain,
     ) {
         val path = request.servletPath
         if (path == "/auth/login" || path == "/auth/register" || path == "/auth/refresh") {
@@ -48,11 +48,12 @@ class JwtAuthenticationFilter(
                 val userDetails = userDetailsService.loadUserByUsername(userEmail)
 
                 if (this.jwtService.isTokenValid(jwtToken, userDetails)) {
-                    val authToken = UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.authorities
-                    )
+                    val authToken =
+                        UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.authorities,
+                        )
 
                     authToken.details = WebAuthenticationDetailsSource().buildDetails(request)
                     SecurityContextHolder.getContext().authentication = authToken

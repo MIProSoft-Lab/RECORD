@@ -6,17 +6,17 @@ import es.uib.record.backend.groups.application.usecase.invitation.GetInvitation
 import es.uib.record.backend.groups.application.usecase.invitation.RejectInvitationByIdUseCase
 import es.uib.record.backend.groups.infrastructure.mapper.toResponse
 import es.uib.record.backend.model.InvitationResponse
+import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
-import java.util.UUID
 
 @RestController
 class InvitationController(
     private val getInvitationsByUserIdUseCase: GetInvitationsByUserIdUseCase,
     private val acceptInvitationByIdUseCase: AcceptInvitationByIdUseCase,
-    private val rejectInvitationByIdUseCase: RejectInvitationByIdUseCase
+    private val rejectInvitationByIdUseCase: RejectInvitationByIdUseCase,
 ) : InvitationsApi {
 
     override fun acceptInvitation(invitationId: UUID): ResponseEntity<Unit> {
