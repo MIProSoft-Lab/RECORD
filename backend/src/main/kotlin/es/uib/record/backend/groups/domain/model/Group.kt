@@ -28,6 +28,10 @@ class Group(
         return _members.size
     }
 
+    fun getAdminsCount(): Int {
+        return _members.count { it.role == GroupRole.ADMIN }
+    }
+
     fun isMember(userId: UUID): Boolean {
         return _members.any { it.userId == userId }
     }

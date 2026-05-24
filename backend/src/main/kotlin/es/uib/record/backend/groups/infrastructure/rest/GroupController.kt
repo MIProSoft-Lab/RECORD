@@ -6,6 +6,8 @@ import es.uib.record.backend.groups.application.usecase.group.GetGroupDetailUseC
 import es.uib.record.backend.groups.application.usecase.group.GetGroupsListByMemberIdUseCase
 import es.uib.record.backend.groups.application.usecase.group.SearchInvitableUsersUseCase
 import es.uib.record.backend.groups.application.usecase.group.SendInvitationUseCase
+import es.uib.record.backend.groups.application.usecase.group.UpdateGroupMemberRoleUseCase
+import es.uib.record.backend.groups.infrastructure.mapper.toDomain
 import es.uib.record.backend.groups.infrastructure.mapper.toDto
 import es.uib.record.backend.groups.infrastructure.mapper.toResponse
 import es.uib.record.backend.model.CreateGroupRequest
@@ -14,6 +16,7 @@ import es.uib.record.backend.model.GroupResponse
 import es.uib.record.backend.model.GroupSummaryResponse
 import es.uib.record.backend.model.InvitableUserResponse
 import es.uib.record.backend.model.SendInvitationRequest
+import es.uib.record.backend.model.UpdateGroupMemberRoleRequest
 import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -27,6 +30,7 @@ class GroupController(
     private val getGroupDetailUseCase: GetGroupDetailUseCase,
     private val searchInvitableUsersUseCase: SearchInvitableUsersUseCase,
     private val sendInvitationUseCase: SendInvitationUseCase,
+    private val updateGroupMemberRoleUseCase: UpdateGroupMemberRoleUseCase,
 ) : GroupsApi {
 
     override fun createGroup(
@@ -70,5 +74,21 @@ class GroupController(
         this.sendInvitationUseCase.execute(email, groupId, sendInvitationRequest.inviteeUserId)
 
         return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+
+    override fun updateGroupMemberRole(
+        groupId: UUID,
+        memberId: UUID,
+        updateGroupMemberRoleRequest: UpdateGroupMemberRoleRequest,
+    ): ResponseEntity<Unit> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        this.updateGroupMemberRoleUseCase.execute(
+            email,
+            groupId,
+            memberId,
+            updateGroupMemberRoleRequest.role.toDomain(),
+        )
+
+        return ResponseEntity.noContent().build()
     }
 }
