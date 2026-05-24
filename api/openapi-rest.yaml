@@ -47,6 +47,12 @@ paths:
   /groups/{groupId}:
     $ref: "./groups/group-detail.yaml"
 
+  /groups/{groupId}/invitable-users:
+    $ref: "./groups/search-invitable-users.yaml"
+
+  /groups/{groupId}/invitations:
+    $ref: "./groups/invitations.yaml"
+
   /invitations/me:
     $ref: "./invitations/list-invitations.yaml"
 

@@ -1,0 +1,57 @@
+post:
+  summary: Invite a user to a group
+  operationId: inviteUserToGroup
+  tags:
+    - Groups
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/SendInvitationRequest"
+  responses:
+    "201":
+      description: Invitation sent successfully.
+    "400":
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Group/user not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "409":
+      description: Already a member / already invited.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

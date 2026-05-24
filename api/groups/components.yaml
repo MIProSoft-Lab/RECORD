@@ -124,3 +124,40 @@ schemas:
       - role
       - profileImageUrl
       - isCreator
+
+  InvitableUserResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+        description: "Unique identifier of the user."
+      firstName:
+        type: string
+        description: "First name of the user."
+      lastName:
+        type: string
+        description: "Last name of the user."
+      email:
+        type: string
+        format: email
+        description: "Email of the user."
+      profileImageUrl:
+        type: string
+        description: "URL of the user's profile image."
+    required:
+      - id
+      - firstName
+      - lastName
+      - email
+      - profileImageUrl
+
+  SendInvitationRequest:
+    type: object
+    properties:
+      inviteeUserId:
+        type: string
+        format: uuid
+        description: "Unique identifier of the user to be invited."
+    required:
+      - inviteeUserId
