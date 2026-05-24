@@ -15,6 +15,7 @@ export * from './logoutRequest';
 export * from './refreshRequest';
 export * from './registerRequest';
 export * from './sendInvitationRequest';
+export * from './updateGroupMemberRoleRequest';
 export * from './userProfileImageSignatureResponse';
 export * from './userResponse';
 export * from './userUpdatePushNotificationRequest';

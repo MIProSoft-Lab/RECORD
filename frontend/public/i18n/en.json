@@ -65,7 +65,7 @@
       "TABS": {
         "ABOUT": "About",
         "POSTS": "Posts",
-        "SETTINGS": "Settings"
+        "ADMINISTRATION": "Administration"
       },
       "ABOUT": {
         "DESCRIPTION_LABEL": "Description",
@@ -83,8 +83,24 @@
       "POSTS": {
         "COMING_SOON": "Coming soon."
       },
-      "SETTINGS": {
-        "COMING_SOON": "Coming soon."
+      "ADMINISTRATION": {
+        "COMING_SOON": "Coming soon.",
+        "MEMBERS": {
+          "SECTION_TITLE": "Members and roles",
+          "COLUMN_MEMBER": "Member",
+          "COLUMN_EMAIL": "Email",
+          "COLUMN_ROLE": "Role",
+          "TOAST_SUCCESS_SUMMARY": "Success",
+          "TOAST_SUCCESS_DETAIL": "Role updated.",
+          "TOAST_ERROR_SUMMARY": "Error",
+          "TOAST_ERROR_LAST_ADMIN": "Cannot downgrade the only administrator of the group.",
+          "TOAST_ERROR_FORBIDDEN": "You don't have permission to change this role.",
+          "TOAST_ERROR_GENERIC": "Could not update the role.",
+          "SELF_DEMOTE_CONFIRM_HEADER": "Step down as administrator",
+          "SELF_DEMOTE_CONFIRM_MESSAGE": "If you change your role to Member you will lose the ability to manage the group. Do you want to continue?",
+          "CONFIRM_YES": "Yes, continue",
+          "CONFIRM_NO": "Cancel"
+        }
       },
       "INVITE": {
         "BUTTON": "Invite users",

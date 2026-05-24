@@ -65,7 +65,7 @@
       "TABS": {
         "ABOUT": "Sobre",
         "POSTS": "Publicaciones",
-        "SETTINGS": "Configuración"
+        "ADMINISTRATION": "Administración"
       },
       "ABOUT": {
         "DESCRIPTION_LABEL": "Descripción",
@@ -83,8 +83,24 @@
       "POSTS": {
         "COMING_SOON": "Próximamente."
       },
-      "SETTINGS": {
-        "COMING_SOON": "Próximamente."
+      "ADMINISTRATION": {
+        "COMING_SOON": "Próximamente.",
+        "MEMBERS": {
+          "SECTION_TITLE": "Miembros y roles",
+          "COLUMN_MEMBER": "Miembro",
+          "COLUMN_EMAIL": "Email",
+          "COLUMN_ROLE": "Rol",
+          "TOAST_SUCCESS_SUMMARY": "Éxito",
+          "TOAST_SUCCESS_DETAIL": "Rol actualizado.",
+          "TOAST_ERROR_SUMMARY": "Error",
+          "TOAST_ERROR_LAST_ADMIN": "No se puede degradar al único administrador del grupo.",
+          "TOAST_ERROR_FORBIDDEN": "No tienes permisos para cambiar este rol.",
+          "TOAST_ERROR_GENERIC": "No se ha podido actualizar el rol.",
+          "SELF_DEMOTE_CONFIRM_HEADER": "Dejar de ser administrador",
+          "SELF_DEMOTE_CONFIRM_MESSAGE": "Si cambias tu rol a Miembro perderás la capacidad de gestionar el grupo. ¿Quieres continuar?",
+          "CONFIRM_YES": "Sí, continuar",
+          "CONFIRM_NO": "Cancelar"
+        }
       },
       "INVITE": {
         "BUTTON": "Invitar usuarios",

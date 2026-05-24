@@ -1,21 +1,43 @@
 import { DatePipe } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
+import { Select } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TabsModule } from 'primeng/tabs';
 import { Tag } from 'primeng/tag';
-import { HttpErrorResponse } from '@angular/common/http';
-import { GroupDetailResponse, GroupsService } from '@core/api';
+import {
+  GroupDetailResponse,
+  GroupMemberDetail,
+  GroupRole,
+  GroupsService,
+} from '@core/api';
 import { UserState } from '@core/services/user-state';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { InviteUsersDialog } from './invite-users-dialog';
 
+interface RoleOption {
+  label: string;
+  value: GroupRole;
+}
+
 @Component({
   selector: 'record-group-detail',
-  imports: [DatePipe, TranslatePipe, TableModule, TabsModule, Tag, Button, InviteUsersDialog],
+  imports: [
+    DatePipe,
+    FormsModule,
+    TranslatePipe,
+    TableModule,
+    TabsModule,
+    Tag,
+    Button,
+    Select,
+    InviteUsersDialog,
+  ],
   templateUrl: './group-detail.html',
 })
 export class GroupDetail implements OnInit, OnDestroy {
@@ -23,6 +45,7 @@ export class GroupDetail implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly groupsService = inject(GroupsService);
   private readonly messageService = inject(MessageService);
+  private readonly confirmationService = inject(ConfirmationService);
   private readonly translate = inject(TranslateService);
   private readonly breadcrumbService = inject(BreadcrumbService);
   private readonly userState = inject(UserState);
@@ -33,6 +56,7 @@ export class GroupDetail implements OnInit, OnDestroy {
   isLoading = signal(false);
   activeTab = signal<string>('about');
   showInviteDialog = signal(false);
+  updatingMemberId = signal<string | null>(null);
 
   members = computed(() => this.group()?.members ?? []);
 
@@ -42,6 +66,11 @@ export class GroupDetail implements OnInit, OnDestroy {
     if (!currentUserId) return false;
     return this.members().some((m) => m.userId === currentUserId && m.role === 'ADMIN');
   });
+
+  readonly roleOptions = computed<RoleOption[]>(() => [
+    { label: this.translate.instant('GROUPS.ROLES.ADMIN'), value: 'ADMIN' },
+    { label: this.translate.instant('GROUPS.ROLES.MEMBER'), value: 'MEMBER' },
+  ]);
 
   ngOnInit() {
     const groupId = this.route.snapshot.paramMap.get('id');
@@ -76,6 +105,87 @@ export class GroupDetail implements OnInit, OnDestroy {
         });
         this.router.navigate(['/groups']);
       },
+    });
+  }
+
+  onRoleChange(member: GroupMemberDetail, newRole: GroupRole) {
+    const previousRole = member.role;
+    if (previousRole === newRole) return;
+
+    const currentUserId = this.userState.currentUser()?.id;
+    const isSelfDemote =
+      member.userId === currentUserId && previousRole === 'ADMIN' && newRole === 'MEMBER';
+
+    if (isSelfDemote) {
+      this.confirmationService.confirm({
+        header: this.translate.instant(
+          'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.SELF_DEMOTE_CONFIRM_HEADER',
+        ),
+        message: this.translate.instant(
+          'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.SELF_DEMOTE_CONFIRM_MESSAGE',
+        ),
+        acceptLabel: this.translate.instant('GROUPS.DETAIL.ADMINISTRATION.MEMBERS.CONFIRM_YES'),
+        rejectLabel: this.translate.instant('GROUPS.DETAIL.ADMINISTRATION.MEMBERS.CONFIRM_NO'),
+        accept: () => this.sendRoleUpdate(member, newRole, previousRole),
+        reject: () => this.revertRole(member, previousRole),
+      });
+      return;
+    }
+
+    this.sendRoleUpdate(member, newRole, previousRole);
+  }
+
+  private sendRoleUpdate(member: GroupMemberDetail, newRole: GroupRole, previousRole: GroupRole) {
+    const groupId = this.group()?.id;
+    if (!groupId) return;
+
+    this.updatingMemberId.set(member.userId);
+    this.groupsService
+      .updateGroupMemberRole(groupId, member.userId, { role: newRole })
+      .subscribe({
+        next: () => {
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translate.instant(
+              'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_SUCCESS_SUMMARY',
+            ),
+            detail: this.translate.instant(
+              'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_SUCCESS_DETAIL',
+            ),
+          });
+          this.updatingMemberId.set(null);
+          this.loadGroup(groupId);
+        },
+        error: (err: HttpErrorResponse) => {
+          this.updatingMemberId.set(null);
+          this.revertRole(member, previousRole);
+          const code = (err.error as { code?: string } | null)?.code;
+          const detailKey =
+            code === 'GROUP_LAST_ADMIN'
+              ? 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_LAST_ADMIN'
+              : code === 'GROUP_MEMBER_NOT_ADMIN'
+                ? 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_FORBIDDEN'
+                : 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_GENERIC';
+          this.messageService.add({
+            severity: 'error',
+            summary: this.translate.instant(
+              'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_SUMMARY',
+            ),
+            detail: this.translate.instant(detailKey),
+          });
+        },
+      });
+  }
+
+  private revertRole(member: GroupMemberDetail, previousRole: GroupRole) {
+    this.group.update((current) => {
+      if (!current) return current;
+      return {
+        ...current,
+        members: current.members.map((m) =>
+          m.userId === member.userId ? { ...m, role: previousRole } : m,
+        ),
+      };
     });
   }
 

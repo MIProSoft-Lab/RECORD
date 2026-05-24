@@ -65,7 +65,7 @@
       "TABS": {
         "ABOUT": "Sobre",
         "POSTS": "Publicacions",
-        "SETTINGS": "Configuració"
+        "ADMINISTRATION": "Administració"
       },
       "ABOUT": {
         "DESCRIPTION_LABEL": "Descripció",
@@ -83,8 +83,24 @@
       "POSTS": {
         "COMING_SOON": "Pròximament."
       },
-      "SETTINGS": {
-        "COMING_SOON": "Pròximament."
+      "ADMINISTRATION": {
+        "COMING_SOON": "Pròximament.",
+        "MEMBERS": {
+          "SECTION_TITLE": "Membres i rols",
+          "COLUMN_MEMBER": "Membre",
+          "COLUMN_EMAIL": "Email",
+          "COLUMN_ROLE": "Rol",
+          "TOAST_SUCCESS_SUMMARY": "Èxit",
+          "TOAST_SUCCESS_DETAIL": "Rol actualitzat.",
+          "TOAST_ERROR_SUMMARY": "Error",
+          "TOAST_ERROR_LAST_ADMIN": "No es pot degradar l'únic administrador del grup.",
+          "TOAST_ERROR_FORBIDDEN": "No tens permisos per canviar aquest rol.",
+          "TOAST_ERROR_GENERIC": "No s'ha pogut actualitzar el rol.",
+          "SELF_DEMOTE_CONFIRM_HEADER": "Deixar de ser administrador",
+          "SELF_DEMOTE_CONFIRM_MESSAGE": "Si canvies el teu rol a Membre perdràs la capacitat de gestionar el grup. Vols continuar?",
+          "CONFIRM_YES": "Sí, continuar",
+          "CONFIRM_NO": "Cancel·lar"
+        }
       },
       "INVITE": {
         "BUTTON": "Convidar usuaris",
