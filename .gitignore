@@ -1,4 +1,6 @@
 .DS_Store
 .claude/*
+.agents/*
+!.agents/skills
 !.claude/commands/
 .atl
