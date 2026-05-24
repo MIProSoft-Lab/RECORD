@@ -2,7 +2,16 @@
   @if (group(); as g) {
     <div class="flex align-items-center justify-content-between mb-4">
       <h1 class="m-0">{{ g.name }}</h1>
+      @if (isAdmin()) {
+        <p-button
+          [label]="'GROUPS.DETAIL.INVITE.BUTTON' | translate"
+          icon="pi pi-user-plus"
+          (onClick)="showInviteDialog.set(true)"
+        />
+      }
     </div>
+
+    <record-invite-users-dialog [groupId]="g.id" [(visible)]="showInviteDialog" />
 
     <p-tabs [(value)]="activeTab">
       <p-tablist>

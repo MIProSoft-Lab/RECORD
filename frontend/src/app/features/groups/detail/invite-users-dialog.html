@@ -1,0 +1,69 @@
+<p-dialog
+  [(visible)]="visible"
+  (onHide)="onHide()"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '36rem' }"
+  [header]="'GROUPS.DETAIL.INVITE.DIALOG_TITLE' | translate"
+>
+  <div class="flex flex-column gap-3">
+    <input
+      pInputText
+      type="text"
+      [ngModel]="query()"
+      (ngModelChange)="query.set($event)"
+      [placeholder]="'GROUPS.DETAIL.INVITE.SEARCH_PLACEHOLDER' | translate"
+      class="w-full"
+    />
+
+    @if (showMinHint()) {
+      <p class="m-0 text-color-secondary text-sm">
+        {{ 'GROUPS.DETAIL.INVITE.MIN_QUERY_HINT' | translate }}
+      </p>
+    }
+
+    @if (showLoader()) {
+      <div class="flex flex-column gap-3">
+        @for (placeholder of [1, 2, 3]; track placeholder) {
+          <div class="flex align-items-center gap-3">
+            <p-skeleton shape="circle" size="2.5rem" />
+            <div class="flex-1">
+              <p-skeleton width="60%" height="1rem" class="mb-2" />
+              <p-skeleton width="40%" height="0.8rem" />
+            </div>
+          </div>
+        }
+      </div>
+    } @else if (showEmptyState()) {
+      <p class="m-0 text-color-secondary text-sm text-center p-3">
+        {{ 'GROUPS.DETAIL.INVITE.NO_RESULTS' | translate }}
+      </p>
+    } @else if (results().length > 0) {
+      <ul class="list-none p-0 m-0 flex flex-column gap-2">
+        @for (user of results(); track user.id) {
+          <li class="flex align-items-center gap-3 p-2 border-1 surface-border border-round">
+            <p-avatar
+              [image]="user.profileImageUrl"
+              [label]="user.profileImageUrl ? undefined : initialsFor(user)"
+              shape="circle"
+              size="large"
+            />
+            <div class="flex-1 min-w-0">
+              <div class="font-medium">{{ fullName(user) }}</div>
+              <div class="text-color-secondary text-sm">{{ user.email }}</div>
+            </div>
+            <p-button
+              [label]="'GROUPS.DETAIL.INVITE.INVITE_BUTTON' | translate"
+              icon="pi pi-user-plus"
+              size="small"
+              [loading]="invitingId() === user.id"
+              [disabled]="invitingId() !== null"
+              (onClick)="invite(user)"
+            />
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</p-dialog>

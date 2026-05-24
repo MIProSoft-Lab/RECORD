@@ -3,16 +3,19 @@ import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
+import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TabsModule } from 'primeng/tabs';
 import { Tag } from 'primeng/tag';
 import { HttpErrorResponse } from '@angular/common/http';
 import { GroupDetailResponse, GroupsService } from '@core/api';
+import { UserState } from '@core/services/user-state';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
+import { InviteUsersDialog } from './invite-users-dialog';
 
 @Component({
   selector: 'record-group-detail',
-  imports: [DatePipe, TranslatePipe, TableModule, TabsModule, Tag],
+  imports: [DatePipe, TranslatePipe, TableModule, TabsModule, Tag, Button, InviteUsersDialog],
   templateUrl: './group-detail.html',
 })
 export class GroupDetail implements OnInit, OnDestroy {
@@ -22,14 +25,23 @@ export class GroupDetail implements OnInit, OnDestroy {
   private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
   private readonly breadcrumbService = inject(BreadcrumbService);
+  private readonly userState = inject(UserState);
 
   private breadcrumbUrl: string | null = null;
 
   group = signal<GroupDetailResponse | null>(null);
   isLoading = signal(false);
   activeTab = signal<string>('about');
+  showInviteDialog = signal(false);
 
   members = computed(() => this.group()?.members ?? []);
+
+  /** True when the current authenticated user is an ADMIN of this group. */
+  isAdmin = computed(() => {
+    const currentUserId = this.userState.currentUser()?.id;
+    if (!currentUserId) return false;
+    return this.members().some((m) => m.userId === currentUserId && m.role === 'ADMIN');
+  });
 
   ngOnInit() {
     const groupId = this.route.snapshot.paramMap.get('id');
