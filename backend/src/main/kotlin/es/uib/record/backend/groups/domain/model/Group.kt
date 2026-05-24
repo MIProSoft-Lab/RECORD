@@ -35,4 +35,8 @@ class Group(
     fun getMembersIds(): List<UUID> {
         return _members.map { it.userId }
     }
+
+    fun updateMemberRole(userId: UUID, role: GroupRole) {
+        this._members.first { it.userId == userId }.role = role
+    }
 }

@@ -11,4 +11,6 @@ interface InvitationRepository {
     fun findByInviteeUserId(userId: UUID): List<Invitation>
 
     fun findById(id: UUID): Invitation?
+
+    fun findByGroupId(groupId: UUID): List<Invitation>
 }

@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface SpringDataJpaInvitationRepository : JpaRepository<InvitationEntity, UUID> {
     fun findByInviteeUserId(inviteeUserId: UUID): List<InvitationEntity>
+
+    fun findByGroupId(groupId: UUID): List<InvitationEntity>
 }

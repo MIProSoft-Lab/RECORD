@@ -7,5 +7,9 @@ interface UserFacade {
 
     fun getUserIdByEmail(email: String): UUID
 
+    fun getUserById(userId: UUID): UserOpenDto
+
     fun getUsersByIds(userIds: List<UUID>): List<UserOpenDto>
+
+    fun searchUsers(query: String): List<UserOpenDto>
 }

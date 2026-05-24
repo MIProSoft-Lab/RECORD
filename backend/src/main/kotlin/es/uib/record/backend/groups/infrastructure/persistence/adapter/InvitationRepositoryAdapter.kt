@@ -4,7 +4,6 @@ import es.uib.record.backend.groups.domain.model.Invitation
 import es.uib.record.backend.groups.domain.repository.InvitationRepository
 import es.uib.record.backend.groups.infrastructure.mapper.toDomain
 import es.uib.record.backend.groups.infrastructure.mapper.toEntity
-import es.uib.record.backend.groups.infrastructure.persistence.entity.InvitationEntity
 import es.uib.record.backend.groups.infrastructure.persistence.repository.SpringDataJpaInvitationRepository
 import java.util.UUID
 import org.springframework.data.repository.findByIdOrNull
@@ -25,12 +24,16 @@ class InvitationRepositoryAdapter(
     }
 
     override fun findByInviteeUserId(userId: UUID): List<Invitation> {
-        return this.springDataJpaInvitationRepository
-            .findByInviteeUserId(userId)
-            .map(InvitationEntity::toDomain)
+        return this.springDataJpaInvitationRepository.findByInviteeUserId(userId).map {
+            it.toDomain()
+        }
     }
 
     override fun findById(id: UUID): Invitation? {
         return this.springDataJpaInvitationRepository.findByIdOrNull(id)?.toDomain()
+    }
+
+    override fun findByGroupId(groupId: UUID): List<Invitation> {
+        return this.springDataJpaInvitationRepository.findByGroupId(groupId).map { it.toDomain() }
     }
 }

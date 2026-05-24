@@ -23,4 +23,8 @@ class UserRepositoryAdapter(private val springDataJpaUserRepository: SpringDataJ
     override fun findAllByIds(userIds: List<UUID>): List<User> {
         return this.springDataJpaUserRepository.findAllById(userIds).map { it.toDomain() }
     }
+
+    override fun searchByEmailOrName(query: String): List<User> {
+        return this.springDataJpaUserRepository.findByEmailOrName(query).map { it.toDomain() }
+    }
 }

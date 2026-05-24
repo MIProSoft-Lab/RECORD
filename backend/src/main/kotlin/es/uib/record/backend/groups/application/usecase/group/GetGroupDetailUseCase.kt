@@ -1,7 +1,7 @@
-package es.uib.record.backend.groups.application.usecase
+package es.uib.record.backend.groups.application.usecase.group
 
-import es.uib.record.backend.groups.application.usecase.dto.GroupDetailResponseDto
-import es.uib.record.backend.groups.application.usecase.dto.GroupMemberDetailDto
+import es.uib.record.backend.groups.application.usecase.group.dto.GroupDetailResponseDto
+import es.uib.record.backend.groups.application.usecase.group.dto.GroupMemberDetailDto
 import es.uib.record.backend.groups.domain.exception.GroupNotFoundException
 import es.uib.record.backend.groups.domain.exception.NotGroupMemberException
 import es.uib.record.backend.groups.domain.model.GroupMember
@@ -20,7 +20,7 @@ class GetGroupDetailUseCase(
         val userId = this.userFacade.getUserIdByEmail(email)
         val group = this.groupRepository.findById(groupId) ?: throw GroupNotFoundException(groupId)
 
-        if (!group.isMember(userId)) throw NotGroupMemberException()
+        if (!group.isMember(userId)) throw NotGroupMemberException(userId, groupId)
 
         val usersFromGroup = this.userFacade.getUsersByIds(group.getMembersIds())
 

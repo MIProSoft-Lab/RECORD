@@ -1,6 +1,6 @@
-package es.uib.record.backend.groups.application.usecase
+package es.uib.record.backend.groups.application.usecase.group
 
-import es.uib.record.backend.groups.application.usecase.dto.CreateGroupRequestDto
+import es.uib.record.backend.groups.application.usecase.group.dto.CreateGroupRequestDto
 import es.uib.record.backend.groups.domain.model.Group
 import es.uib.record.backend.groups.domain.model.GroupRole
 import es.uib.record.backend.groups.domain.repository.GroupRepository

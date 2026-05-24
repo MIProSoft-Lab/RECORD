@@ -8,4 +8,6 @@ interface UserRepository {
     fun findByEmail(email: String): User?
 
     fun findAllByIds(userIds: List<UUID>): List<User>
+
+    fun searchByEmailOrName(query: String): List<User>
 }

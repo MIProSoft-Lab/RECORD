@@ -1,9 +1,10 @@
 package es.uib.record.backend.groups.infrastructure.mapper
 
-import es.uib.record.backend.groups.application.usecase.dto.CreateGroupRequestDto
-import es.uib.record.backend.groups.application.usecase.dto.GroupDetailResponseDto
-import es.uib.record.backend.groups.application.usecase.dto.GroupMemberDetailDto
-import es.uib.record.backend.groups.application.usecase.dto.GroupSummaryResponseDto
+import es.uib.record.backend.groups.application.usecase.group.dto.CreateGroupRequestDto
+import es.uib.record.backend.groups.application.usecase.group.dto.GroupDetailResponseDto
+import es.uib.record.backend.groups.application.usecase.group.dto.GroupMemberDetailDto
+import es.uib.record.backend.groups.application.usecase.group.dto.GroupSummaryResponseDto
+import es.uib.record.backend.groups.application.usecase.group.dto.InvitableUserResponseDto
 import es.uib.record.backend.groups.domain.model.Group
 import es.uib.record.backend.groups.domain.model.GroupRole
 import es.uib.record.backend.model.CreateGroupRequest
@@ -11,6 +12,7 @@ import es.uib.record.backend.model.GroupDetailResponse
 import es.uib.record.backend.model.GroupMemberDetail
 import es.uib.record.backend.model.GroupResponse
 import es.uib.record.backend.model.GroupSummaryResponse
+import es.uib.record.backend.model.InvitableUserResponse
 import java.time.ZoneOffset
 
 fun CreateGroupRequest.toDto() =
@@ -64,5 +66,14 @@ fun GroupMemberDetailDto.toResponse() =
         email = this.email,
         role = this.role.toResponse(),
         isCreator = this.isCreator,
+        profileImageUrl = this.profileImageUrl,
+    )
+
+fun InvitableUserResponseDto.toResponse() =
+    InvitableUserResponse(
+        id = this.id,
+        firstName = this.firstName,
+        lastName = this.lastName,
+        email = this.email,
         profileImageUrl = this.profileImageUrl,
     )

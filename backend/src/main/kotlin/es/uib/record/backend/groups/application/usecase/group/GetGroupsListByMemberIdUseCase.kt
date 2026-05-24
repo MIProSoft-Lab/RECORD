@@ -1,6 +1,6 @@
-package es.uib.record.backend.groups.application.usecase
+package es.uib.record.backend.groups.application.usecase.group
 
-import es.uib.record.backend.groups.application.usecase.dto.GroupSummaryResponseDto
+import es.uib.record.backend.groups.application.usecase.group.dto.GroupSummaryResponseDto
 import es.uib.record.backend.groups.domain.repository.GroupRepository
 import es.uib.record.backend.users.open.UserFacade
 import org.springframework.stereotype.Component

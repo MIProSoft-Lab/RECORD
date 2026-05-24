@@ -1,4 +1,4 @@
-package es.uib.record.backend.groups.application.usecase.dto
+package es.uib.record.backend.groups.application.usecase.group.dto
 
 import es.uib.record.backend.groups.domain.model.GroupRole
 import java.util.UUID
