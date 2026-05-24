@@ -161,3 +161,12 @@ schemas:
         description: "Unique identifier of the user to be invited."
     required:
       - inviteeUserId
+
+  UpdateGroupMemberRoleRequest:
+    type: object
+    properties:
+      role:
+        $ref: "../common.yaml#/schemas/GroupRole"
+        description: "The new role to assign to the group member."
+    required:
+      - role
