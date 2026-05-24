@@ -22,9 +22,9 @@
               class="flex align-items-center gap-3 p-3 border-1 surface-border border-round"
             >
               <p-avatar
-                [image]="invitation.inviter?.profileImageUrl"
+                [image]="invitation.inviter.profileImageUrl"
                 [label]="
-                  invitation.inviter?.profileImageUrl
+                  invitation.inviter.profileImageUrl
                     ? undefined
                     : inviterInitials(invitation.inviter)
                 "
@@ -39,7 +39,7 @@
                   </span>
                   <span class="font-medium">{{ inviterName(invitation.inviter) }}</span>
                 </div>
-                <div class="font-bold">{{ invitation.group?.groupName }}</div>
+                <div class="font-bold">{{ invitation.group.groupName }}</div>
                 @if (invitation.createdAt) {
                   <div class="text-color-secondary text-sm">
                     {{ 'INVITATIONS.RECEIVED' | translate }}
