@@ -86,6 +86,20 @@
       "SETTINGS": {
         "COMING_SOON": "Pròximament."
       },
+      "INVITE": {
+        "BUTTON": "Convidar usuaris",
+        "DIALOG_TITLE": "Convidar usuaris al grup",
+        "SEARCH_PLACEHOLDER": "Cerca per nom o email...",
+        "MIN_QUERY_HINT": "Escriu almenys 2 caràcters.",
+        "NO_RESULTS": "No s'han trobat usuaris.",
+        "INVITE_BUTTON": "Convidar",
+        "TOAST_SUCCESS_SUMMARY": "Èxit",
+        "TOAST_SUCCESS_DETAIL": "Invitació enviada.",
+        "TOAST_ERROR_SUMMARY": "Error",
+        "TOAST_ERROR_ALREADY_MEMBER": "Aquest usuari ja és membre del grup.",
+        "TOAST_ERROR_ALREADY_INVITED": "Aquest usuari ja té una invitació pendent.",
+        "TOAST_ERROR_GENERIC": "No s'ha pogut enviar la invitació."
+      },
       "ERRORS": {
         "TITLE": "Error",
         "NOT_FOUND": "Grup no trobat.",

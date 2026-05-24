@@ -86,6 +86,20 @@
       "SETTINGS": {
         "COMING_SOON": "Próximamente."
       },
+      "INVITE": {
+        "BUTTON": "Invitar usuarios",
+        "DIALOG_TITLE": "Invitar usuarios al grupo",
+        "SEARCH_PLACEHOLDER": "Buscar por nombre o email...",
+        "MIN_QUERY_HINT": "Escribe al menos 2 caracteres.",
+        "NO_RESULTS": "No se han encontrado usuarios.",
+        "INVITE_BUTTON": "Invitar",
+        "TOAST_SUCCESS_SUMMARY": "Éxito",
+        "TOAST_SUCCESS_DETAIL": "Invitación enviada.",
+        "TOAST_ERROR_SUMMARY": "Error",
+        "TOAST_ERROR_ALREADY_MEMBER": "Este usuario ya es miembro del grupo.",
+        "TOAST_ERROR_ALREADY_INVITED": "Este usuario ya tiene una invitación pendiente.",
+        "TOAST_ERROR_GENERIC": "No se ha podido enviar la invitación."
+      },
       "ERRORS": {
         "TITLE": "Error",
         "NOT_FOUND": "Grupo no encontrado.",
