@@ -19,6 +19,7 @@ fun User.toEntity() =
         this.pushNotifications,
         this.profileImageUrl,
         this.createdAt,
+        this.deactivatedAt,
     )
 
 fun UserEntity.toDomain() =
@@ -31,6 +32,7 @@ fun UserEntity.toDomain() =
         this.pushNotifications,
         this.profileImageUrl,
         this.createdAt,
+        this.deactivatedAt,
     )
 
 fun User.toResponse() =

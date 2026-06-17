@@ -18,6 +18,7 @@ class UserSecurityAdapter(private val getUserByEmailUseCase: GetUserByEmailUseCa
             return org.springframework.security.core.userdetails.User.builder()
                 .username(user.email)
                 .password(user.password)
+                .disabled(user.isDeactivated())
                 .build()
         } catch (_: UserNotFoundException) {
             throw BadCredentialsException("Invalid username or password")

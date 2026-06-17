@@ -1,10 +1,12 @@
 package es.uib.record.backend.users.infrastructure.rest
 
 import es.uib.record.backend.api.UsersApi
+import es.uib.record.backend.model.DeactivateAccountRequest
 import es.uib.record.backend.model.UserProfileImageSignatureResponse
 import es.uib.record.backend.model.UserResponse
 import es.uib.record.backend.model.UserUpdatePushNotificationRequest
 import es.uib.record.backend.model.UserUpdateRequest
+import es.uib.record.backend.users.application.usecase.DeactivateUserUseCase
 import es.uib.record.backend.users.application.usecase.GetUserByEmailUseCase
 import es.uib.record.backend.users.application.usecase.GetUserProfileImageSignatureUseCase
 import es.uib.record.backend.users.application.usecase.UpdateCurrentUserByEmailUseCase
@@ -21,6 +23,7 @@ class UserController(
     private val updateCurrentUserByEmailUseCase: UpdateCurrentUserByEmailUseCase,
     private val getUserProfileImageSignatureUseCase: GetUserProfileImageSignatureUseCase,
     private val updateUserPushNotificationsUseCase: UpdateUserPushNotificationsUseCase,
+    private val deactivateUserUseCase: DeactivateUserUseCase,
 ) : UsersApi {
     override fun getCurrentUser(): ResponseEntity<UserResponse> {
         val authentication = SecurityContextHolder.getContext().authentication
@@ -60,5 +63,16 @@ class UserController(
             )
 
         return ResponseEntity.ok(user.toResponse())
+    }
+
+    override fun deactivateCurrentUser(
+        deactivateAccountRequest: DeactivateAccountRequest
+    ): ResponseEntity<Unit> {
+        val authentication = SecurityContextHolder.getContext().authentication
+        val email = authentication.name
+
+        this.deactivateUserUseCase.execute(email, deactivateAccountRequest.password)
+
+        return ResponseEntity.noContent().build()
     }
 }

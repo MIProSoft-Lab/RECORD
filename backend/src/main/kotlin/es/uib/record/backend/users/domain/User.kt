@@ -12,4 +12,7 @@ data class User(
     val pushNotifications: Boolean = true,
     val profileImageUrl: String = "https://api.dicebear.com/7.x/identicon/svg?seed=$email",
     val createdAt: Instant = Instant.now(),
-)
+    val deactivatedAt: Instant? = null,
+) {
+    fun isDeactivated(): Boolean = deactivatedAt != null
+}
