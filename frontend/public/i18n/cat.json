@@ -109,7 +109,15 @@
           "SELF_DEMOTE_CONFIRM_HEADER": "Deixar de ser administrador",
           "SELF_DEMOTE_CONFIRM_MESSAGE": "Si canvies el teu rol a Membre perdràs la capacitat de gestionar el grup. Vols continuar?",
           "CONFIRM_YES": "Sí, continuar",
-          "CONFIRM_NO": "Cancel·lar"
+          "CONFIRM_NO": "Cancel·lar",
+          "KICK_BUTTON": "Expulsar",
+          "KICK_CONFIRM_HEADER": "Expulsar membre",
+          "KICK_CONFIRM_MESSAGE": "Això eliminarà el membre del grup de forma immediata. Vols continuar?",
+          "CONFIRM_KICK_YES": "Sí, expulsar",
+          "TOAST_KICK_SUCCESS_DETAIL": "Membre eliminat del grup.",
+          "TOAST_ERROR_KICK_LAST_ADMIN": "No es pot expulsar l'únic administrador del grup.",
+          "TOAST_ERROR_KICK_FORBIDDEN": "No tens permisos per expulsar aquest membre.",
+          "TOAST_ERROR_KICK_GENERIC": "No s'ha pogut expulsar el membre."
         }
       },
       "INVITE": {

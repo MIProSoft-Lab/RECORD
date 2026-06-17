@@ -48,7 +48,7 @@ export class GroupDetail implements OnInit, OnDestroy {
   private readonly confirmationService = inject(ConfirmationService);
   private readonly translate = inject(TranslateService);
   private readonly breadcrumbService = inject(BreadcrumbService);
-  private readonly userState = inject(UserState);
+  readonly userState = inject(UserState);
 
   private breadcrumbUrl: string | null = null;
 
@@ -57,6 +57,7 @@ export class GroupDetail implements OnInit, OnDestroy {
   activeTab = signal<string>('about');
   showInviteDialog = signal(false);
   updatingMemberId = signal<string | null>(null);
+  kickingMemberId = signal<string | null>(null);
 
   members = computed(() => this.group()?.members ?? []);
 
@@ -175,6 +176,53 @@ export class GroupDetail implements OnInit, OnDestroy {
           });
         },
       });
+  }
+
+  onKickMember(member: GroupMemberDetail) {
+    const groupId = this.group()?.id;
+    if (!groupId) return;
+
+    this.confirmationService.confirm({
+      header: this.translate.instant('GROUPS.DETAIL.ADMINISTRATION.MEMBERS.KICK_CONFIRM_HEADER'),
+      message: this.translate.instant('GROUPS.DETAIL.ADMINISTRATION.MEMBERS.KICK_CONFIRM_MESSAGE'),
+      acceptLabel: this.translate.instant('GROUPS.DETAIL.ADMINISTRATION.MEMBERS.CONFIRM_KICK_YES'),
+      rejectLabel: this.translate.instant('GROUPS.DETAIL.ADMINISTRATION.MEMBERS.CONFIRM_NO'),
+      accept: () => {
+        this.kickingMemberId.set(member.userId);
+        this.groupsService.kickGroupMember(groupId, member.userId).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: this.translate.instant(
+                'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_SUCCESS_SUMMARY',
+              ),
+              detail: this.translate.instant(
+                'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_KICK_SUCCESS_DETAIL',
+              ),
+            });
+            this.kickingMemberId.set(null);
+            this.loadGroup(groupId);
+          },
+          error: (err: HttpErrorResponse) => {
+            this.kickingMemberId.set(null);
+            const code = (err.error as { code?: string } | null)?.code;
+            const detailKey =
+              code === 'GROUP_LAST_ADMIN'
+                ? 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_KICK_LAST_ADMIN'
+                : code === 'GROUP_MEMBER_NOT_ADMIN'
+                  ? 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_KICK_FORBIDDEN'
+                  : 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_KICK_GENERIC';
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translate.instant(
+                'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_SUMMARY',
+              ),
+              detail: this.translate.instant(detailKey),
+            });
+          },
+        });
+      },
+    });
   }
 
   private revertRole(member: GroupMemberDetail, previousRole: GroupRole) {

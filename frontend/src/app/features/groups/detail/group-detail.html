@@ -143,6 +143,7 @@
                       <th style="width: 12rem">
                         {{ 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.COLUMN_ROLE' | translate }}
                       </th>
+                      <th style="width: 6rem"></th>
                     </tr>
                   </ng-template>
                   <ng-template #body let-member>
@@ -181,6 +182,18 @@
                           appendTo="body"
                           class="w-full"
                         />
+                      </td>
+                      <td>
+                        @if (member.userId !== userState.currentUser()?.id) {
+                          <p-button
+                            icon="pi pi-user-minus"
+                            severity="danger"
+                            [text]="true"
+                            [disabled]="kickingMemberId() === member.userId"
+                            [title]="'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.KICK_BUTTON' | translate"
+                            (onClick)="onKickMember(member)"
+                          />
+                        }
                       </td>
                     </tr>
                   </ng-template>

@@ -109,7 +109,15 @@
           "SELF_DEMOTE_CONFIRM_HEADER": "Step down as administrator",
           "SELF_DEMOTE_CONFIRM_MESSAGE": "If you change your role to Member you will lose the ability to manage the group. Do you want to continue?",
           "CONFIRM_YES": "Yes, continue",
-          "CONFIRM_NO": "Cancel"
+          "CONFIRM_NO": "Cancel",
+          "KICK_BUTTON": "Kick",
+          "KICK_CONFIRM_HEADER": "Kick member",
+          "KICK_CONFIRM_MESSAGE": "This will remove the member from the group immediately. Do you want to continue?",
+          "CONFIRM_KICK_YES": "Yes, kick",
+          "TOAST_KICK_SUCCESS_DETAIL": "Member removed from the group.",
+          "TOAST_ERROR_KICK_LAST_ADMIN": "Cannot kick the only administrator of the group.",
+          "TOAST_ERROR_KICK_FORBIDDEN": "You don't have permission to kick this member.",
+          "TOAST_ERROR_KICK_GENERIC": "Could not kick the member."
         }
       },
       "INVITE": {
