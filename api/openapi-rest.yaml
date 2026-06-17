@@ -56,6 +56,9 @@ paths:
   /groups/{groupId}/invitations:
     $ref: "./groups/invitations.yaml"
 
+  /groups/{groupId}/members/{memberId}:
+    $ref: "./groups/kick-member.yaml"
+
   /groups/{groupId}/members/{memberId}/role:
     $ref: "./groups/update-member-role.yaml"
 
