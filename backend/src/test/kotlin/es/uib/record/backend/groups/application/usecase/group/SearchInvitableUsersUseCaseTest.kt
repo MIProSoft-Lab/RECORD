@@ -31,7 +31,8 @@ class SearchInvitableUsersUseCaseTest {
         private val NON_MEMBER_USER_ID = UUID.fromString("00000000-0000-0000-0000-000000000003")
         private val INVITEE_USER_ID = UUID.fromString("00000000-0000-0000-0000-000000000004")
         private val MEMBER_USER_ID = UUID.fromString("00000000-0000-0000-0000-000000000005")
-        private val PENDING_INVITEE_USER_ID = UUID.fromString("00000000-0000-0000-0000-000000000006")
+        private val PENDING_INVITEE_USER_ID =
+            UUID.fromString("00000000-0000-0000-0000-000000000006")
         private const val USER_EMAIL = "test@test.com"
         private const val QUERY = "query"
     }
@@ -150,11 +151,7 @@ class SearchInvitableUsersUseCaseTest {
         }
 
     private fun createInvitation(inviteeUserId: UUID) =
-        Invitation(
-            groupId = GROUP_ID,
-            inviteeUserId = inviteeUserId,
-            inviterUserId = USER_ID,
-        )
+        Invitation(groupId = GROUP_ID, inviteeUserId = inviteeUserId, inviterUserId = USER_ID)
 
     private fun createUserOpenDto(userId: UUID) =
         UserOpenDto(

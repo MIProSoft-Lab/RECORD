@@ -11,13 +11,13 @@ import java.util.UUID
 import org.springframework.stereotype.Component
 
 @Component
-class UpdateGroupMemberRoleUseCase(
+class KickGroupMemberUseCase(
     private val groupRepository: GroupRepository,
     private val userFacade: UserFacade,
 ) {
-    fun execute(email: String, groupId: UUID, targetUserId: UUID, newRole: GroupRole) {
-        val group = this.groupRepository.findById(groupId) ?: throw GroupNotFoundException(groupId)
-        val actingUserId = this.userFacade.getUserIdByEmail(email)
+    fun execute(email: String, groupId: UUID, targetUserId: UUID) {
+        val group = groupRepository.findById(groupId) ?: throw GroupNotFoundException(groupId)
+        val actingUserId = userFacade.getUserIdByEmail(email)
 
         if (!group.isMember(actingUserId)) throw NotGroupMemberException(actingUserId, groupId)
 
@@ -26,17 +26,10 @@ class UpdateGroupMemberRoleUseCase(
 
         if (!group.isMember(targetUserId)) throw NotGroupMemberException(targetUserId, groupId)
 
-        val currentRole = group.getMemberRole(targetUserId)
-        if (currentRole == newRole) return
-
-        if (
-            currentRole == GroupRole.ADMIN &&
-                newRole == GroupRole.MEMBER &&
-                group.getAdminsCount() == 1
-        )
+        if (group.getMemberRole(targetUserId) == GroupRole.ADMIN && group.getAdminsCount() == 1)
             throw LastGroupAdminException(targetUserId, groupId)
 
-        group.updateMemberRole(targetUserId, newRole)
-        this.groupRepository.save(group)
+        group.removeMember(targetUserId)
+        groupRepository.save(group)
     }
 }

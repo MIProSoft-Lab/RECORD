@@ -43,4 +43,8 @@ class Group(
     fun updateMemberRole(userId: UUID, role: GroupRole) {
         this._members.first { it.userId == userId }.role = role
     }
+
+    fun removeMember(userId: UUID) {
+        _members.removeIf { it.userId == userId }
+    }
 }

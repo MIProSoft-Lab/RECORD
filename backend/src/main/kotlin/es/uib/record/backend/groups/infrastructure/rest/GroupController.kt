@@ -4,6 +4,7 @@ import es.uib.record.backend.api.GroupsApi
 import es.uib.record.backend.groups.application.usecase.group.CreateGroupUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupDetailUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupsListByMemberIdUseCase
+import es.uib.record.backend.groups.application.usecase.group.KickGroupMemberUseCase
 import es.uib.record.backend.groups.application.usecase.group.SearchInvitableUsersUseCase
 import es.uib.record.backend.groups.application.usecase.group.SendInvitationUseCase
 import es.uib.record.backend.groups.application.usecase.group.UpdateGroupMemberRoleUseCase
@@ -31,6 +32,7 @@ class GroupController(
     private val searchInvitableUsersUseCase: SearchInvitableUsersUseCase,
     private val sendInvitationUseCase: SendInvitationUseCase,
     private val updateGroupMemberRoleUseCase: UpdateGroupMemberRoleUseCase,
+    private val kickGroupMemberUseCase: KickGroupMemberUseCase,
 ) : GroupsApi {
 
     override fun createGroup(
@@ -74,6 +76,12 @@ class GroupController(
         this.sendInvitationUseCase.execute(email, groupId, sendInvitationRequest.inviteeUserId)
 
         return ResponseEntity.status(HttpStatus.CREATED).build()
+    }
+
+    override fun kickGroupMember(groupId: UUID, memberId: UUID): ResponseEntity<Unit> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        this.kickGroupMemberUseCase.execute(email, groupId, memberId)
+        return ResponseEntity.noContent().build()
     }
 
     override fun updateGroupMemberRole(
