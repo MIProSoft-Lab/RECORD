@@ -1,10 +1,10 @@
 package es.uib.record.backend.users.application.usecase
 
-import es.uib.record.backend.auth.open.AuthFacade
 import es.uib.record.backend.users.domain.User
 import es.uib.record.backend.users.domain.UserRepository
 import es.uib.record.backend.users.domain.exception.UserDeactivatedException
 import es.uib.record.backend.users.domain.exception.UserNotFoundException
+import es.uib.record.backend.users.open.UserDeactivatedEvent
 import java.time.Instant
 import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -18,6 +18,7 @@ import org.mockito.kotlin.argumentCaptor
 import org.mockito.kotlin.given
 import org.mockito.kotlin.never
 import org.mockito.kotlin.verify
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.crypto.password.PasswordEncoder
 
@@ -36,7 +37,7 @@ class DeactivateUserUseCaseTest {
 
     @Mock private lateinit var passwordEncoder: PasswordEncoder
 
-    @Mock private lateinit var authFacade: AuthFacade
+    @Mock private lateinit var eventPublisher: ApplicationEventPublisher
 
     @InjectMocks private lateinit var deactivateUserUseCase: DeactivateUserUseCase
 
@@ -55,7 +56,7 @@ class DeactivateUserUseCaseTest {
         val captor = argumentCaptor<User>()
         verify(userRepository).save(captor.capture())
         assertNotNull(captor.firstValue.deactivatedAt)
-        verify(authFacade).revokeAllTokensByEmail(EMAIL)
+        verify(eventPublisher).publishEvent(UserDeactivatedEvent(EMAIL))
     }
 
     @Test
@@ -68,7 +69,7 @@ class DeactivateUserUseCaseTest {
             deactivateUserUseCase.execute(EMAIL, CORRECT_PASSWORD)
         }
         verify(userRepository, never()).save(org.mockito.kotlin.any())
-        verify(authFacade, never()).revokeAllTokensByEmail(org.mockito.kotlin.any())
+        verify(eventPublisher, never()).publishEvent(org.mockito.kotlin.any<UserDeactivatedEvent>())
     }
 
     @Test
@@ -82,7 +83,7 @@ class DeactivateUserUseCaseTest {
             deactivateUserUseCase.execute(EMAIL, CORRECT_PASSWORD)
         }
         verify(userRepository, never()).save(org.mockito.kotlin.any())
-        verify(authFacade, never()).revokeAllTokensByEmail(org.mockito.kotlin.any())
+        verify(eventPublisher, never()).publishEvent(org.mockito.kotlin.any<UserDeactivatedEvent>())
     }
 
     @Test
@@ -97,7 +98,7 @@ class DeactivateUserUseCaseTest {
             deactivateUserUseCase.execute(EMAIL, WRONG_PASSWORD)
         }
         verify(userRepository, never()).save(org.mockito.kotlin.any())
-        verify(authFacade, never()).revokeAllTokensByEmail(org.mockito.kotlin.any())
+        verify(eventPublisher, never()).publishEvent(org.mockito.kotlin.any<UserDeactivatedEvent>())
     }
 
     private fun createActiveUser() =

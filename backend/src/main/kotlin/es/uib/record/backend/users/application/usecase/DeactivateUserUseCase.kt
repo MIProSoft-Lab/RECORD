@@ -1,10 +1,11 @@
 package es.uib.record.backend.users.application.usecase
 
-import es.uib.record.backend.auth.open.AuthFacade
 import es.uib.record.backend.users.domain.UserRepository
 import es.uib.record.backend.users.domain.exception.UserDeactivatedException
 import es.uib.record.backend.users.domain.exception.UserNotFoundException
+import es.uib.record.backend.users.open.UserDeactivatedEvent
 import java.time.Instant
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component
 class DeactivateUserUseCase(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
-    private val authFacade: AuthFacade,
+    private val eventPublisher: ApplicationEventPublisher,
 ) {
     fun execute(email: String, password: String) {
         val user = userRepository.findByEmail(email) ?: throw UserNotFoundException(email)
@@ -29,6 +30,6 @@ class DeactivateUserUseCase(
         val deactivatedUser = user.copy(deactivatedAt = Instant.now())
         userRepository.save(deactivatedUser)
 
-        authFacade.revokeAllTokensByEmail(email)
+        eventPublisher.publishEvent(UserDeactivatedEvent(email))
     }
 }

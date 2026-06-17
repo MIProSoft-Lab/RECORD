@@ -40,10 +40,8 @@ class UserFacadeImpl(
     }
 
     override fun getUserById(userId: UUID): UserOpenDto {
-        return this.getAllUsersByIdsUseCase
-            .execute(listOf(userId))
-            .firstOrNull()
-            ?.toOpenDto() ?: throw UserNotFoundException(userId)
+        return this.getAllUsersByIdsUseCase.execute(listOf(userId)).firstOrNull()?.toOpenDto()
+            ?: throw UserNotFoundException(userId)
     }
 
     override fun getUsersByIds(userIds: List<UUID>): List<UserOpenDto> {
