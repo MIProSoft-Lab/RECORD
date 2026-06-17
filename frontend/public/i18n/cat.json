@@ -49,7 +49,17 @@
       "TITLE": "Perfil d'usuari"
     },
     "TITLE": "Configuració",
+    "ACCOUNT": {
+      "TITLE": "Zona de perill",
+      "DESCRIPTION": "Una vegada desactivis el teu compte, no podràs iniciar sessió fins que sigui reactivat.",
+      "DEACTIVATE_BUTTON": "Desactivar compte",
+      "DIALOG_TITLE": "Desactivar el teu compte",
+      "DIALOG_DESCRIPTION": "Aquesta acció desactivarà el teu compte i tancarà la teva sessió. Introdueix la teva contrasenya per confirmar.",
+      "PASSWORD_LABEL": "Contrasenya",
+      "CONFIRM_BUTTON": "Desactivar compte"
+    },
     "TOASTS": {
+      "ACCOUNT_DEACTIVATED": "El teu compte ha estat desactivat",
       "AVATAR_UPDATED": "Foto de perfil actualitzada correctament.",
       "PROFILE_UPDATED": "Perfil actualitzat correctament.",
       "PUSH_NOTIFICATIONS_UPDATED": "Preferències de notificacions actualitzades.",
@@ -167,6 +177,7 @@
   "ERRORS": {
     "BAD_CREDENTIALS": "Credencials incorrectes.",
     "EMAIL_ALREADY_IN_USE": "L'email {{ email }} ja s'està emprant.",
+    "USER_DEACTIVATED": "El teu compte està desactivat",
     "VALIDATION": {
       "CONFIRM_PASSWORD_REQUIRED": "Cal confirmar la contrasenya.",
       "EMAIL_REQUIRED": "El correu electrònic no pot estar buit.",

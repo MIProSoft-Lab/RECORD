@@ -49,7 +49,17 @@
       "TITLE": "Perfil de usuario"
     },
     "TITLE": "Configuración",
+    "ACCOUNT": {
+      "TITLE": "Zona de peligro",
+      "DESCRIPTION": "Una vez desactives tu cuenta, no podrás iniciar sesión hasta que sea reactivada.",
+      "DEACTIVATE_BUTTON": "Desactivar cuenta",
+      "DIALOG_TITLE": "Desactivar tu cuenta",
+      "DIALOG_DESCRIPTION": "Esta acción desactivará tu cuenta y cerrará tu sesión. Introduce tu contraseña para confirmar.",
+      "PASSWORD_LABEL": "Contraseña",
+      "CONFIRM_BUTTON": "Desactivar cuenta"
+    },
     "TOASTS": {
+      "ACCOUNT_DEACTIVATED": "Tu cuenta ha sido desactivada",
       "AVATAR_UPDATED": "Foto de perfil actualizada correctamente.",
       "PROFILE_UPDATED": "Perfil actualizado correctamente.",
       "PUSH_NOTIFICATIONS_UPDATED": "Preferencias de notificaciones actualizadas.",
@@ -167,6 +177,7 @@
   "ERRORS": {
     "BAD_CREDENTIALS": "Credenciales incorrectas.",
     "EMAIL_ALREADY_IN_USE": "El email {{ email }} ya está en uso.",
+    "USER_DEACTIVATED": "Tu cuenta está desactivada",
     "VALIDATION": {
       "CONFIRM_PASSWORD_REQUIRED": "Debes confirmar la contraseña.",
       "EMAIL_REQUIRED": "El correo electrónico no puede estar vacío.",

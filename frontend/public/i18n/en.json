@@ -49,7 +49,17 @@
       "TITLE": "User Profile"
     },
     "TITLE": "Configuration",
+    "ACCOUNT": {
+      "TITLE": "Danger Zone",
+      "DESCRIPTION": "Once you deactivate your account, you will not be able to log in until it is reactivated.",
+      "DEACTIVATE_BUTTON": "Deactivate account",
+      "DIALOG_TITLE": "Deactivate your account",
+      "DIALOG_DESCRIPTION": "This action will deactivate your account and close your session. Enter your password to confirm.",
+      "PASSWORD_LABEL": "Password",
+      "CONFIRM_BUTTON": "Deactivate account"
+    },
     "TOASTS": {
+      "ACCOUNT_DEACTIVATED": "Your account has been deactivated",
       "AVATAR_UPDATED": "Profile picture updated successfully.",
       "PROFILE_UPDATED": "Profile updated successfully.",
       "PUSH_NOTIFICATIONS_UPDATED": "Notification preferences updated.",
@@ -167,6 +177,7 @@
   "ERRORS": {
     "BAD_CREDENTIALS": "Invalid credentials.",
     "EMAIL_ALREADY_IN_USE": "The email {{ email }} is already in use.",
+    "USER_DEACTIVATED": "Your account is deactivated",
     "VALIDATION": {
       "CONFIRM_PASSWORD_REQUIRED": "Password confirmation is required.",
       "EMAIL_REQUIRED": "Email cannot be empty.",
