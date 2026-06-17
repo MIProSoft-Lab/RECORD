@@ -38,6 +38,9 @@ paths:
   /users/me/update-push-notifications:
     $ref: "./users/update-push-notifications.yaml"
 
+  /users/me/deactivate:
+    $ref: "./users/deactivate-user.yaml"
+
   /groups/create:
     $ref: "./groups/create.yaml"
 

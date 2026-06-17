@@ -86,3 +86,11 @@ schemas:
         example: true
     required:
       - pushNotifications
+
+  DeactivateAccountRequest:
+    type: object
+    required:
+      - password
+    properties:
+      password:
+        type: string

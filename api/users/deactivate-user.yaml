@@ -1,0 +1,32 @@
+post:
+  summary: Deactivate the current user account
+  operationId: deactivateCurrentUser
+  tags:
+    - Users
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/DeactivateAccountRequest"
+  responses:
+    "204":
+      description: Account deactivated successfully
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
