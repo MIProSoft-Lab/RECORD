@@ -138,6 +138,71 @@
           </div>
         </div>
       </p-card>
+
+      <p-card header="{{ 'CONFIG.ACCOUNT.TITLE' | translate }}" class="shadow-2">
+        <div class="flex flex-column gap-4">
+          <div class="flex flex-column gap-1 mb-2">
+            <span class="text-color-secondary text-sm">
+              {{ 'CONFIG.ACCOUNT.DESCRIPTION' | translate }}
+            </span>
+          </div>
+
+          <div class="flex justify-content-start">
+            <p-button
+              [label]="'CONFIG.ACCOUNT.DEACTIVATE_BUTTON' | translate"
+              severity="danger"
+              [outlined]="true"
+              (onClick)="onDeactivateAccount()">
+            </p-button>
+          </div>
+        </div>
+      </p-card>
     </div>
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="deactivateDialogVisible"
+  [header]="'CONFIG.ACCOUNT.DIALOG_TITLE' | translate"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  [closable]="!deactivateLoading">
+  <div class="flex flex-column gap-4 pt-2">
+    <span class="text-color-secondary text-sm">
+      {{ 'CONFIG.ACCOUNT.DIALOG_DESCRIPTION' | translate }}
+    </span>
+
+    <div class="flex flex-column gap-2">
+      <label for="deactivatePassword" class="font-semibold">
+        {{ 'CONFIG.ACCOUNT.PASSWORD_LABEL' | translate }}
+      </label>
+      <p-password
+        id="deactivatePassword"
+        [(ngModel)]="deactivatePassword"
+        [feedback]="false"
+        [toggleMask]="true"
+        styleClass="w-full"
+        inputStyleClass="w-full">
+      </p-password>
+    </div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div class="flex justify-content-end gap-2">
+      <p-button
+        [label]="'COMMON.BUTTONS.CANCEL' | translate"
+        severity="secondary"
+        [text]="true"
+        (onClick)="deactivateDialogVisible = false"
+        [disabled]="deactivateLoading">
+      </p-button>
+      <p-button
+        [label]="'CONFIG.ACCOUNT.CONFIRM_BUTTON' | translate"
+        severity="danger"
+        [loading]="deactivateLoading"
+        [disabled]="!deactivatePassword || deactivateLoading"
+        (onClick)="confirmDeactivation()">
+      </p-button>
+    </div>
+  </ng-template>
+</p-dialog>

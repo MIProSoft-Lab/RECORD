@@ -1,5 +1,6 @@
 export * from './authResponse';
 export * from './createGroupRequest';
+export * from './deactivateAccountRequest';
 export * from './errorResponse';
 export * from './groupDetailResponse';
 export * from './groupInvitationSummary';

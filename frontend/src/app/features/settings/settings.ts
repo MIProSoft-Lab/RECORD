@@ -1,5 +1,6 @@
 import { Component, effect, inject, signal, OnDestroy } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Card } from 'primeng/card';
 import { Button } from 'primeng/button';
 import { RouterLink } from '@angular/router';
@@ -7,6 +8,8 @@ import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { Select } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
+import { Password } from 'primeng/password';
+import { Dialog } from 'primeng/dialog';
 import { UserState } from '@core/services/user-state';
 import { UsersService } from '@core/api';
 import { MessageService } from 'primeng/api';
@@ -32,6 +35,8 @@ interface Language {
     FormsModule,
     ReactiveFormsModule,
     InputText,
+    Password,
+    Dialog,
     UpperCasePipe,
     FileUploadModule,
     ToggleSwitch,
@@ -45,6 +50,7 @@ export class Settings implements OnDestroy {
   private fb = inject(FormBuilder);
   private messageService = inject(MessageService);
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   profileForm = this.fb.group({
     email: [{ value: '', disabled: true }],
@@ -57,6 +63,9 @@ export class Settings implements OnDestroy {
   isUploadingAvatar = signal(false);
   isDarkMode = signal(localStorage.getItem('dark_mode') === 'true');
   isPushNotifications = signal(false);
+  deactivateDialogVisible: boolean = false;
+  deactivatePassword: string = '';
+  deactivateLoading: boolean = false;
   private sub?: Subscription;
 
   constructor() {
@@ -173,6 +182,42 @@ export class Settings implements OnDestroy {
       error: (err) => {
         console.error(err);
         this.isSaving.set(false);
+      },
+    });
+  }
+
+  onDeactivateAccount() {
+    this.deactivatePassword = '';
+    this.deactivateDialogVisible = true;
+  }
+
+  confirmDeactivation() {
+    this.deactivateLoading = true;
+    this.usersService.deactivateCurrentUser({ password: this.deactivatePassword }).subscribe({
+      next: () => {
+        this.deactivateLoading = false;
+        this.deactivateDialogVisible = false;
+        this.userState.currentUser.set(null);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translate.instant('CONFIG.TOASTS.SUCCESS'),
+          detail: this.translate.instant('CONFIG.TOASTS.ACCOUNT_DEACTIVATED'),
+        });
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        this.deactivateLoading = false;
+        const code = err?.error?.code;
+        const detail = code
+          ? this.translate.instant(`ERRORS.${code}`)
+          : this.translate.instant('ERRORS.VALIDATION.PASSWORD_REQUIRED');
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail,
+        });
       },
     });
   }
