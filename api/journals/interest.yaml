@@ -1,0 +1,72 @@
+post:
+  summary: "Marca una revista como de interés para el usuario autenticado"
+  description: >
+    Añade la revista a la lista de intereses del usuario autenticado. La operación es
+    idempotente: marcar una revista ya marcada no produce error.
+  operationId: markJournalAsInterest
+  tags:
+    - Journals
+  parameters:
+    - name: journalId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Journal marked as interest successfully
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Journal not found
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+delete:
+  summary: "Desmarca una revista como de interés para el usuario autenticado"
+  description: >
+    Elimina la revista de la lista de intereses del usuario autenticado. La operación es
+    idempotente: desmarcar una revista no marcada no produce error.
+  operationId: unmarkJournalAsInterest
+  tags:
+    - Journals
+  parameters:
+    - name: journalId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Journal unmarked as interest successfully
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Journal not found
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

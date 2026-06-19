@@ -71,8 +71,14 @@ paths:
   /journals/categories:
     $ref: "./journals/list-categories.yaml"
 
+  /journals/me/interests:
+    $ref: "./journals/list-interests.yaml"
+
   /journals/{journalId}:
     $ref: "./journals/journal-detail.yaml"
+
+  /journals/{journalId}/interest:
+    $ref: "./journals/interest.yaml"
 
   /invitations/me:
     $ref: "./invitations/list-invitations.yaml"

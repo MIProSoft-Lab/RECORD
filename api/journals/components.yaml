@@ -122,10 +122,15 @@ schemas:
         description: "Categorías/cuartiles de la revista en su último año disponible."
         items:
           $ref: "#/schemas/JournalCategoryQuartileSummary"
+      isInterest:
+        type: boolean
+        description: "Indica si el usuario autenticado ha marcado esta revista como de interés."
+        example: false
     required:
       - id
       - name
       - categories
+      - isInterest
 
   JournalSearchPageResponse:
     type: object
@@ -222,8 +227,13 @@ schemas:
         type: array
         items:
           $ref: "#/schemas/JournalCategoryQuartileDetail"
+      isInterest:
+        type: boolean
+        description: "Indica si el usuario autenticado ha marcado esta revista como de interés."
+        example: false
     required:
       - id
       - name
       - metrics
       - categoryQuartiles
+      - isInterest

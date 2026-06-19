@@ -1,0 +1,72 @@
+get:
+  summary: "Lista las revistas marcadas como de interés por el usuario autenticado"
+  description: >
+    Devuelve una página de revistas que el usuario autenticado ha marcado como de interés.
+    Todos los filtros son opcionales y combinables, igual que en la búsqueda general.
+    Las categorías/cuartiles devueltos corresponden al último año disponible de cada revista.
+  operationId: listInterestJournals
+  tags:
+    - Journals
+  parameters:
+    - name: name
+      in: query
+      required: false
+      description: "Búsqueda parcial e insensible a mayúsculas por nombre de la revista."
+      schema:
+        type: string
+        minLength: 1
+    - name: categoryId
+      in: query
+      required: false
+      description: "Filtra por categoría (en el último año disponible de la revista)."
+      schema:
+        type: string
+        format: uuid
+    - name: quartile
+      in: query
+      required: false
+      description: "Filtra por cuartil (en el último año disponible de la revista)."
+      schema:
+        $ref: "./components.yaml#/schemas/Quartile"
+    - name: page
+      in: query
+      required: false
+      description: "Índice de página (base 0)."
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    - name: size
+      in: query
+      required: false
+      description: "Tamaño de página."
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/JournalSearchPageResponse"
+    "400":
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
