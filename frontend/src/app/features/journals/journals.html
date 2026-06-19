@@ -1,0 +1,101 @@
+<div class="surface-ground p-4">
+  <div class="flex align-items-center justify-content-between mb-4">
+    <h1 class="m-0">{{ 'JOURNALS.TITLE' | translate }}</h1>
+  </div>
+
+  <div class="flex flex-column md:flex-row gap-3 mb-4 align-items-stretch md:align-items-end">
+    <div class="flex flex-column gap-1 flex-1">
+      <input
+        pInputText
+        type="text"
+        [ngModel]="name"
+        (ngModelChange)="onNameChange($event)"
+        [placeholder]="'JOURNALS.FILTERS.SEARCH_PLACEHOLDER' | translate"
+        class="w-full"
+      />
+    </div>
+
+    <p-select
+      [options]="categoryOptions()"
+      [ngModel]="categoryId"
+      (ngModelChange)="onCategoryChange($event)"
+      optionLabel="label"
+      optionValue="value"
+      [filter]="true"
+      [showClear]="true"
+      [placeholder]="'JOURNALS.FILTERS.CATEGORY_PLACEHOLDER' | translate"
+      styleClass="w-full md:w-18rem"
+    />
+
+    <p-select
+      [options]="quartileOptions"
+      [ngModel]="quartile"
+      (ngModelChange)="onQuartileChange($event)"
+      optionLabel="label"
+      optionValue="value"
+      [showClear]="true"
+      [placeholder]="'JOURNALS.FILTERS.QUARTILE_PLACEHOLDER' | translate"
+      styleClass="w-full md:w-12rem"
+    />
+
+    @if (hasActiveFilters()) {
+      <p-button
+        [label]="'JOURNALS.FILTERS.CLEAR' | translate"
+        icon="pi pi-filter-slash"
+        severity="secondary"
+        [outlined]="true"
+        (onClick)="clearFilters()"
+      />
+    }
+  </div>
+
+  <p-table [value]="journals()" [loading]="showLoader()" [rowHover]="true" dataKey="id" class="p-datatable-sm">
+    <ng-template #header>
+      <tr>
+        <th>{{ 'JOURNALS.LIST.COLUMNS.NAME' | translate }}</th>
+        <th>{{ 'JOURNALS.LIST.COLUMNS.CATEGORIES' | translate }}</th>
+        <th style="width: 14rem">{{ 'JOURNALS.LIST.COLUMNS.PUBLISHER' | translate }}</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-journal>
+      <tr (click)="openJournalDetail(journal.id)" style="cursor: pointer">
+        <td>
+          <div class="font-medium">{{ journal.name }}</div>
+          @if (journal.issn || journal.eIssn) {
+            <div class="text-color-secondary text-sm mt-1">
+              {{ journal.issn }}@if (journal.issn && journal.eIssn) {<span> · </span>}{{ journal.eIssn }}
+            </div>
+          }
+        </td>
+        <td>
+          <div class="flex flex-wrap gap-3 align-items-center">
+            @for (cat of journal.categories; track cat.categoryId) {
+              <span class="inline-flex align-items-center gap-2 white-space-nowrap">
+                <p-tag [value]="cat.quartile" [severity]="quartileSeverity(cat.quartile)" />
+                <span class="text-sm">{{ cat.categoryName }}</span>
+              </span>
+            }
+          </div>
+        </td>
+        <td>{{ journal.publisherName }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="3" class="text-center text-color-secondary p-4">
+          @if (hasLoaded() && !showLoader()) {
+            {{ 'JOURNALS.EMPTY_STATE' | translate }}
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-paginator
+    [first]="first()"
+    [rows]="pageSize"
+    [totalRecords]="totalRecords()"
+    (onPageChange)="onPageChange($event)"
+    styleClass="mt-3 surface-card"
+  />
+</div>

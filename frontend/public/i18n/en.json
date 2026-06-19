@@ -69,6 +69,49 @@
   "DASHBOARD": {
     "TITLE": "Dashboard"
   },
+  "JOURNALS": {
+    "TITLE": "Journals",
+    "FILTERS": {
+      "SEARCH_PLACEHOLDER": "Search by name...",
+      "CATEGORY_PLACEHOLDER": "All categories",
+      "QUARTILE_PLACEHOLDER": "All quartiles",
+      "CLEAR": "Clear filters"
+    },
+    "LIST": {
+      "COLUMNS": {
+        "NAME": "Name",
+        "CATEGORIES": "Categories (latest year)",
+        "PUBLISHER": "Publisher"
+      }
+    },
+    "EMPTY_STATE": "No journals found.",
+    "DETAIL": {
+      "BACK": "Back to journals",
+      "PUBLISHER": "Publisher",
+      "COUNTRY": "Country",
+      "ISSN": "ISSN",
+      "EISSN": "eISSN",
+      "METRICS": {
+        "TITLE": "Metrics by year",
+        "YEAR": "Year",
+        "IMPACT_FACTOR": "Impact factor"
+      },
+      "QUARTILES": {
+        "TITLE": "Quartiles by category",
+        "YEAR": "Year",
+        "CATEGORY": "Category",
+        "EDITION": "Edition",
+        "QUARTILE": "Quartile",
+        "IMPACT_FACTOR": "Impact factor"
+      },
+      "EMPTY_METRICS": "No metrics available.",
+      "EMPTY_QUARTILES": "No quartile data available.",
+      "ERRORS": {
+        "NOT_FOUND": "Journal not found.",
+        "GENERIC": "Could not load the journal."
+      }
+    }
+  },
   "GROUPS": {
     "CREATE_BUTTON": "Create group",
     "DETAIL": {

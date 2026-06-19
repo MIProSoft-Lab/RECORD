@@ -69,6 +69,49 @@
   "DASHBOARD": {
     "TITLE": "Inici"
   },
+  "JOURNALS": {
+    "TITLE": "Revistes",
+    "FILTERS": {
+      "SEARCH_PLACEHOLDER": "Cercar per nom...",
+      "CATEGORY_PLACEHOLDER": "Totes les categories",
+      "QUARTILE_PLACEHOLDER": "Tots els quartils",
+      "CLEAR": "Netejar filtres"
+    },
+    "LIST": {
+      "COLUMNS": {
+        "NAME": "Nom",
+        "CATEGORIES": "Categories (últim any)",
+        "PUBLISHER": "Editorial"
+      }
+    },
+    "EMPTY_STATE": "No s'han trobat revistes.",
+    "DETAIL": {
+      "BACK": "Tornar a revistes",
+      "PUBLISHER": "Editorial",
+      "COUNTRY": "País",
+      "ISSN": "ISSN",
+      "EISSN": "eISSN",
+      "METRICS": {
+        "TITLE": "Mètriques per any",
+        "YEAR": "Any",
+        "IMPACT_FACTOR": "Factor d'impacte"
+      },
+      "QUARTILES": {
+        "TITLE": "Quartils per categoria",
+        "YEAR": "Any",
+        "CATEGORY": "Categoria",
+        "EDITION": "Edició",
+        "QUARTILE": "Quartil",
+        "IMPACT_FACTOR": "Factor d'impacte"
+      },
+      "EMPTY_METRICS": "No hi ha mètriques disponibles.",
+      "EMPTY_QUARTILES": "No hi ha dades de quartils disponibles.",
+      "ERRORS": {
+        "NOT_FOUND": "No s'ha trobat la revista.",
+        "GENERIC": "No s'ha pogut carregar la revista."
+      }
+    }
+  },
   "GROUPS": {
     "CREATE_BUTTON": "Crear grup",
     "DETAIL": {

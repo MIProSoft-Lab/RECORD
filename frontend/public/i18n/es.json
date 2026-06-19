@@ -69,6 +69,49 @@
   "DASHBOARD": {
     "TITLE": "Inicio"
   },
+  "JOURNALS": {
+    "TITLE": "Revistas",
+    "FILTERS": {
+      "SEARCH_PLACEHOLDER": "Buscar por nombre...",
+      "CATEGORY_PLACEHOLDER": "Todas las categorías",
+      "QUARTILE_PLACEHOLDER": "Todos los cuartiles",
+      "CLEAR": "Limpiar filtros"
+    },
+    "LIST": {
+      "COLUMNS": {
+        "NAME": "Nombre",
+        "CATEGORIES": "Categorías (último año)",
+        "PUBLISHER": "Editorial"
+      }
+    },
+    "EMPTY_STATE": "No se encontraron revistas.",
+    "DETAIL": {
+      "BACK": "Volver a revistas",
+      "PUBLISHER": "Editorial",
+      "COUNTRY": "País",
+      "ISSN": "ISSN",
+      "EISSN": "eISSN",
+      "METRICS": {
+        "TITLE": "Métricas por año",
+        "YEAR": "Año",
+        "IMPACT_FACTOR": "Factor de impacto"
+      },
+      "QUARTILES": {
+        "TITLE": "Cuartiles por categoría",
+        "YEAR": "Año",
+        "CATEGORY": "Categoría",
+        "EDITION": "Edición",
+        "QUARTILE": "Cuartil",
+        "IMPACT_FACTOR": "Factor de impacto"
+      },
+      "EMPTY_METRICS": "No hay métricas disponibles.",
+      "EMPTY_QUARTILES": "No hay datos de cuartiles disponibles.",
+      "ERRORS": {
+        "NOT_FOUND": "No se encontró la revista.",
+        "GENERIC": "No se pudo cargar la revista."
+      }
+    }
+  },
   "GROUPS": {
     "CREATE_BUTTON": "Crear grupo",
     "DETAIL": {
