@@ -101,6 +101,11 @@ CLOUDINARY_API_KEY=
 CLOUDINARY_API_SECRET=
 CLOUDINARY_USER_AVATAR_FOLDER=
 CLOUDINARY_USER_TRANSFORMATION=
+CLARIVATE_API_KEY=
+CLARIVATE_SYNC_TRIGGER_TOKEN=
 ```
+
+Optional Clarivate overrides (sensible defaults in `application.yaml`): `CLARIVATE_BASE_URL`,
+`CLARIVATE_SYNC_CRON`, `CLARIVATE_SYNC_YEARS_TO_KEEP`, `CLARIVATE_SYNC_RATE_LIMIT_PER_SECOND`.
 
 Swagger UI is available at `http://localhost:8080/swagger-ui.html` when the server is running.

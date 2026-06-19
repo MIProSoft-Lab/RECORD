@@ -20,3 +20,11 @@ application:
     api-secret: ${CLOUDINARY_API_SECRET}
     user-avatar-folder: ${CLOUDINARY_USER_AVATAR_FOLDER}
     user-transformation: ${CLOUDINARY_USER_TRANSFORMATION}
+  clarivate:
+    base-url: ${CLARIVATE_BASE_URL:https://api.clarivate.com/apis/wos-journals/v1}
+    api-key: ${CLARIVATE_API_KEY}
+    sync:
+      cron: ${CLARIVATE_SYNC_CRON:0 0 3 * * SUN}
+      trigger-token: ${CLARIVATE_SYNC_TRIGGER_TOKEN}
+      years-to-keep: ${CLARIVATE_SYNC_YEARS_TO_KEEP:2}
+      rate-limit-per-second: ${CLARIVATE_SYNC_RATE_LIMIT_PER_SECOND:4}
