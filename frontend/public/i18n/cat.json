@@ -110,6 +110,18 @@
         "NOT_FOUND": "No s'ha trobat la revista.",
         "GENERIC": "No s'ha pogut carregar la revista."
       }
+    },
+    "TABS": {
+      "SEARCH": "Cercar",
+      "INTERESTS": "Els meus interessos"
+    },
+    "INTERESTS": {
+      "EMPTY_STATE": "Encara no tens revistes marcades com d'interès."
+    },
+    "ACTIONS": {
+      "MARK": "Marcar com a interès",
+      "UNMARK": "Treure dels interessos",
+      "ERROR": "No s'han pogut actualitzar els teus interessos."
     }
   },
   "GROUPS": {

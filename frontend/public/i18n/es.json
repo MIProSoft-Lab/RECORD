@@ -110,6 +110,18 @@
         "NOT_FOUND": "No se encontró la revista.",
         "GENERIC": "No se pudo cargar la revista."
       }
+    },
+    "TABS": {
+      "SEARCH": "Buscar",
+      "INTERESTS": "Mis intereses"
+    },
+    "INTERESTS": {
+      "EMPTY_STATE": "Aún no tienes revistas marcadas como de interés."
+    },
+    "ACTIONS": {
+      "MARK": "Marcar como interés",
+      "UNMARK": "Quitar de intereses",
+      "ERROR": "No se pudieron actualizar tus intereses."
     }
   },
   "GROUPS": {

@@ -10,7 +10,18 @@
 
   @let journalObj = journal();
   @if (journalObj) {
-    <h1 class="mt-2 mb-3">{{ journalObj.name }}</h1>
+    <div class="flex align-items-center justify-content-between gap-3 mt-2 mb-3">
+      <h1 class="m-0">{{ journalObj.name }}</h1>
+      <p-button
+        [label]="
+          (journalObj.isInterest ? 'JOURNALS.ACTIONS.UNMARK' : 'JOURNALS.ACTIONS.MARK') | translate
+        "
+        [icon]="journalObj.isInterest ? 'pi pi-star-fill' : 'pi pi-star'"
+        severity="warn"
+        [outlined]="!journalObj.isInterest"
+        (onClick)="toggleInterest()"
+      />
+    </div>
 
     <div class="surface-card border-round p-4 mb-4 flex flex-column gap-2">
       @if (journalObj.publisherName) {

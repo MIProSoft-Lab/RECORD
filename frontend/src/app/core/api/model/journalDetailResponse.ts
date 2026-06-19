@@ -23,5 +23,9 @@ export interface JournalDetailResponse {
     publisherCountry?: string;
     metrics: Array<JournalMetricResponse>;
     categoryQuartiles: Array<JournalCategoryQuartileDetail>;
+    /**
+     * Indica si el usuario autenticado ha marcado esta revista como de interés.
+     */
+    isInterest: boolean;
 }
 

@@ -110,6 +110,18 @@
         "NOT_FOUND": "Journal not found.",
         "GENERIC": "Could not load the journal."
       }
+    },
+    "TABS": {
+      "SEARCH": "Search",
+      "INTERESTS": "My interests"
+    },
+    "INTERESTS": {
+      "EMPTY_STATE": "You have no journals marked as interest yet."
+    },
+    "ACTIONS": {
+      "MARK": "Mark as interest",
+      "UNMARK": "Remove from interests",
+      "ERROR": "Could not update your interests."
     }
   },
   "GROUPS": {

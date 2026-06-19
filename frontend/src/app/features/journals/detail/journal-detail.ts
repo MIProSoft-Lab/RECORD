@@ -59,6 +59,31 @@ export class JournalDetail implements OnInit {
     this.router.navigate(['/journals']);
   }
 
+  /** Mark/unmark the current journal as interest, flipping optimistically and reverting on error. */
+  toggleInterest() {
+    const current = this.journal();
+    if (!current) {
+      return;
+    }
+    const next = !current.isInterest;
+    this.journal.set({ ...current, isInterest: next });
+
+    const request = next
+      ? this.journalsService.markJournalAsInterest(current.id)
+      : this.journalsService.unmarkJournalAsInterest(current.id);
+
+    request.subscribe({
+      error: () => {
+        this.journal.set({ ...current, isInterest: current.isInterest });
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('JOURNALS.TITLE'),
+          detail: this.translate.instant('JOURNALS.ACTIONS.ERROR'),
+        });
+      },
+    });
+  }
+
   quartileSeverity(quartile: Quartile): 'success' | 'info' | 'warn' | 'danger' {
     switch (quartile) {
       case Quartile.Q1:

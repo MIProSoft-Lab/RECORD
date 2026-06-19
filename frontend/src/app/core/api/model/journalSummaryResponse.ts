@@ -27,5 +27,9 @@ export interface JournalSummaryResponse {
      * Categorías/cuartiles de la revista en su último año disponible.
      */
     categories: Array<JournalCategoryQuartileSummary>;
+    /**
+     * Indica si el usuario autenticado ha marcado esta revista como de interés.
+     */
+    isInterest: boolean;
 }
 
