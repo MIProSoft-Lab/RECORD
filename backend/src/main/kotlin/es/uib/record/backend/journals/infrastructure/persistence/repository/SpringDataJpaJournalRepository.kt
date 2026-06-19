@@ -54,4 +54,39 @@ interface SpringDataJpaJournalRepository : JpaRepository<JournalEntity, UUID> {
         @Param("quartile") quartile: Quartile?,
         pageable: Pageable,
     ): Page<UUID>
+
+    /**
+     * Como [searchJournalIds] pero restringido a las revistas marcadas como de interés por
+     * [userId]. Mismos filtros y orden por nombre.
+     */
+    @Query(
+        value =
+            "SELECT j.id FROM JournalEntity j " +
+                "WHERE EXISTS (SELECT 1 FROM UserJournalInterestEntity uji WHERE uji.journalId = j.id AND uji.userId = :userId) " +
+                "AND (:namePattern IS NULL OR LOWER(j.name) LIKE :namePattern) " +
+                "AND ((:categoryId IS NULL AND :quartile IS NULL) OR EXISTS (" +
+                "  SELECT 1 FROM JournalCategoryQuartileEntity jcq " +
+                "  WHERE jcq.journalId = j.id " +
+                "  AND jcq.year = (SELECT MAX(jcq2.year) FROM JournalCategoryQuartileEntity jcq2 WHERE jcq2.journalId = j.id) " +
+                "  AND (:categoryId IS NULL OR jcq.categoryId = :categoryId) " +
+                "  AND (:quartile IS NULL OR jcq.quartile = :quartile))) " +
+                "ORDER BY j.name",
+        countQuery =
+            "SELECT COUNT(j.id) FROM JournalEntity j " +
+                "WHERE EXISTS (SELECT 1 FROM UserJournalInterestEntity uji WHERE uji.journalId = j.id AND uji.userId = :userId) " +
+                "AND (:namePattern IS NULL OR LOWER(j.name) LIKE :namePattern) " +
+                "AND ((:categoryId IS NULL AND :quartile IS NULL) OR EXISTS (" +
+                "  SELECT 1 FROM JournalCategoryQuartileEntity jcq " +
+                "  WHERE jcq.journalId = j.id " +
+                "  AND jcq.year = (SELECT MAX(jcq2.year) FROM JournalCategoryQuartileEntity jcq2 WHERE jcq2.journalId = j.id) " +
+                "  AND (:categoryId IS NULL OR jcq.categoryId = :categoryId) " +
+                "  AND (:quartile IS NULL OR jcq.quartile = :quartile)))",
+    )
+    fun searchInterestJournalIds(
+        @Param("userId") userId: UUID,
+        @Param("namePattern") namePattern: String?,
+        @Param("categoryId") categoryId: UUID?,
+        @Param("quartile") quartile: Quartile?,
+        pageable: Pageable,
+    ): Page<UUID>
 }

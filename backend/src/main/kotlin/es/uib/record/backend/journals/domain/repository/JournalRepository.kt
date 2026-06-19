@@ -27,5 +27,20 @@ interface JournalRepository {
         size: Int,
     ): PageResult<JournalSearchItem>
 
+    /**
+     * Búsqueda paginada restringida a las revistas que [userId] ha marcado como de interés. Mismos
+     * filtros que [search]; todos los resultados tienen `isInterest = true`.
+     */
+    fun searchInterests(
+        userId: UUID,
+        name: String?,
+        categoryId: UUID?,
+        quartile: Quartile?,
+        page: Int,
+        size: Int,
+    ): PageResult<JournalSearchItem>
+
+    fun existsById(id: UUID): Boolean
+
     fun findDetailById(id: UUID): JournalDetail?
 }

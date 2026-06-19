@@ -52,6 +52,39 @@ class JournalRepositoryAdapter(
                 quartile,
                 PageRequest.of(page, size),
             )
+        return this.hydrateSearchPage(idPage, page, size, isInterest = false)
+    }
+
+    override fun searchInterests(
+        userId: UUID,
+        name: String?,
+        categoryId: UUID?,
+        quartile: Quartile?,
+        page: Int,
+        size: Int,
+    ): PageResult<JournalSearchItem> {
+        val namePattern = name?.let { "%${it.lowercase()}%" }
+        val idPage =
+            this.springDataJpaJournalRepository.searchInterestJournalIds(
+                userId,
+                namePattern,
+                categoryId,
+                quartile,
+                PageRequest.of(page, size),
+            )
+        return this.hydrateSearchPage(idPage, page, size, isInterest = true)
+    }
+
+    /**
+     * Hidrata una página de IDs de revistas (ya ordenada por nombre) con sus revistas y las
+     * categorías/cuartiles de su último año disponible, preservando el orden de la página.
+     */
+    private fun hydrateSearchPage(
+        idPage: org.springframework.data.domain.Page<UUID>,
+        page: Int,
+        size: Int,
+        isInterest: Boolean,
+    ): PageResult<JournalSearchItem> {
         val ids = idPage.content
         if (ids.isEmpty()) {
             return PageResult(emptyList(), idPage.totalElements, page, size)
@@ -73,10 +106,15 @@ class JournalRepositoryAdapter(
                     journal = entity.toDomain(),
                     year = categories.firstOrNull()?.year,
                     categories = categories,
+                    isInterest = isInterest,
                 )
             }
 
         return PageResult(items, idPage.totalElements, page, size)
+    }
+
+    override fun existsById(id: UUID): Boolean {
+        return this.springDataJpaJournalRepository.existsById(id)
     }
 
     override fun findDetailById(id: UUID): JournalDetail? {
