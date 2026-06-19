@@ -39,3 +39,191 @@ schemas:
       - status
       - processedCount
       - failedCount
+
+  Quartile:
+    type: string
+    description: "Cuartil de la revista dentro de una categoría (JCR)."
+    enum:
+      - Q1
+      - Q2
+      - Q3
+      - Q4
+    example: "Q1"
+
+  CategoryResponse:
+    type: object
+    description: "Categoría temática de las revistas (JCR)."
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+        description: "Nombre de la categoría."
+        example: "ONCOLOGY"
+      edition:
+        type: string
+        description: "Edición del JCR a la que pertenece la categoría (p. ej. SCIE, SSCI)."
+        example: "SCIE"
+    required:
+      - id
+      - name
+
+  JournalCategoryQuartileSummary:
+    type: object
+    description: "Posición de una revista en una categoría para un año concreto."
+    properties:
+      categoryId:
+        type: string
+        format: uuid
+      categoryName:
+        type: string
+        example: "ONCOLOGY"
+      edition:
+        type: string
+        example: "SCIE"
+      quartile:
+        $ref: "#/schemas/Quartile"
+      impactFactor:
+        type: number
+        format: double
+        description: "Factor de impacto en esa categoría/año."
+        example: 12.345
+    required:
+      - categoryId
+      - categoryName
+      - quartile
+
+  JournalSummaryResponse:
+    type: object
+    description: "Revista con su posición de categorías/cuartiles en su último año disponible."
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+        example: "CA-A Cancer Journal for Clinicians"
+      issn:
+        type: string
+        example: "0007-9235"
+      eIssn:
+        type: string
+        example: "1542-4863"
+      publisherName:
+        type: string
+        example: "Wiley"
+      year:
+        type: integer
+        description: "Año del informe del que provienen las categorías/cuartiles mostrados."
+        example: 2023
+      categories:
+        type: array
+        description: "Categorías/cuartiles de la revista en su último año disponible."
+        items:
+          $ref: "#/schemas/JournalCategoryQuartileSummary"
+    required:
+      - id
+      - name
+      - categories
+
+  JournalSearchPageResponse:
+    type: object
+    description: "Página de resultados de la búsqueda de revistas."
+    properties:
+      content:
+        type: array
+        items:
+          $ref: "#/schemas/JournalSummaryResponse"
+      totalElements:
+        type: integer
+        format: int64
+        description: "Número total de revistas que cumplen los filtros."
+        example: 137
+      totalPages:
+        type: integer
+        description: "Número total de páginas."
+        example: 7
+      page:
+        type: integer
+        description: "Índice de página actual (base 0)."
+        example: 0
+      size:
+        type: integer
+        description: "Tamaño de página solicitado."
+        example: 20
+    required:
+      - content
+      - totalElements
+      - totalPages
+      - page
+      - size
+
+  JournalMetricResponse:
+    type: object
+    description: "Métrica anual de una revista."
+    properties:
+      year:
+        type: integer
+        example: 2023
+      impactFactor:
+        type: number
+        format: double
+        example: 12.345
+    required:
+      - year
+
+  JournalCategoryQuartileDetail:
+    type: object
+    description: "Posición de la revista en una categoría para un año (vista de detalle)."
+    properties:
+      year:
+        type: integer
+        example: 2023
+      categoryName:
+        type: string
+        example: "ONCOLOGY"
+      edition:
+        type: string
+        example: "SCIE"
+      quartile:
+        $ref: "#/schemas/Quartile"
+      impactFactor:
+        type: number
+        format: double
+        example: 12.345
+    required:
+      - year
+      - categoryName
+      - quartile
+
+  JournalDetailResponse:
+    type: object
+    description: "Detalle completo de una revista con sus métricas y cuartiles por año/categoría."
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+      issn:
+        type: string
+      eIssn:
+        type: string
+      publisherName:
+        type: string
+      publisherCountry:
+        type: string
+      metrics:
+        type: array
+        items:
+          $ref: "#/schemas/JournalMetricResponse"
+      categoryQuartiles:
+        type: array
+        items:
+          $ref: "#/schemas/JournalCategoryQuartileDetail"
+    required:
+      - id
+      - name
+      - metrics
+      - categoryQuartiles

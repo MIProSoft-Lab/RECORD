@@ -1,0 +1,29 @@
+get:
+  summary: "Lista las categorías disponibles de revistas"
+  description: >
+    Devuelve el catálogo completo de categorías, ordenado por nombre. Pensado para poblar
+    el filtro de categorías de la búsqueda de revistas.
+  operationId: listJournalCategories
+  tags:
+    - Journals
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "./components.yaml#/schemas/CategoryResponse"
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

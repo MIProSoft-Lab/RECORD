@@ -62,8 +62,17 @@ paths:
   /groups/{groupId}/members/{memberId}/role:
     $ref: "./groups/update-member-role.yaml"
 
+  /journals:
+    $ref: "./journals/search.yaml"
+
   /journals/sync:
     $ref: "./journals/sync.yaml"
+
+  /journals/categories:
+    $ref: "./journals/list-categories.yaml"
+
+  /journals/{journalId}:
+    $ref: "./journals/journal-detail.yaml"
 
   /invitations/me:
     $ref: "./invitations/list-invitations.yaml"

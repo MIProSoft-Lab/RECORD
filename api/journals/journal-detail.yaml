@@ -1,0 +1,40 @@
+get:
+  summary: "Devuelve el detalle de una revista"
+  description: >
+    Detalle completo de una revista, incluyendo sus métricas por año y sus cuartiles por
+    categoría y año.
+  operationId: getJournalDetail
+  tags:
+    - Journals
+  parameters:
+    - name: journalId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/JournalDetailResponse"
+    "401":
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Journal not found
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
