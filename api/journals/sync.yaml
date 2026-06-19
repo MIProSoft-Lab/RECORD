@@ -1,0 +1,34 @@
+post:
+  summary: "Dispara manualmente el volcado de journals desde Clarivate"
+  description: >
+    Endpoint de administración protegido por un secreto estático en la cabecera `X-Sync-Token`.
+    Lanza la sincronización en segundo plano si no hay otra en curso.
+  operationId: triggerJournalSync
+  tags:
+    - Journals
+  parameters:
+    - in: header
+      name: X-Sync-Token
+      required: false
+      description: "Secreto estático que autoriza el disparo del volcado."
+      schema:
+        type: string
+  responses:
+    "202":
+      description: "Volcado aceptado y lanzado en segundo plano."
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/JournalSyncStatusResponse"
+    "401":
+      description: "Token de sincronización inválido o ausente."
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "409":
+      description: "Ya hay un volcado en curso."
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

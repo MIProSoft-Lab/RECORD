@@ -1,0 +1,41 @@
+schemas:
+  JournalSyncStatusResponse:
+    type: object
+    description: "Estado del proceso de sincronización de journals con Clarivate."
+    properties:
+      status:
+        type: string
+        description: "Estado actual del volcado."
+        enum:
+          - IDLE
+          - RUNNING
+          - SUCCESS
+          - FAILED
+        example: "RUNNING"
+      processedCount:
+        type: integer
+        description: "Número de journals procesados en el run actual."
+        example: 1500
+      totalCount:
+        type: integer
+        description: "Número total de journals a procesar (si se conoce)."
+        example: 26835
+      failedCount:
+        type: integer
+        description: "Número de journals que fallaron en el run actual."
+        example: 3
+      clarivateLastUpdated:
+        type: string
+        description: "Última fecha de actualización conocida de los datos de Clarivate."
+      runStartedAt:
+        type: string
+        format: date-time
+        description: "Inicio del run actual o último."
+      runFinishedAt:
+        type: string
+        format: date-time
+        description: "Fin del último run completado."
+    required:
+      - status
+      - processedCount
+      - failedCount
