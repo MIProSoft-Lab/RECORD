@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface SpringDataJpaCategoryRepository : JpaRepository<CategoryEntity, UUID> {
     fun findByNameAndEdition(name: String, edition: String?): CategoryEntity?
+
+    fun findAllByOrderByNameAsc(): List<CategoryEntity>
 }

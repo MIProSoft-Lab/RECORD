@@ -3,6 +3,7 @@ package es.uib.record.backend.journals.infrastructure.mapper
 import es.uib.record.backend.journals.domain.model.Category
 import es.uib.record.backend.journals.domain.model.Journal
 import es.uib.record.backend.journals.domain.model.JournalCategoryQuartile
+import es.uib.record.backend.journals.domain.model.JournalCategoryQuartileInfo
 import es.uib.record.backend.journals.domain.model.JournalMetric
 import es.uib.record.backend.journals.domain.model.SyncState
 import es.uib.record.backend.journals.infrastructure.persistence.entity.CategoryEntity
@@ -10,6 +11,7 @@ import es.uib.record.backend.journals.infrastructure.persistence.entity.JournalC
 import es.uib.record.backend.journals.infrastructure.persistence.entity.JournalEntity
 import es.uib.record.backend.journals.infrastructure.persistence.entity.JournalMetricEntity
 import es.uib.record.backend.journals.infrastructure.persistence.entity.JournalSyncStateEntity
+import es.uib.record.backend.journals.infrastructure.persistence.repository.JournalCategoryQuartileView
 
 fun Journal.toEntity() =
     JournalEntity(
@@ -59,6 +61,16 @@ fun JournalMetricEntity.toDomain() =
         year = this.year,
         impactFactor = this.impactFactor,
         createdAt = this.createdAt,
+    )
+
+fun JournalCategoryQuartileView.toInfo() =
+    JournalCategoryQuartileInfo(
+        categoryId = this.categoryId,
+        categoryName = this.categoryName,
+        edition = this.edition,
+        year = this.year,
+        quartile = this.quartile,
+        impactFactor = this.impactFactor,
     )
 
 fun JournalCategoryQuartile.toEntity() =

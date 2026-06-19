@@ -6,4 +6,6 @@ interface CategoryRepository {
     fun save(category: Category): Category
 
     fun findByNameAndEdition(name: String, edition: String?): Category?
+
+    fun findAllOrderedByName(): List<Category>
 }

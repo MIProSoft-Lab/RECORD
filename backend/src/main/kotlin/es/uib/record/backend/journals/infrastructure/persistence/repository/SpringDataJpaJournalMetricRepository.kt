@@ -8,4 +8,6 @@ interface SpringDataJpaJournalMetricRepository : JpaRepository<JournalMetricEnti
     fun findByJournalIdAndYear(journalId: UUID, year: Int): JournalMetricEntity?
 
     fun deleteByJournalIdAndYearNotIn(journalId: UUID, years: List<Int>)
+
+    fun findByJournalIdOrderByYearDesc(journalId: UUID): List<JournalMetricEntity>
 }

@@ -19,4 +19,8 @@ class CategoryRepositoryAdapter(
     override fun findByNameAndEdition(name: String, edition: String?): Category? {
         return this.springDataJpaCategoryRepository.findByNameAndEdition(name, edition)?.toDomain()
     }
+
+    override fun findAllOrderedByName(): List<Category> {
+        return this.springDataJpaCategoryRepository.findAllByOrderByNameAsc().map { it.toDomain() }
+    }
 }
