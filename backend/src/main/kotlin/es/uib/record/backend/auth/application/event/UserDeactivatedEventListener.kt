@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class UserDeactivatedEventListener(
-    private val revokeAllTokensByEmailUseCase: RevokeAllTokensByEmailUseCase,
+    private val revokeAllTokensByEmailUseCase: RevokeAllTokensByEmailUseCase
 ) {
     @EventListener
     fun onUserDeactivated(event: UserDeactivatedEvent) {
