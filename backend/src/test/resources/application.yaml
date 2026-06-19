@@ -20,4 +20,12 @@ application:
     api-secret: "test-secret"
     user-avatar-folder: "test-folder"
     user-transformation: "test-transform"
+  clarivate:
+    base-url: "https://api.clarivate.com/apis/wos-journals/v1"
+    api-key: "test-clarivate-key"
+    sync:
+      cron: "-"
+      trigger-token: "test-sync-token"
+      years-to-keep: 2
+      rate-limit-per-second: 4
 
