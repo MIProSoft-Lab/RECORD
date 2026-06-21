@@ -22,6 +22,7 @@ Group all current changes into semantic commits and push the changes to the remo
 - Do not ammend commits.
 - Do not force push.
 - Do NOT add yourself as co-author. Never append a `Co-Authored-By: Claude ...` trailer (or any other co-author trailer for the executing model) to commit messages. Commit messages must contain only the semantic description — no co-author lines, no "Generated with Claude Code" footers, no agent attribution of any kind.
+- Do not include commit body explaining the changes.
 
 ## Flow
 
