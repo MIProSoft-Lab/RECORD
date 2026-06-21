@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
@@ -7,18 +7,22 @@ import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { JournalDetailResponse, JournalsService, Quartile } from '@core/api';
+import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 
 @Component({
   selector: 'record-journal-detail',
   imports: [TranslatePipe, Button, TableModule, Tag],
   templateUrl: './journal-detail.html',
 })
-export class JournalDetail implements OnInit {
+export class JournalDetail implements OnInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly journalsService = inject(JournalsService);
   private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
+  private readonly breadcrumbService = inject(BreadcrumbService);
+
+  private breadcrumbUrl: string | null = null;
 
   readonly journal = signal<JournalDetailResponse | null>(null);
   readonly isLoading = signal(false);
@@ -38,6 +42,8 @@ export class JournalDetail implements OnInit {
       next: (journal) => {
         this.journal.set(journal);
         this.isLoading.set(false);
+        this.breadcrumbUrl = this.router.url;
+        this.breadcrumbService.setDynamicLabel(this.breadcrumbUrl, journal.name);
       },
       error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);
@@ -57,6 +63,12 @@ export class JournalDetail implements OnInit {
 
   goBack() {
     this.router.navigate(['/journals']);
+  }
+
+  ngOnDestroy() {
+    if (this.breadcrumbUrl) {
+      this.breadcrumbService.clearDynamicLabel(this.breadcrumbUrl);
+    }
   }
 
   /** Mark/unmark the current journal as interest, flipping optimistically and reverting on error. */
