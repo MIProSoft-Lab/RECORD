@@ -60,6 +60,7 @@ export class GroupDetail implements OnInit, OnDestroy {
   showInviteDialog = signal(false);
   updatingMemberId = signal<string | null>(null);
   kickingMemberId = signal<string | null>(null);
+  leavingGroup = signal(false);
 
   members = computed(() => this.group()?.members ?? []);
 
@@ -68,6 +69,15 @@ export class GroupDetail implements OnInit, OnDestroy {
     const currentUserId = this.userState.currentUser()?.id;
     if (!currentUserId) return false;
     return this.members().some((m) => m.userId === currentUserId && m.role === 'ADMIN');
+  });
+
+  /** True when the current user is an ADMIN and the only admin left in the group. */
+  isLastAdmin = computed(() => {
+    const currentUserId = this.userState.currentUser()?.id;
+    if (!currentUserId) return false;
+    const currentMember = this.members().find((m) => m.userId === currentUserId);
+    if (currentMember?.role !== 'ADMIN') return false;
+    return this.members().filter((m) => m.role === 'ADMIN').length === 1;
   });
 
   readonly roleOptions = computed<RoleOption[]>(() => [
@@ -219,6 +229,54 @@ export class GroupDetail implements OnInit, OnDestroy {
               summary: this.translate.instant(
                 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_SUMMARY',
               ),
+              detail: this.translate.instant(detailKey),
+            });
+          },
+        });
+      },
+    });
+  }
+
+  onLeaveGroup() {
+    const groupId = this.group()?.id;
+    if (!groupId) return;
+
+    if (this.isLastAdmin()) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: this.translate.instant('GROUPS.DETAIL.LEAVE.TOAST_LAST_ADMIN_SUMMARY'),
+        detail: this.translate.instant('GROUPS.DETAIL.LEAVE.LAST_ADMIN_MESSAGE'),
+      });
+      return;
+    }
+
+    this.confirmationService.confirm({
+      header: this.translate.instant('GROUPS.DETAIL.LEAVE.CONFIRM_HEADER'),
+      message: this.translate.instant('GROUPS.DETAIL.LEAVE.CONFIRM_MESSAGE'),
+      acceptLabel: this.translate.instant('GROUPS.DETAIL.LEAVE.CONFIRM_YES'),
+      rejectLabel: this.translate.instant('GROUPS.DETAIL.ADMINISTRATION.MEMBERS.CONFIRM_NO'),
+      accept: () => {
+        this.leavingGroup.set(true);
+        this.groupsService.leaveGroup(groupId).subscribe({
+          next: () => {
+            this.leavingGroup.set(false);
+            this.messageService.add({
+              severity: 'success',
+              summary: this.translate.instant('GROUPS.DETAIL.LEAVE.TOAST_SUCCESS_SUMMARY'),
+              detail: this.translate.instant('GROUPS.DETAIL.LEAVE.TOAST_SUCCESS_DETAIL'),
+            });
+            this.router.navigate(['/groups']);
+          },
+          error: (err: HttpErrorResponse) => {
+            this.leavingGroup.set(false);
+            const code = (err.error as { code?: string } | null)?.code;
+            const detailKey =
+              code === 'GROUP_LAST_ADMIN'
+                ? 'GROUPS.DETAIL.LEAVE.LAST_ADMIN_MESSAGE'
+                : 'GROUPS.DETAIL.LEAVE.TOAST_ERROR_GENERIC';
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translate.instant('GROUPS.DETAIL.LEAVE.TOAST_ERROR_SUMMARY'),
               detail: this.translate.instant(detailKey),
             });
           },

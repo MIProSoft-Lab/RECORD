@@ -127,8 +127,8 @@
         </p-tabpanel>
 
         <p-tabpanel value="administration">
-          @if (isAdmin()) {
-            <div class="flex flex-column gap-4 pt-3">
+          <div class="flex flex-column gap-4 pt-3">
+            @if (isAdmin()) {
               <div>
                 <h3 class="m-0 mb-3">
                   {{ 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.SECTION_TITLE' | translate }}
@@ -206,13 +206,25 @@
                   </ng-template>
                 </p-table>
               </div>
+            }
+
+            <div>
+              <h3 class="m-0 mb-2">
+                {{ 'GROUPS.DETAIL.LEAVE.SECTION_TITLE' | translate }}
+              </h3>
+              <p class="m-0 mb-3 text-color-secondary">
+                {{ 'GROUPS.DETAIL.LEAVE.SECTION_DESCRIPTION' | translate }}
+              </p>
+              <p-button
+                [label]="'GROUPS.DETAIL.LEAVE.BUTTON' | translate"
+                icon="pi pi-sign-out"
+                severity="danger"
+                [outlined]="true"
+                [loading]="leavingGroup()"
+                (onClick)="onLeaveGroup()"
+              />
             </div>
-          } @else {
-            <div class="flex align-items-center justify-content-center p-6 text-color-secondary">
-              <i class="pi pi-info-circle mr-2"></i>
-              {{ 'GROUPS.DETAIL.ADMINISTRATION.COMING_SOON' | translate }}
-            </div>
-          }
+          </div>
         </p-tabpanel>
       </p-tabpanels>
     </p-tabs>

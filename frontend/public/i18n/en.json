@@ -186,6 +186,20 @@
           "TOAST_ERROR_KICK_GENERIC": "Could not kick the member."
         }
       },
+      "LEAVE": {
+        "SECTION_TITLE": "Leave group",
+        "SECTION_DESCRIPTION": "Stop being a member of this group. You will lose access to it.",
+        "BUTTON": "Leave group",
+        "CONFIRM_HEADER": "Leave group",
+        "CONFIRM_MESSAGE": "You will lose access to this group. Do you want to continue?",
+        "CONFIRM_YES": "Yes, leave",
+        "LAST_ADMIN_MESSAGE": "You are the only administrator. Promote another member to administrator before leaving.",
+        "TOAST_LAST_ADMIN_SUMMARY": "Cannot leave the group",
+        "TOAST_SUCCESS_SUMMARY": "Success",
+        "TOAST_SUCCESS_DETAIL": "You have left the group.",
+        "TOAST_ERROR_SUMMARY": "Error",
+        "TOAST_ERROR_GENERIC": "Could not leave the group."
+      },
       "INVITE": {
         "BUTTON": "Invite users",
         "DIALOG_TITLE": "Invite users to the group",

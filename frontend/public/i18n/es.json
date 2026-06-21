@@ -186,6 +186,20 @@
           "TOAST_ERROR_KICK_GENERIC": "No se ha podido expulsar al miembro."
         }
       },
+      "LEAVE": {
+        "SECTION_TITLE": "Abandonar grupo",
+        "SECTION_DESCRIPTION": "Deja de ser miembro de este grupo. Perderás el acceso a él.",
+        "BUTTON": "Abandonar grupo",
+        "CONFIRM_HEADER": "Abandonar grupo",
+        "CONFIRM_MESSAGE": "Perderás el acceso a este grupo. ¿Quieres continuar?",
+        "CONFIRM_YES": "Sí, abandonar",
+        "LAST_ADMIN_MESSAGE": "Eres el único administrador. Promociona a otro miembro a administrador antes de abandonar el grupo.",
+        "TOAST_LAST_ADMIN_SUMMARY": "No puedes abandonar el grupo",
+        "TOAST_SUCCESS_SUMMARY": "Éxito",
+        "TOAST_SUCCESS_DETAIL": "Has abandonado el grupo.",
+        "TOAST_ERROR_SUMMARY": "Error",
+        "TOAST_ERROR_GENERIC": "No se pudo abandonar el grupo."
+      },
       "INVITE": {
         "BUTTON": "Invitar usuarios",
         "DIALOG_TITLE": "Invitar usuarios al grupo",
