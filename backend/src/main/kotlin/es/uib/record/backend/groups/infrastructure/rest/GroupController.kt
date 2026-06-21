@@ -6,6 +6,7 @@ import es.uib.record.backend.groups.application.usecase.group.GetGroupDetailUseC
 import es.uib.record.backend.groups.application.usecase.group.GetGroupJournalInterestsUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupsListByMemberIdUseCase
 import es.uib.record.backend.groups.application.usecase.group.KickGroupMemberUseCase
+import es.uib.record.backend.groups.application.usecase.group.LeaveGroupUseCase
 import es.uib.record.backend.groups.application.usecase.group.SearchInvitableUsersUseCase
 import es.uib.record.backend.groups.application.usecase.group.SendInvitationUseCase
 import es.uib.record.backend.groups.application.usecase.group.UpdateGroupMemberRoleUseCase
@@ -35,6 +36,7 @@ class GroupController(
     private val sendInvitationUseCase: SendInvitationUseCase,
     private val updateGroupMemberRoleUseCase: UpdateGroupMemberRoleUseCase,
     private val kickGroupMemberUseCase: KickGroupMemberUseCase,
+    private val leaveGroupUseCase: LeaveGroupUseCase,
     private val getGroupJournalInterestsUseCase: GetGroupJournalInterestsUseCase,
 ) : GroupsApi {
 
@@ -95,6 +97,12 @@ class GroupController(
     override fun kickGroupMember(groupId: UUID, memberId: UUID): ResponseEntity<Unit> {
         val email = SecurityContextHolder.getContext().authentication.name
         this.kickGroupMemberUseCase.execute(email, groupId, memberId)
+        return ResponseEntity.noContent().build()
+    }
+
+    override fun leaveGroup(groupId: UUID): ResponseEntity<Unit> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        this.leaveGroupUseCase.execute(email, groupId)
         return ResponseEntity.noContent().build()
     }
 
