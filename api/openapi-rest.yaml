@@ -59,6 +59,9 @@ paths:
   /groups/{groupId}/journal-interests:
     $ref: "./groups/journal-interests.yaml"
 
+  /groups/{groupId}/members/me:
+    $ref: "./groups/leave-group.yaml"
+
   /groups/{groupId}/members/{memberId}:
     $ref: "./groups/kick-member.yaml"
 

@@ -1,0 +1,47 @@
+delete:
+  summary: Leave a group
+  description: Allows the authenticated user to voluntarily leave a group they belong to. If the user is the last administrator of the group, they must first promote another member to administrator before leaving.
+  operationId: leaveGroup
+  tags:
+    - Groups
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      description: Unique identifier of the group.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Group left successfully.
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. The acting user is not a member of the group.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Group not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "409":
+      description: Conflict. The acting user is the last administrator of the group and must promote another member to administrator before leaving.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
