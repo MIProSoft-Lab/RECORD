@@ -15,4 +15,11 @@ interface UserJournalInterestRepository {
 
     /** IDs de las revistas que el usuario ha marcado como de interés. */
     fun findInterestJournalIds(userId: UUID): Set<UUID>
+
+    /**
+     * Para el conjunto de usuarios dado, devuelve por cada revista marcada la lista de usuarios (de
+     * ese conjunto) que la han marcado. Las revistas que ningún usuario del conjunto ha marcado no
+     * aparecen en el mapa.
+     */
+    fun findInterestedUserIdsByJournal(userIds: Set<UUID>): Map<UUID, List<UUID>>
 }

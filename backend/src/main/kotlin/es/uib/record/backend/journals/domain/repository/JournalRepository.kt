@@ -1,5 +1,6 @@
 package es.uib.record.backend.journals.domain.repository
 
+import es.uib.record.backend.journals.domain.model.InterestedJournal
 import es.uib.record.backend.journals.domain.model.Journal
 import es.uib.record.backend.journals.domain.model.JournalDetail
 import es.uib.record.backend.journals.domain.model.JournalSearchItem
@@ -39,6 +40,17 @@ interface JournalRepository {
         page: Int,
         size: Int,
     ): PageResult<JournalSearchItem>
+
+    /**
+     * Unión paginada de las revistas marcadas como de interés por cualquiera de los [memberIds],
+     * deduplicada y ordenada por número de miembros que la marcan (descendente). Cada elemento
+     * incluye los ids de los miembros que la han marcado.
+     */
+    fun findInterestedJournalsByUsers(
+        memberIds: Set<UUID>,
+        page: Int,
+        size: Int,
+    ): PageResult<InterestedJournal>
 
     fun existsById(id: UUID): Boolean
 

@@ -12,11 +12,10 @@ interface SpringDataJpaUserJournalInterestRepository :
 
     fun existsByUserIdAndJournalId(userId: UUID, journalId: UUID): Boolean
 
-    @Modifying
-    fun deleteByUserIdAndJournalId(userId: UUID, journalId: UUID)
+    @Modifying fun deleteByUserIdAndJournalId(userId: UUID, journalId: UUID)
 
-    @Query(
-        "SELECT uji.journalId FROM UserJournalInterestEntity uji WHERE uji.userId = :userId"
-    )
+    @Query("SELECT uji.journalId FROM UserJournalInterestEntity uji WHERE uji.userId = :userId")
     fun findJournalIdsByUserId(@Param("userId") userId: UUID): List<UUID>
+
+    fun findByUserIdIn(userIds: Collection<UUID>): List<UserJournalInterestEntity>
 }

@@ -3,6 +3,7 @@ package es.uib.record.backend.groups.infrastructure.rest
 import es.uib.record.backend.api.GroupsApi
 import es.uib.record.backend.groups.application.usecase.group.CreateGroupUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupDetailUseCase
+import es.uib.record.backend.groups.application.usecase.group.GetGroupJournalInterestsUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupsListByMemberIdUseCase
 import es.uib.record.backend.groups.application.usecase.group.KickGroupMemberUseCase
 import es.uib.record.backend.groups.application.usecase.group.SearchInvitableUsersUseCase
@@ -13,6 +14,7 @@ import es.uib.record.backend.groups.infrastructure.mapper.toDto
 import es.uib.record.backend.groups.infrastructure.mapper.toResponse
 import es.uib.record.backend.model.CreateGroupRequest
 import es.uib.record.backend.model.GroupDetailResponse
+import es.uib.record.backend.model.GroupJournalInterestPageResponse
 import es.uib.record.backend.model.GroupResponse
 import es.uib.record.backend.model.GroupSummaryResponse
 import es.uib.record.backend.model.InvitableUserResponse
@@ -33,6 +35,7 @@ class GroupController(
     private val sendInvitationUseCase: SendInvitationUseCase,
     private val updateGroupMemberRoleUseCase: UpdateGroupMemberRoleUseCase,
     private val kickGroupMemberUseCase: KickGroupMemberUseCase,
+    private val getGroupJournalInterestsUseCase: GetGroupJournalInterestsUseCase,
 ) : GroupsApi {
 
     override fun createGroup(
@@ -56,6 +59,17 @@ class GroupController(
         val groupDetail = this.getGroupDetailUseCase.execute(groupId, email)
 
         return ResponseEntity.ok(groupDetail.toResponse())
+    }
+
+    override fun getGroupJournalInterests(
+        groupId: UUID,
+        page: Int,
+        size: Int,
+    ): ResponseEntity<GroupJournalInterestPageResponse> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        val interests = this.getGroupJournalInterestsUseCase.execute(groupId, email, page, size)
+
+        return ResponseEntity.ok(interests.toResponse())
     }
 
     override fun getInvitableUsers(
