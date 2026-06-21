@@ -170,3 +170,102 @@ schemas:
         description: "The new role to assign to the group member."
     required:
       - role
+
+  GroupJournalInterestMember:
+    type: object
+    description: "Miembro del grupo que ha marcado la revista como de interés."
+    properties:
+      userId:
+        type: string
+        format: uuid
+        description: "Unique identifier of the member."
+      firstName:
+        type: string
+        description: "First name of the member."
+      lastName:
+        type: string
+        description: "Last name of the member."
+      profileImageUrl:
+        type: string
+        description: "URL of the member's profile image."
+    required:
+      - userId
+      - firstName
+      - lastName
+      - profileImageUrl
+
+  GroupJournalInterestResponse:
+    type: object
+    description: "Revista marcada como de interés por uno o más miembros del grupo."
+    properties:
+      id:
+        type: string
+        format: uuid
+      name:
+        type: string
+        example: "CA-A Cancer Journal for Clinicians"
+      issn:
+        type: string
+        example: "0007-9235"
+      eIssn:
+        type: string
+        example: "1542-4863"
+      publisherName:
+        type: string
+        example: "Wiley"
+      year:
+        type: integer
+        description: "Año del informe del que provienen las categorías/cuartiles mostrados."
+        example: 2023
+      categories:
+        type: array
+        description: "Categorías/cuartiles de la revista en su último año disponible."
+        items:
+          $ref: "../journals/components.yaml#/schemas/JournalCategoryQuartileSummary"
+      favoriteCount:
+        type: integer
+        description: "Número de miembros del grupo que han marcado esta revista como de interés."
+        example: 3
+      members:
+        type: array
+        description: "Miembros del grupo que han marcado esta revista como de interés."
+        items:
+          $ref: "#/schemas/GroupJournalInterestMember"
+    required:
+      - id
+      - name
+      - categories
+      - favoriteCount
+      - members
+
+  GroupJournalInterestPageResponse:
+    type: object
+    description: "Página con la unión de revistas de interés de los miembros del grupo."
+    properties:
+      content:
+        type: array
+        items:
+          $ref: "#/schemas/GroupJournalInterestResponse"
+      totalElements:
+        type: integer
+        format: int64
+        description: "Número total de revistas en la unión."
+        example: 42
+      totalPages:
+        type: integer
+        description: "Número total de páginas."
+        example: 3
+      page:
+        type: integer
+        description: "Índice de página actual (base 0)."
+        example: 0
+      size:
+        type: integer
+        description: "Tamaño de página solicitado."
+        example: 20
+    required:
+      - content
+      - totalElements
+      - totalPages
+      - page
+      - size
