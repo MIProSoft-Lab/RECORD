@@ -23,6 +23,8 @@ import { ErrorResponse } from '../model/errorResponse';
 // @ts-ignore
 import { GroupDetailResponse } from '../model/groupDetailResponse';
 // @ts-ignore
+import { GroupJournalInterestPageResponse } from '../model/groupJournalInterestPageResponse';
+// @ts-ignore
 import { GroupResponse } from '../model/groupResponse';
 // @ts-ignore
 import { GroupSummaryResponse } from '../model/groupSummaryResponse';
@@ -167,6 +169,89 @@ export class GroupsService extends BaseService {
         return this.httpClient.request<GroupDetailResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Lista la unión de revistas de interés de los miembros del grupo
+     * Devuelve una página con la unión deduplicada de las revistas marcadas como de interés por cualquier miembro del grupo, indicando cuántos miembros la han marcado y quiénes. Ordenada por número de miembros que la marcan (descendente). Las categorías/cuartiles devueltos corresponden al último año disponible de cada revista. 
+     * @endpoint get /groups/{groupId}/journal-interests
+     * @param groupId Unique identifier of the group.
+     * @param page Índice de página (base 0).
+     * @param size Tamaño de página.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public getGroupJournalInterests(groupId: string, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GroupJournalInterestPageResponse>;
+    public getGroupJournalInterests(groupId: string, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GroupJournalInterestPageResponse>>;
+    public getGroupJournalInterests(groupId: string, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GroupJournalInterestPageResponse>>;
+    public getGroupJournalInterests(groupId: string, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (groupId === null || groupId === undefined) {
+            throw new Error('Required parameter groupId was null or undefined when calling getGroupJournalInterests.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/journal-interests`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<GroupJournalInterestPageResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,

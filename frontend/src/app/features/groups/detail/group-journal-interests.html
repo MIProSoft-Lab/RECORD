@@ -1,0 +1,83 @@
+<div class="pt-3">
+  <h3 class="m-0 mb-3">{{ 'GROUPS.DETAIL.JOURNALS.TITLE' | translate }}</h3>
+
+  <p-table
+    [value]="journals()"
+    [loading]="showLoader()"
+    [rowHover]="true"
+    dataKey="id"
+    class="p-datatable-sm"
+  >
+    <ng-template #header>
+      <tr>
+        <th>{{ 'GROUPS.DETAIL.JOURNALS.COLUMNS.JOURNAL' | translate }}</th>
+        <th>{{ 'GROUPS.DETAIL.JOURNALS.COLUMNS.CATEGORIES' | translate }}</th>
+        <th style="width: 14rem">
+          {{ 'GROUPS.DETAIL.JOURNALS.COLUMNS.MEMBERS' | translate }}
+        </th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-journal>
+      <tr (click)="openJournalDetail(journal.id)" style="cursor: pointer">
+        <td>
+          <div class="font-medium">{{ journal.name }}</div>
+          @if (journal.issn || journal.eIssn) {
+            <div class="text-color-secondary text-sm mt-1">
+              {{ journal.issn }}@if (journal.issn && journal.eIssn) {<span> · </span>}{{
+                journal.eIssn
+              }}
+            </div>
+          }
+        </td>
+        <td>
+          <div class="flex flex-wrap gap-3 align-items-center">
+            @for (cat of journal.categories; track cat.categoryId) {
+              <span class="inline-flex align-items-center gap-2 white-space-nowrap">
+                <p-tag [value]="cat.quartile" [severity]="quartileSeverity(cat.quartile)" />
+                <span class="text-sm">{{ cat.categoryName }}</span>
+              </span>
+            }
+          </div>
+        </td>
+        <td>
+          <div
+            class="inline-flex align-items-center gap-2"
+            [pTooltip]="membersTooltip(journal)"
+            tooltipPosition="top"
+          >
+            <span class="font-medium">{{ journal.favoriteCount }}</span>
+            <p-avatargroup>
+              @for (member of visibleMembers(journal); track member.userId) {
+                @if (member.profileImageUrl) {
+                  <p-avatar [image]="member.profileImageUrl" shape="circle" />
+                } @else {
+                  <p-avatar icon="pi pi-user" shape="circle" />
+                }
+              }
+              @if (hiddenMembersCount(journal) > 0) {
+                <p-avatar [label]="'+' + hiddenMembersCount(journal)" shape="circle" />
+              }
+            </p-avatargroup>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="3" class="text-center text-color-secondary p-4">
+          @if (hasLoaded() && !showLoader()) {
+            {{ 'GROUPS.DETAIL.JOURNALS.EMPTY_STATE' | translate }}
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <p-paginator
+    [first]="first()"
+    [rows]="pageSize"
+    [totalRecords]="totalRecords()"
+    (onPageChange)="onPageChange($event)"
+    styleClass="mt-3 surface-card"
+  />
+</div>

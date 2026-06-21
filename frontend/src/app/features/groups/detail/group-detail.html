@@ -16,6 +16,7 @@
     <p-tabs [(value)]="activeTab">
       <p-tablist>
         <p-tab value="about">{{ 'GROUPS.DETAIL.TABS.ABOUT' | translate }}</p-tab>
+        <p-tab value="journals">{{ 'GROUPS.DETAIL.TABS.JOURNALS' | translate }}</p-tab>
         <p-tab value="posts">{{ 'GROUPS.DETAIL.TABS.POSTS' | translate }}</p-tab>
         <p-tab value="administration">{{ 'GROUPS.DETAIL.TABS.ADMINISTRATION' | translate }}</p-tab>
       </p-tablist>
@@ -110,6 +111,12 @@
               </p-table>
             </div>
           </div>
+        </p-tabpanel>
+
+        <p-tabpanel value="journals">
+          @if (activeTab() === 'journals') {
+            <record-group-journal-interests [groupId]="g.id" />
+          }
         </p-tabpanel>
 
         <p-tabpanel value="posts">

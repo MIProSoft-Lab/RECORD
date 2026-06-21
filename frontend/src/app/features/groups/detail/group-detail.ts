@@ -18,6 +18,7 @@ import {
 } from '@core/api';
 import { UserState } from '@core/services/user-state';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
+import { GroupJournalInterests } from './group-journal-interests';
 import { InviteUsersDialog } from './invite-users-dialog';
 
 interface RoleOption {
@@ -37,6 +38,7 @@ interface RoleOption {
     Button,
     Select,
     InviteUsersDialog,
+    GroupJournalInterests,
   ],
   templateUrl: './group-detail.html',
 })

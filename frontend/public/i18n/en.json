@@ -129,6 +129,7 @@
     "DETAIL": {
       "TABS": {
         "ABOUT": "About",
+        "JOURNALS": "Journals",
         "POSTS": "Posts",
         "ADMINISTRATION": "Administration"
       },
@@ -143,6 +144,16 @@
           "EMAIL": "Email",
           "ROLE": "Role",
           "CREATOR": "Creator"
+        }
+      },
+      "JOURNALS": {
+        "TITLE": "Member journal interests",
+        "EMPTY_STATE": "No member has marked any journal as interest yet.",
+        "ERROR": "Could not load the group's journal interests.",
+        "COLUMNS": {
+          "JOURNAL": "Journal",
+          "CATEGORIES": "Categories",
+          "MEMBERS": "Members"
         }
       },
       "POSTS": {

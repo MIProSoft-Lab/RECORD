@@ -129,6 +129,7 @@
     "DETAIL": {
       "TABS": {
         "ABOUT": "Sobre",
+        "JOURNALS": "Revistas",
         "POSTS": "Publicaciones",
         "ADMINISTRATION": "Administración"
       },
@@ -143,6 +144,16 @@
           "EMAIL": "Email",
           "ROLE": "Rol",
           "CREATOR": "Creador"
+        }
+      },
+      "JOURNALS": {
+        "TITLE": "Revistas de interés de los miembros",
+        "EMPTY_STATE": "Ningún miembro ha marcado todavía revistas como de interés.",
+        "ERROR": "No se han podido cargar las revistas de interés del grupo.",
+        "COLUMNS": {
+          "JOURNAL": "Revista",
+          "CATEGORIES": "Categorías",
+          "MEMBERS": "Miembros"
         }
       },
       "POSTS": {

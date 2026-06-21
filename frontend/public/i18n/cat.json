@@ -129,6 +129,7 @@
     "DETAIL": {
       "TABS": {
         "ABOUT": "Sobre",
+        "JOURNALS": "Revistes",
         "POSTS": "Publicacions",
         "ADMINISTRATION": "Administració"
       },
@@ -143,6 +144,16 @@
           "EMAIL": "Email",
           "ROLE": "Rol",
           "CREATOR": "Creador"
+        }
+      },
+      "JOURNALS": {
+        "TITLE": "Revistes d'interès dels membres",
+        "EMPTY_STATE": "Cap membre no ha marcat encara revistes com a interès.",
+        "ERROR": "No s'han pogut carregar les revistes d'interès del grup.",
+        "COLUMNS": {
+          "JOURNAL": "Revista",
+          "CATEGORIES": "Categories",
+          "MEMBERS": "Membres"
         }
       },
       "POSTS": {
