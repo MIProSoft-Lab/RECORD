@@ -186,6 +186,19 @@
           "TOAST_ERROR_KICK_GENERIC": "No se ha podido expulsar al miembro."
         }
       },
+      "DELETE": {
+        "SECTION_TITLE": "Eliminar grupo",
+        "SECTION_DESCRIPTION": "Elimina permanentemente este grupo y sus invitaciones pendientes. Esta acción no se puede deshacer. Las publicaciones de los miembros no se ven afectadas.",
+        "BUTTON": "Eliminar grupo",
+        "CONFIRM_HEADER": "Eliminar grupo",
+        "CONFIRM_MESSAGE": "Esto eliminará permanentemente el grupo, sus invitaciones pendientes y todas las membresías. Esta acción no se puede deshacer. ¿Quieres continuar?",
+        "CONFIRM_YES": "Sí, eliminar",
+        "TOAST_SUCCESS_SUMMARY": "Éxito",
+        "TOAST_SUCCESS_DETAIL": "Grupo eliminado correctamente.",
+        "TOAST_ERROR_SUMMARY": "Error",
+        "TOAST_ERROR_FORBIDDEN": "No tienes permiso para eliminar este grupo.",
+        "TOAST_ERROR_GENERIC": "No se pudo eliminar el grupo."
+      },
       "LEAVE": {
         "SECTION_TITLE": "Abandonar grupo",
         "SECTION_DESCRIPTION": "Deja de ser miembro de este grupo. Perderás el acceso a él.",

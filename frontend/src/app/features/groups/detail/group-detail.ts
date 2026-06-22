@@ -64,6 +64,7 @@ export class GroupDetail implements OnInit, OnDestroy {
   updatingMemberId = signal<string | null>(null);
   kickingMemberId = signal<string | null>(null);
   leavingGroup = signal(false);
+  deletingGroup = signal(false);
 
   members = computed(() => this.group()?.members ?? []);
 
@@ -280,6 +281,45 @@ export class GroupDetail implements OnInit, OnDestroy {
             this.messageService.add({
               severity: 'error',
               summary: this.translate.instant('GROUPS.DETAIL.LEAVE.TOAST_ERROR_SUMMARY'),
+              detail: this.translate.instant(detailKey),
+            });
+          },
+        });
+      },
+    });
+  }
+
+  onDeleteGroup() {
+    const groupId = this.group()?.id;
+    if (!groupId) return;
+
+    this.confirmationService.confirm({
+      header: this.translate.instant('GROUPS.DETAIL.DELETE.CONFIRM_HEADER'),
+      message: this.translate.instant('GROUPS.DETAIL.DELETE.CONFIRM_MESSAGE'),
+      acceptLabel: this.translate.instant('GROUPS.DETAIL.DELETE.CONFIRM_YES'),
+      rejectLabel: this.translate.instant('GROUPS.DETAIL.ADMINISTRATION.MEMBERS.CONFIRM_NO'),
+      accept: () => {
+        this.deletingGroup.set(true);
+        this.groupsService.deleteGroup(groupId).subscribe({
+          next: () => {
+            this.deletingGroup.set(false);
+            this.messageService.add({
+              severity: 'success',
+              summary: this.translate.instant('GROUPS.DETAIL.DELETE.TOAST_SUCCESS_SUMMARY'),
+              detail: this.translate.instant('GROUPS.DETAIL.DELETE.TOAST_SUCCESS_DETAIL'),
+            });
+            this.router.navigate(['/groups']);
+          },
+          error: (err: HttpErrorResponse) => {
+            this.deletingGroup.set(false);
+            const code = (err.error as { code?: string } | null)?.code;
+            const detailKey =
+              code === 'GROUP_MEMBER_NOT_ADMIN'
+                ? 'GROUPS.DETAIL.DELETE.TOAST_ERROR_FORBIDDEN'
+                : 'GROUPS.DETAIL.DELETE.TOAST_ERROR_GENERIC';
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translate.instant('GROUPS.DETAIL.DELETE.TOAST_ERROR_SUMMARY'),
               detail: this.translate.instant(detailKey),
             });
           },

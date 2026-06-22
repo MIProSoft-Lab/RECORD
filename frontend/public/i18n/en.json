@@ -186,6 +186,19 @@
           "TOAST_ERROR_KICK_GENERIC": "Could not kick the member."
         }
       },
+      "DELETE": {
+        "SECTION_TITLE": "Delete group",
+        "SECTION_DESCRIPTION": "Permanently delete this group and its pending invitations. This cannot be undone. Members' posts are not affected.",
+        "BUTTON": "Delete group",
+        "CONFIRM_HEADER": "Delete group",
+        "CONFIRM_MESSAGE": "This will permanently delete the group, its pending invitations and all memberships. This action cannot be undone. Do you want to continue?",
+        "CONFIRM_YES": "Yes, delete",
+        "TOAST_SUCCESS_SUMMARY": "Success",
+        "TOAST_SUCCESS_DETAIL": "Group deleted successfully.",
+        "TOAST_ERROR_SUMMARY": "Error",
+        "TOAST_ERROR_FORBIDDEN": "You don't have permission to delete this group.",
+        "TOAST_ERROR_GENERIC": "Could not delete the group."
+      },
       "LEAVE": {
         "SECTION_TITLE": "Leave group",
         "SECTION_DESCRIPTION": "Stop being a member of this group. You will lose access to it.",

@@ -229,6 +229,22 @@
                   </ng-template>
                 </p-table>
               </div>
+
+              <div>
+                <h3 class="m-0 mb-2">
+                  {{ 'GROUPS.DETAIL.DELETE.SECTION_TITLE' | translate }}
+                </h3>
+                <p class="m-0 mb-3 text-color-secondary">
+                  {{ 'GROUPS.DETAIL.DELETE.SECTION_DESCRIPTION' | translate }}
+                </p>
+                <p-button
+                  [label]="'GROUPS.DETAIL.DELETE.BUTTON' | translate"
+                  icon="pi pi-trash"
+                  severity="danger"
+                  [loading]="deletingGroup()"
+                  (onClick)="onDeleteGroup()"
+                />
+              </div>
             }
 
             <div>
