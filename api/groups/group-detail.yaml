@@ -112,3 +112,45 @@ put:
         application/json:
           schema:
             $ref: "../common.yaml#/schemas/ErrorResponse"
+
+delete:
+  summary: Delete a group
+  description: Permanently delete a group, including its pending invitations and all member memberships. Only group administrators can perform this action. Members' posts are not affected.
+  operationId: deleteGroup
+  tags:
+    - Groups
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      description: Unique identifier of the group.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "204":
+      description: Group deleted successfully.
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. User is not an administrator of the group.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Group not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
