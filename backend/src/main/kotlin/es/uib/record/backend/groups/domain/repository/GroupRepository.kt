@@ -11,4 +11,6 @@ interface GroupRepository {
     fun findAllByMemberId(memberId: UUID): List<Group>
 
     fun findById(id: UUID): Group?
+
+    fun delete(id: UUID)
 }

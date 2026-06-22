@@ -31,4 +31,8 @@ class GroupRepositoryAdapter(
     override fun findById(id: UUID): Group? {
         return this.springDataJpaGroupRepository.findById(id).orElse(null)?.toDomain()
     }
+
+    override fun delete(id: UUID) {
+        this.springDataJpaGroupRepository.deleteById(id)
+    }
 }

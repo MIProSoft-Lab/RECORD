@@ -8,4 +8,6 @@ interface SpringDataJpaInvitationRepository : JpaRepository<InvitationEntity, UU
     fun findByInviteeUserId(inviteeUserId: UUID): List<InvitationEntity>
 
     fun findByGroupId(groupId: UUID): List<InvitationEntity>
+
+    fun deleteAllByGroupId(groupId: UUID)
 }

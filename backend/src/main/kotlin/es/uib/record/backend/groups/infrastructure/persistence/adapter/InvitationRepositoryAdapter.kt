@@ -36,4 +36,8 @@ class InvitationRepositoryAdapter(
     override fun findByGroupId(groupId: UUID): List<Invitation> {
         return this.springDataJpaInvitationRepository.findByGroupId(groupId).map { it.toDomain() }
     }
+
+    override fun deleteAllByGroupId(groupId: UUID) {
+        this.springDataJpaInvitationRepository.deleteAllByGroupId(groupId)
+    }
 }

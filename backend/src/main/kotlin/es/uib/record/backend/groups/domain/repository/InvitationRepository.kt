@@ -13,4 +13,6 @@ interface InvitationRepository {
     fun findById(id: UUID): Invitation?
 
     fun findByGroupId(groupId: UUID): List<Invitation>
+
+    fun deleteAllByGroupId(groupId: UUID)
 }

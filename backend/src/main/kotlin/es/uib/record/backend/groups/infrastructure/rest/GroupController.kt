@@ -2,6 +2,7 @@ package es.uib.record.backend.groups.infrastructure.rest
 
 import es.uib.record.backend.api.GroupsApi
 import es.uib.record.backend.groups.application.usecase.group.CreateGroupUseCase
+import es.uib.record.backend.groups.application.usecase.group.DeleteGroupUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupDetailUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupJournalInterestsUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupsListByMemberIdUseCase
@@ -38,6 +39,7 @@ class GroupController(
     private val sendInvitationUseCase: SendInvitationUseCase,
     private val updateGroupMemberRoleUseCase: UpdateGroupMemberRoleUseCase,
     private val updateGroupUseCase: UpdateGroupUseCase,
+    private val deleteGroupUseCase: DeleteGroupUseCase,
     private val kickGroupMemberUseCase: KickGroupMemberUseCase,
     private val leaveGroupUseCase: LeaveGroupUseCase,
     private val getGroupJournalInterestsUseCase: GetGroupJournalInterestsUseCase,
@@ -66,6 +68,13 @@ class GroupController(
             )
 
         return ResponseEntity.ok(updatedGroup.toResponse())
+    }
+
+    override fun deleteGroup(groupId: UUID): ResponseEntity<Unit> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        this.deleteGroupUseCase.execute(email, groupId)
+
+        return ResponseEntity.noContent().build()
     }
 
     override fun listGroups(): ResponseEntity<List<GroupSummaryResponse>> {
