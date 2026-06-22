@@ -200,6 +200,22 @@
         "TOAST_ERROR_SUMMARY": "Error",
         "TOAST_ERROR_GENERIC": "No s'ha pogut abandonar el grup."
       },
+      "EDIT": {
+        "SECTION_TITLE": "Informació del grup",
+        "SECTION_DESCRIPTION": "Actualitza el nom i la descripció del grup.",
+        "BUTTON": "Editar grup",
+        "DIALOG_TITLE": "Editar grup de recerca",
+        "NAME_LABEL": "Nom",
+        "NAME_REQUIRED": "El nom és obligatori (mín. 3 caràcters).",
+        "NAME_TAKEN": "Ja existeix un grup amb aquest nom.",
+        "DESCRIPTION_LABEL": "Descripció",
+        "SAVE_BUTTON": "Desar",
+        "TOAST_SUCCESS_SUMMARY": "Èxit",
+        "TOAST_SUCCESS_DETAIL": "Grup actualitzat correctament.",
+        "TOAST_ERROR_SUMMARY": "Error",
+        "TOAST_ERROR_FORBIDDEN": "No tens permís per editar aquest grup.",
+        "TOAST_ERROR_GENERIC": "No s'ha pogut actualitzar el grup."
+      },
       "INVITE": {
         "BUTTON": "Convidar usuaris",
         "DIALOG_TITLE": "Convidar usuaris al grup",

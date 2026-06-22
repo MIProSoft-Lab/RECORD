@@ -12,6 +12,13 @@
     </div>
 
     <record-invite-users-dialog [groupId]="g.id" [(visible)]="showInviteDialog" />
+    <record-edit-group-dialog
+      [groupId]="g.id"
+      [name]="g.name"
+      [description]="g.description"
+      [(visible)]="showEditDialog"
+      (saved)="loadGroup(g.id)"
+    />
 
     <p-tabs [(value)]="activeTab">
       <p-tablist>
@@ -129,6 +136,22 @@
         <p-tabpanel value="administration">
           <div class="flex flex-column gap-4 pt-3">
             @if (isAdmin()) {
+              <div>
+                <h3 class="m-0 mb-2">
+                  {{ 'GROUPS.DETAIL.EDIT.SECTION_TITLE' | translate }}
+                </h3>
+                <p class="m-0 mb-3 text-color-secondary">
+                  {{ 'GROUPS.DETAIL.EDIT.SECTION_DESCRIPTION' | translate }}
+                </p>
+                <p-button
+                  [label]="'GROUPS.DETAIL.EDIT.BUTTON' | translate"
+                  icon="pi pi-pencil"
+                  severity="secondary"
+                  [outlined]="true"
+                  (onClick)="showEditDialog.set(true)"
+                />
+              </div>
+
               <div>
                 <h3 class="m-0 mb-3">
                   {{ 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.SECTION_TITLE' | translate }}

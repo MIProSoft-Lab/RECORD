@@ -200,6 +200,22 @@
         "TOAST_ERROR_SUMMARY": "Error",
         "TOAST_ERROR_GENERIC": "No se pudo abandonar el grupo."
       },
+      "EDIT": {
+        "SECTION_TITLE": "Información del grupo",
+        "SECTION_DESCRIPTION": "Actualiza el nombre y la descripción del grupo.",
+        "BUTTON": "Editar grupo",
+        "DIALOG_TITLE": "Editar grupo de investigación",
+        "NAME_LABEL": "Nombre",
+        "NAME_REQUIRED": "El nombre es obligatorio (mín. 3 caracteres).",
+        "NAME_TAKEN": "Ya existe un grupo con este nombre.",
+        "DESCRIPTION_LABEL": "Descripción",
+        "SAVE_BUTTON": "Guardar",
+        "TOAST_SUCCESS_SUMMARY": "Éxito",
+        "TOAST_SUCCESS_DETAIL": "Grupo actualizado correctamente.",
+        "TOAST_ERROR_SUMMARY": "Error",
+        "TOAST_ERROR_FORBIDDEN": "No tienes permiso para editar este grupo.",
+        "TOAST_ERROR_GENERIC": "No se pudo actualizar el grupo."
+      },
       "INVITE": {
         "BUTTON": "Invitar usuarios",
         "DIALOG_TITLE": "Invitar usuarios al grupo",

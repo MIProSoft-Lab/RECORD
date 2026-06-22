@@ -1,0 +1,59 @@
+<p-dialog
+  [header]="'GROUPS.DETAIL.EDIT.DIALOG_TITLE' | translate"
+  [(visible)]="visible"
+  [modal]="true"
+  [style]="{ width: '30rem' }"
+  [draggable]="false"
+  [resizable]="false"
+  (onShow)="onShow()"
+>
+  <form [formGroup]="editForm" class="flex flex-column gap-3 pt-2">
+    <div class="flex flex-column gap-1">
+      <label for="edit-group-name" class="font-medium">
+        {{ 'GROUPS.DETAIL.EDIT.NAME_LABEL' | translate }}
+      </label>
+      <input
+        id="edit-group-name"
+        pInputText
+        formControlName="name"
+        [placeholder]="'GROUPS.DIALOG.NAME_PLACEHOLDER' | translate"
+        class="w-full"
+      />
+      @if (editForm.controls.name.hasError('nameTaken')) {
+        <small class="text-red-500">{{ 'GROUPS.DETAIL.EDIT.NAME_TAKEN' | translate }}</small>
+      } @else if (editForm.controls.name.invalid && editForm.controls.name.touched) {
+        <small class="text-red-500">{{ 'GROUPS.DETAIL.EDIT.NAME_REQUIRED' | translate }}</small>
+      }
+    </div>
+
+    <div class="flex flex-column gap-1">
+      <label for="edit-group-description" class="font-medium">
+        {{ 'GROUPS.DETAIL.EDIT.DESCRIPTION_LABEL' | translate }}
+      </label>
+      <textarea
+        id="edit-group-description"
+        pTextarea
+        formControlName="description"
+        [placeholder]="'GROUPS.DIALOG.DESCRIPTION_PLACEHOLDER' | translate"
+        rows="4"
+        class="w-full"
+      ></textarea>
+    </div>
+  </form>
+
+  <ng-template #footer>
+    <p-button
+      [label]="'COMMON.BUTTONS.CANCEL' | translate"
+      severity="secondary"
+      [outlined]="true"
+      (onClick)="close()"
+      [disabled]="isSaving()"
+    />
+    <p-button
+      [label]="'GROUPS.DETAIL.EDIT.SAVE_BUTTON' | translate"
+      (onClick)="onSave()"
+      [loading]="isSaving()"
+      [disabled]="editForm.invalid"
+    />
+  </ng-template>
+</p-dialog>

@@ -18,6 +18,7 @@ import {
 } from '@core/api';
 import { UserState } from '@core/services/user-state';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
+import { EditGroupDialog } from './edit-group-dialog';
 import { GroupJournalInterests } from './group-journal-interests';
 import { InviteUsersDialog } from './invite-users-dialog';
 
@@ -38,6 +39,7 @@ interface RoleOption {
     Button,
     Select,
     InviteUsersDialog,
+    EditGroupDialog,
     GroupJournalInterests,
   ],
   templateUrl: './group-detail.html',
@@ -58,6 +60,7 @@ export class GroupDetail implements OnInit, OnDestroy {
   isLoading = signal(false);
   activeTab = signal<string>('about');
   showInviteDialog = signal(false);
+  showEditDialog = signal(false);
   updatingMemberId = signal<string | null>(null);
   kickingMemberId = signal<string | null>(null);
   leavingGroup = signal(false);
