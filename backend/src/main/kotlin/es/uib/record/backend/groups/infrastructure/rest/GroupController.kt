@@ -10,6 +10,7 @@ import es.uib.record.backend.groups.application.usecase.group.LeaveGroupUseCase
 import es.uib.record.backend.groups.application.usecase.group.SearchInvitableUsersUseCase
 import es.uib.record.backend.groups.application.usecase.group.SendInvitationUseCase
 import es.uib.record.backend.groups.application.usecase.group.UpdateGroupMemberRoleUseCase
+import es.uib.record.backend.groups.application.usecase.group.UpdateGroupUseCase
 import es.uib.record.backend.groups.infrastructure.mapper.toDomain
 import es.uib.record.backend.groups.infrastructure.mapper.toDto
 import es.uib.record.backend.groups.infrastructure.mapper.toResponse
@@ -21,6 +22,7 @@ import es.uib.record.backend.model.GroupSummaryResponse
 import es.uib.record.backend.model.InvitableUserResponse
 import es.uib.record.backend.model.SendInvitationRequest
 import es.uib.record.backend.model.UpdateGroupMemberRoleRequest
+import es.uib.record.backend.model.UpdateGroupRequest
 import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -35,6 +37,7 @@ class GroupController(
     private val searchInvitableUsersUseCase: SearchInvitableUsersUseCase,
     private val sendInvitationUseCase: SendInvitationUseCase,
     private val updateGroupMemberRoleUseCase: UpdateGroupMemberRoleUseCase,
+    private val updateGroupUseCase: UpdateGroupUseCase,
     private val kickGroupMemberUseCase: KickGroupMemberUseCase,
     private val leaveGroupUseCase: LeaveGroupUseCase,
     private val getGroupJournalInterestsUseCase: GetGroupJournalInterestsUseCase,
@@ -47,6 +50,22 @@ class GroupController(
         val createdGroup = this.createGroupUseCase.execute(createGroupRequest.toDto(), email)
 
         return ResponseEntity.ok(createdGroup.toResponse())
+    }
+
+    override fun updateGroup(
+        groupId: UUID,
+        updateGroupRequest: UpdateGroupRequest,
+    ): ResponseEntity<GroupResponse> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        val updatedGroup =
+            this.updateGroupUseCase.execute(
+                email,
+                groupId,
+                updateGroupRequest.name,
+                updateGroupRequest.description,
+            )
+
+        return ResponseEntity.ok(updatedGroup.toResponse())
     }
 
     override fun listGroups(): ResponseEntity<List<GroupSummaryResponse>> {

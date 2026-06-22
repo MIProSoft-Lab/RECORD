@@ -1,6 +1,7 @@
 package es.uib.record.backend.groups.application.usecase.group
 
 import es.uib.record.backend.groups.application.usecase.group.dto.CreateGroupRequestDto
+import es.uib.record.backend.groups.domain.exception.GroupNameAlreadyExistsException
 import es.uib.record.backend.groups.domain.model.Group
 import es.uib.record.backend.groups.domain.model.GroupRole
 import es.uib.record.backend.groups.domain.repository.GroupRepository
@@ -14,6 +15,9 @@ class CreateGroupUseCase(
 ) {
     fun execute(createGroupRequestDto: CreateGroupRequestDto, email: String): Group {
         val userId = this.userFacade.getUserIdByEmail(email)
+
+        if (groupRepository.findByName(createGroupRequestDto.name) != null)
+            throw GroupNameAlreadyExistsException(createGroupRequestDto.name)
 
         val toSave =
             Group(
