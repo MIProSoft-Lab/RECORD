@@ -48,3 +48,67 @@ get:
         application/json:
           schema:
             $ref: "../common.yaml#/schemas/ErrorResponse"
+
+put:
+  summary: Update a group
+  description: Update the name and description of a group. Only group administrators can perform this action. The name must remain unique.
+  operationId: updateGroup
+  tags:
+    - Groups
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      description: Unique identifier of the group.
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/UpdateGroupRequest"
+  responses:
+    "200":
+      description: Group updated successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/GroupResponse"
+    "400":
+      description: Bad request. Invalid input data.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. User is not an administrator of the group.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Group not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "409":
+      description: Conflict. A group with the given name already exists.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
