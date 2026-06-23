@@ -1,0 +1,26 @@
+get:
+  summary: List the publications created by the current user
+  operationId: listMyPublications
+  tags:
+    - Publications
+  responses:
+    "200":
+      description: Successfully retrieved the list of publications
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: "./components.yaml#/schemas/PublicationSummaryResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

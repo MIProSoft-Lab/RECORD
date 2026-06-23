@@ -1,0 +1,37 @@
+post:
+  summary: Create a new publication
+  operationId: createPublication
+  tags:
+    - Publications
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/CreatePublicationRequest"
+
+  responses:
+    "200":
+      description: Publication created successfully
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/PublicationResponse"
+    "400":
+      description: Bad request (e.g., invalid data or DOI provided without PUBLISHED status)
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. User is not a member of the group.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Journal or group not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

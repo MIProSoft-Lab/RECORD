@@ -1,0 +1,116 @@
+schemas:
+  PublicationStatus:
+    type: string
+    description: "Estado del ciclo de vida de la publicación."
+    enum:
+      - PLANNED
+      - SUBMITTED
+      - UNDER_REVIEW
+      - MINOR_REVISION
+      - MAJOR_REVISION
+      - REJECTED
+      - ACCEPTED
+      - PUBLISHED
+    example: "PLANNED"
+
+  CreatePublicationRequest:
+    type: object
+    properties:
+      title:
+        type: string
+        minLength: 1
+        maxLength: 512
+        description: "Título de la publicación. Obligatorio."
+        example: "Deep learning approaches for medical imaging"
+      groupId:
+        type: string
+        format: uuid
+        description: "Grupo de investigación al que pertenece la publicación. El creador debe ser miembro."
+      journalId:
+        type: string
+        format: uuid
+        description: "Journal al que se asocia la publicación."
+      abstract:
+        type: string
+        maxLength: 5000
+        description: "Resumen de la publicación."
+      doi:
+        type: string
+        maxLength: 255
+        description: "DOI de la publicación. Solo permitido cuando el estado es PUBLISHED."
+        example: "10.1000/xyz123"
+      status:
+        $ref: "#/schemas/PublicationStatus"
+        description: "Estado inicial. Si se omite, por defecto es PLANNED."
+    required:
+      - title
+      - groupId
+      - journalId
+
+  PublicationResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      title:
+        type: string
+      groupId:
+        type: string
+        format: uuid
+      journalId:
+        type: string
+        format: uuid
+      journalName:
+        type: string
+        description: "Nombre del journal asociado."
+      abstract:
+        type: string
+      doi:
+        type: string
+      status:
+        $ref: "#/schemas/PublicationStatus"
+      createdBy:
+        type: string
+        format: uuid
+      createdAt:
+        type: string
+        format: date-time
+    required:
+      - id
+      - title
+      - groupId
+      - journalId
+      - status
+      - createdBy
+      - createdAt
+
+  PublicationSummaryResponse:
+    type: object
+    properties:
+      id:
+        type: string
+        format: uuid
+      title:
+        type: string
+      groupId:
+        type: string
+        format: uuid
+      journalId:
+        type: string
+        format: uuid
+      journalName:
+        type: string
+        description: "Nombre del journal asociado."
+      status:
+        $ref: "#/schemas/PublicationStatus"
+      createdAt:
+        type: string
+        format: date-time
+    required:
+      - id
+      - title
+      - groupId
+      - journalId
+      - status
+      - createdAt

@@ -1,0 +1,38 @@
+get:
+  summary: Get publication detail
+  operationId: getPublicationDetail
+  tags:
+    - Publications
+  parameters:
+    - name: publicationId
+      in: path
+      required: true
+      description: Unique identifier of the publication.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Publication detail retrieved successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/PublicationResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Publication not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

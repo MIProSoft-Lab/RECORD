@@ -86,6 +86,15 @@ paths:
   /journals/{journalId}/interest:
     $ref: "./journals/interest.yaml"
 
+  /publications/create:
+    $ref: "./publications/create.yaml"
+
+  /publications/me:
+    $ref: "./publications/list-publications.yaml"
+
+  /publications/{publicationId}:
+    $ref: "./publications/publication-detail.yaml"
+
   /invitations/me:
     $ref: "./invitations/list-invitations.yaml"
 
