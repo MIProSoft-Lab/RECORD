@@ -5,4 +5,5 @@ enum class ErrorType {
     CONFLICT,
     UNAUTHORIZED,
     FORBIDDEN,
+    BAD_REQUEST,
 }

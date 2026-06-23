@@ -23,6 +23,7 @@ class GlobalExceptionHandler {
                 ErrorType.CONFLICT -> HttpStatus.CONFLICT
                 ErrorType.UNAUTHORIZED -> HttpStatus.UNAUTHORIZED
                 ErrorType.FORBIDDEN -> HttpStatus.FORBIDDEN
+                ErrorType.BAD_REQUEST -> HttpStatus.BAD_REQUEST
             }
 
         val response =
