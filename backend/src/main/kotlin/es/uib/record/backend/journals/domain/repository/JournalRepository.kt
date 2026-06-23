@@ -54,5 +54,7 @@ interface JournalRepository {
 
     fun existsById(id: UUID): Boolean
 
+    fun findByIds(ids: Set<UUID>): List<Journal>
+
     fun findDetailById(id: UUID): JournalDetail?
 }

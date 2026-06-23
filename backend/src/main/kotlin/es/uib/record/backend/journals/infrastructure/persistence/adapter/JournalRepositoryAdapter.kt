@@ -167,6 +167,11 @@ class JournalRepositoryAdapter(
         return this.springDataJpaJournalRepository.existsById(id)
     }
 
+    override fun findByIds(ids: Set<UUID>): List<Journal> {
+        if (ids.isEmpty()) return emptyList()
+        return this.springDataJpaJournalRepository.findAllById(ids).map { it.toDomain() }
+    }
+
     override fun findDetailById(id: UUID): JournalDetail? {
         val journal =
             this.springDataJpaJournalRepository.findById(id).orElse(null)?.toDomain() ?: return null

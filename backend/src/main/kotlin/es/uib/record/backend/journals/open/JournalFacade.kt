@@ -14,4 +14,10 @@ interface JournalFacade {
         page: Int,
         size: Int,
     ): PageResult<InterestedJournalDto>
+
+    /** Indica si existe una revista con el [journalId] dado. */
+    fun existsById(journalId: UUID): Boolean
+
+    /** Devuelve, para los [journalIds] existentes, su referencia mínima indexada por id. */
+    fun getJournalsByIds(journalIds: Set<UUID>): Map<UUID, JournalRefDto>
 }

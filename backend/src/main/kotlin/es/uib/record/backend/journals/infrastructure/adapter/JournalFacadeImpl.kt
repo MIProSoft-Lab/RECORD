@@ -6,6 +6,7 @@ import es.uib.record.backend.journals.domain.repository.JournalRepository
 import es.uib.record.backend.journals.open.InterestedJournalCategoryDto
 import es.uib.record.backend.journals.open.InterestedJournalDto
 import es.uib.record.backend.journals.open.JournalFacade
+import es.uib.record.backend.journals.open.JournalRefDto
 import es.uib.record.backend.shared.domain.PageResult
 import java.util.UUID
 import org.springframework.stereotype.Component
@@ -25,6 +26,16 @@ class JournalFacadeImpl(private val journalRepository: JournalRepository) : Jour
             page = result.page,
             size = result.size,
         )
+    }
+
+    override fun existsById(journalId: UUID): Boolean {
+        return this.journalRepository.existsById(journalId)
+    }
+
+    override fun getJournalsByIds(journalIds: Set<UUID>): Map<UUID, JournalRefDto> {
+        return this.journalRepository.findByIds(journalIds).associate {
+            it.id!! to JournalRefDto(journalId = it.id, name = it.name, issn = it.issn)
+        }
     }
 
     private fun InterestedJournal.toOpenDto() =
