@@ -12,7 +12,8 @@
       "CANCEL": "Cancel·lar",
       "CREATE_ACCOUNT": "Crear compte",
       "LOGIN": "Entrar",
-      "SAVE": "Guardar"
+      "SAVE": "Guardar",
+      "DISCARD": "Descarta"
     },
     "FIELDS": {
       "CONFIRM_PASSWORD": "Confirmar contrasenya",
@@ -306,6 +307,64 @@
       "PASSWORDS_NOT_MATCHING": "Les contrasenyes han de coincidir.",
       "PASSWORD_MINLENGTH": "La contrasenya ha de tenir almenys 8 caràcters.",
       "PASSWORD_REQUIRED": "La contrasenya no pot estar buida."
+    }
+  },
+  "PUBLICATIONS": {
+    "TITLE": "Publicacions",
+    "CREATE_BUTTON": "Crear publicació",
+    "EMPTY_STATE": "Encara no hi ha publicacions. Crea'n una per començar.",
+    "TABLE": {
+      "TITLE": "Títol",
+      "STATUS": "Estat",
+      "CREATED_AT": "Creada",
+      "JOURNAL": "Journal"
+    },
+    "STATUS": {
+      "PLANNED": "Planificada",
+      "SUBMITTED": "Enviada",
+      "UNDER_REVIEW": "En revisió",
+      "MINOR_REVISION": "Revisió menor",
+      "MAJOR_REVISION": "Correcció major",
+      "REJECTED": "Rebutjada",
+      "ACCEPTED": "Acceptada",
+      "PUBLISHED": "Publicada"
+    },
+    "FORM": {
+      "TITLE": "Nova publicació",
+      "ABOUT": {
+        "TITLE": "Dades generals",
+        "SUBTITLE": "Informació identificativa de la teva publicació."
+      },
+      "RESEARCH_GROUP": "Grup de recerca",
+      "RESEARCH_GROUP_PLACEHOLDER": "Selecciona un grup de recerca",
+      "PUBLICATION_TITLE": "Títol de la publicació",
+      "TITLE_REQUIRED": "El títol és obligatori.",
+      "ABSTRACT": "Resum",
+      "INFORMATION": {
+        "TITLE": "Informació",
+        "SUBTITLE": "On s'enviarà aquesta publicació i el seu estat inicial."
+      },
+      "VENUE_TYPE": "On vols publicar?",
+      "VENUE_JOURNAL": "Journal",
+      "VENUE_CONGRESS": "Congrés",
+      "VENUE_CONGRESS_SOON": "Pròximament",
+      "JOURNAL": "Journal",
+      "JOURNAL_PLACEHOLDER": "Cerca per nom, ISSN...",
+      "INITIAL_STATUS": "Estat inicial",
+      "DOI": "DOI",
+      "AUTHORS": {
+        "TITLE": "Autors",
+        "SUBTITLE": "Investigadors amb qui has col·laborat per crear la teva publicació.",
+        "SEARCH_PLACEHOLDER": "Cerca altres investigadors",
+        "YOU": "Tu"
+      }
+    },
+    "TOASTS": {
+      "SUCCESS": "Èxit",
+      "CREATED": "Publicació creada correctament."
+    },
+    "DETAIL": {
+      "NOT_FOUND": "Publicació no trobada."
     }
   }
 }

@@ -12,7 +12,8 @@
       "CANCEL": "Cancelar",
       "CREATE_ACCOUNT": "Crear cuenta",
       "LOGIN": "Entrar",
-      "SAVE": "Guardar"
+      "SAVE": "Guardar",
+      "DISCARD": "Descartar"
     },
     "FIELDS": {
       "CONFIRM_PASSWORD": "Confirmar contraseña",
@@ -306,6 +307,64 @@
       "PASSWORDS_NOT_MATCHING": "Las contraseñas deben coincidir.",
       "PASSWORD_MINLENGTH": "La contraseña debe tener al menos 8 caracteres.",
       "PASSWORD_REQUIRED": "La contraseña no puede estar vacía."
+    }
+  },
+  "PUBLICATIONS": {
+    "TITLE": "Publicaciones",
+    "CREATE_BUTTON": "Crear publicación",
+    "EMPTY_STATE": "Aún no hay publicaciones. Crea una para empezar.",
+    "TABLE": {
+      "TITLE": "Título",
+      "STATUS": "Estado",
+      "CREATED_AT": "Creada",
+      "JOURNAL": "Journal"
+    },
+    "STATUS": {
+      "PLANNED": "Planificada",
+      "SUBMITTED": "Enviada",
+      "UNDER_REVIEW": "En revisión",
+      "MINOR_REVISION": "Revisión menor",
+      "MAJOR_REVISION": "Corrección mayor",
+      "REJECTED": "Rechazada",
+      "ACCEPTED": "Aceptada",
+      "PUBLISHED": "Publicada"
+    },
+    "FORM": {
+      "TITLE": "Nueva publicación",
+      "ABOUT": {
+        "TITLE": "Datos generales",
+        "SUBTITLE": "Información identificativa de tu publicación."
+      },
+      "RESEARCH_GROUP": "Grupo de investigación",
+      "RESEARCH_GROUP_PLACEHOLDER": "Selecciona un grupo de investigación",
+      "PUBLICATION_TITLE": "Título de la publicación",
+      "TITLE_REQUIRED": "El título es obligatorio.",
+      "ABSTRACT": "Resumen",
+      "INFORMATION": {
+        "TITLE": "Información",
+        "SUBTITLE": "A dónde se enviará esta publicación y su estado inicial."
+      },
+      "VENUE_TYPE": "¿Dónde quieres publicar?",
+      "VENUE_JOURNAL": "Journal",
+      "VENUE_CONGRESS": "Congreso",
+      "VENUE_CONGRESS_SOON": "Próximamente",
+      "JOURNAL": "Journal",
+      "JOURNAL_PLACEHOLDER": "Busca por nombre, ISSN...",
+      "INITIAL_STATUS": "Estado inicial",
+      "DOI": "DOI",
+      "AUTHORS": {
+        "TITLE": "Autores",
+        "SUBTITLE": "Investigadores con los que has colaborado para crear tu publicación.",
+        "SEARCH_PLACEHOLDER": "Busca otros investigadores",
+        "YOU": "Tú"
+      }
+    },
+    "TOASTS": {
+      "SUCCESS": "Éxito",
+      "CREATED": "Publicación creada correctamente."
+    },
+    "DETAIL": {
+      "NOT_FOUND": "Publicación no encontrada."
     }
   }
 }

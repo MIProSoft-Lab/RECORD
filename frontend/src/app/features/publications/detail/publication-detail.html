@@ -1,0 +1,40 @@
+<div class="surface-ground p-4">
+  @let pub = publication();
+
+  @if (pub) {
+    <div class="surface-card border-round p-4 flex flex-column gap-3">
+      <div class="flex align-items-center justify-content-between">
+        <h1 class="m-0">{{ pub.title }}</h1>
+        <p-tag [value]="'PUBLICATIONS.STATUS.' + pub.status | translate" />
+      </div>
+
+      <div>
+        <span class="font-medium">{{ 'PUBLICATIONS.FORM.JOURNAL' | translate }}: </span>
+        <span>{{ pub.journalName || '—' }}</span>
+      </div>
+
+      @if (pub.abstract) {
+        <div>
+          <h3 class="mb-1">{{ 'PUBLICATIONS.FORM.ABSTRACT' | translate }}</h3>
+          <p class="m-0 text-color-secondary">{{ pub.abstract }}</p>
+        </div>
+      }
+
+      @if (pub.doi) {
+        <div>
+          <span class="font-medium">{{ 'PUBLICATIONS.FORM.DOI' | translate }}: </span>
+          <span>{{ pub.doi }}</span>
+        </div>
+      }
+
+      <div>
+        <span class="font-medium">{{ 'PUBLICATIONS.TABLE.CREATED_AT' | translate }}: </span>
+        <span>{{ pub.createdAt | date: 'medium' }}</span>
+      </div>
+    </div>
+  } @else if (!isLoading()) {
+    <div class="text-center text-color-secondary p-4">
+      {{ 'PUBLICATIONS.DETAIL.NOT_FOUND' | translate }}
+    </div>
+  }
+</div>

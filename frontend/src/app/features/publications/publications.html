@@ -1,0 +1,51 @@
+<div class="surface-ground p-4">
+  <div class="flex align-items-center justify-content-between mb-4">
+    <h1 class="m-0">{{ 'PUBLICATIONS.TITLE' | translate }}</h1>
+    <p-button
+      [label]="'PUBLICATIONS.CREATE_BUTTON' | translate"
+      icon="pi pi-plus"
+      (onClick)="openCreate()"
+    />
+  </div>
+
+  <p-table
+    [value]="publications()"
+    [loading]="showLoader()"
+    [rowHover]="true"
+    dataKey="id"
+    class="p-datatable-sm"
+  >
+    <ng-template #header>
+      <tr>
+        <th>{{ 'PUBLICATIONS.TABLE.TITLE' | translate }}</th>
+        <th>{{ 'PUBLICATIONS.TABLE.JOURNAL' | translate }}</th>
+        <th style="width: 12rem">{{ 'PUBLICATIONS.TABLE.STATUS' | translate }}</th>
+        <th style="width: 12rem">{{ 'PUBLICATIONS.TABLE.CREATED_AT' | translate }}</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-publication>
+      <tr (click)="openDetail(publication.id)" style="cursor: pointer">
+        <td>
+          <div class="font-medium">{{ publication.title }}</div>
+        </td>
+        <td>{{ publication.journalName || '—' }}</td>
+        <td>
+          <p-tag
+            [value]="'PUBLICATIONS.STATUS.' + publication.status | translate"
+            [severity]="statusSeverity(publication.status)"
+          />
+        </td>
+        <td>{{ publication.createdAt | date: 'mediumDate' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="4" class="text-center text-color-secondary p-4">
+          @if (hasLoaded() && !showLoader()) {
+            {{ 'PUBLICATIONS.EMPTY_STATE' | translate }}
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

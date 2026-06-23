@@ -12,7 +12,8 @@
       "CANCEL": "Cancel",
       "CREATE_ACCOUNT": "Create account",
       "LOGIN": "Log in",
-      "SAVE": "Save"
+      "SAVE": "Save",
+      "DISCARD": "Discard"
     },
     "FIELDS": {
       "CONFIRM_PASSWORD": "Confirm password",
@@ -306,6 +307,64 @@
       "PASSWORDS_NOT_MATCHING": "The passwords must match.",
       "PASSWORD_MINLENGTH": "The password must be at least 8 characters long.",
       "PASSWORD_REQUIRED": "Password cannot be empty."
+    }
+  },
+  "PUBLICATIONS": {
+    "TITLE": "Publications",
+    "CREATE_BUTTON": "Create publication",
+    "EMPTY_STATE": "No publications yet. Create one to get started.",
+    "TABLE": {
+      "TITLE": "Title",
+      "STATUS": "Status",
+      "CREATED_AT": "Created",
+      "JOURNAL": "Journal"
+    },
+    "STATUS": {
+      "PLANNED": "Planned",
+      "SUBMITTED": "Submitted",
+      "UNDER_REVIEW": "Under review",
+      "MINOR_REVISION": "Minor revision",
+      "MAJOR_REVISION": "Major revision",
+      "REJECTED": "Rejected",
+      "ACCEPTED": "Accepted",
+      "PUBLISHED": "Published"
+    },
+    "FORM": {
+      "TITLE": "New publication",
+      "ABOUT": {
+        "TITLE": "About",
+        "SUBTITLE": "Identifying information about your publication."
+      },
+      "RESEARCH_GROUP": "Research group",
+      "RESEARCH_GROUP_PLACEHOLDER": "Select a research group",
+      "PUBLICATION_TITLE": "Publication title",
+      "TITLE_REQUIRED": "Title is required.",
+      "ABSTRACT": "Abstract",
+      "INFORMATION": {
+        "TITLE": "Information",
+        "SUBTITLE": "Where this publication is going to be sent and its initial status."
+      },
+      "VENUE_TYPE": "Where are you willing to publish?",
+      "VENUE_JOURNAL": "Journal",
+      "VENUE_CONGRESS": "Congress",
+      "VENUE_CONGRESS_SOON": "Coming soon",
+      "JOURNAL": "Journal",
+      "JOURNAL_PLACEHOLDER": "Search by name, ISSN...",
+      "INITIAL_STATUS": "Initialization status",
+      "DOI": "DOI",
+      "AUTHORS": {
+        "TITLE": "Authors",
+        "SUBTITLE": "Researchers that you collaborated with to create your publication.",
+        "SEARCH_PLACEHOLDER": "Search for other researchers",
+        "YOU": "You"
+      }
+    },
+    "TOASTS": {
+      "SUCCESS": "Success",
+      "CREATED": "Publication created successfully."
+    },
+    "DETAIL": {
+      "NOT_FOUND": "Publication not found."
     }
   }
 }

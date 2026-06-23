@@ -1,6 +1,7 @@
 export * from './authResponse';
 export * from './categoryResponse';
 export * from './createGroupRequest';
+export * from './createPublicationRequest';
 export * from './deactivateAccountRequest';
 export * from './errorResponse';
 export * from './groupDetailResponse';
@@ -24,6 +25,9 @@ export * from './journalSummaryResponse';
 export * from './journalSyncStatusResponse';
 export * from './loginRequest';
 export * from './logoutRequest';
+export * from './publicationResponse';
+export * from './publicationStatus';
+export * from './publicationSummaryResponse';
 export * from './quartile';
 export * from './refreshRequest';
 export * from './registerRequest';

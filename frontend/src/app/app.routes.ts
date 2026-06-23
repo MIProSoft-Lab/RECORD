@@ -6,6 +6,9 @@ import { Groups } from '@features/groups/groups';
 import { GroupDetail } from '@features/groups/detail/group-detail';
 import { Journals } from '@features/journals/journals';
 import { JournalDetail } from '@features/journals/detail/journal-detail';
+import { Publications } from '@features/publications/publications';
+import { CreatePublication } from '@features/publications/create/create-publication';
+import { PublicationDetail } from '@features/publications/detail/publication-detail';
 import { guestGuard } from '@core/guards/guest.guard';
 import { authGuard } from '@core/guards/auth.guard';
 import { Register } from '@features/auth/pages/register/register';
@@ -46,6 +49,23 @@ export const routes: Routes = [
             path: ':id',
             component: GroupDetail,
             data: { breadcrumb: 'GROUPS.TITLE' }
+          }
+        ]
+      },
+      {
+        path: 'publications',
+        data: { breadcrumb: 'PUBLICATIONS.TITLE' },
+        children: [
+          { path: '', component: Publications },
+          {
+            path: 'create',
+            component: CreatePublication,
+            data: { breadcrumb: 'PUBLICATIONS.FORM.TITLE' }
+          },
+          {
+            path: ':id',
+            component: PublicationDetail,
+            data: { breadcrumb: 'PUBLICATIONS.TITLE' }
           }
         ]
       },

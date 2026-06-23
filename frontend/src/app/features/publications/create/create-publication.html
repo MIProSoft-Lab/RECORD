@@ -1,0 +1,157 @@
+<div class="surface-ground p-4">
+  <h1 class="mt-0 mb-4">{{ 'PUBLICATIONS.FORM.TITLE' | translate }}</h1>
+
+  <form [formGroup]="createForm" class="grid">
+    <!-- Columna principal -->
+    <div class="col-12 lg:col-8 flex flex-column gap-4">
+
+      <!-- About -->
+      <div class="surface-card border-round p-4">
+        <h2 class="mt-0 mb-1">{{ 'PUBLICATIONS.FORM.ABOUT.TITLE' | translate }}</h2>
+        <p class="mt-0 mb-3 text-color-secondary text-sm">
+          {{ 'PUBLICATIONS.FORM.ABOUT.SUBTITLE' | translate }}
+        </p>
+
+        <div class="flex flex-column gap-1 mb-3">
+          <label class="font-medium">{{ 'PUBLICATIONS.FORM.RESEARCH_GROUP' | translate }}</label>
+          <p-select
+            formControlName="groupId"
+            [options]="groups()"
+            optionValue="id"
+            optionLabel="name"
+            [placeholder]="'PUBLICATIONS.FORM.RESEARCH_GROUP_PLACEHOLDER' | translate"
+            styleClass="w-full"
+          />
+        </div>
+
+        <div class="flex flex-column gap-1 mb-3">
+          <label for="pub-title" class="font-medium">
+            {{ 'PUBLICATIONS.FORM.PUBLICATION_TITLE' | translate }}
+          </label>
+          <input id="pub-title" pInputText formControlName="title" class="w-full" />
+          @if (createForm.controls.title.invalid && createForm.controls.title.touched) {
+            <small class="text-red-500">{{ 'PUBLICATIONS.FORM.TITLE_REQUIRED' | translate }}</small>
+          }
+        </div>
+
+        <div class="flex flex-column gap-1">
+          <label for="pub-abstract" class="font-medium">
+            {{ 'PUBLICATIONS.FORM.ABSTRACT' | translate }}
+          </label>
+          <textarea
+            id="pub-abstract"
+            pTextarea
+            formControlName="abstract"
+            rows="5"
+            class="w-full"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Information -->
+      <div class="surface-card border-round p-4">
+        <h2 class="mt-0 mb-1">{{ 'PUBLICATIONS.FORM.INFORMATION.TITLE' | translate }}</h2>
+        <p class="mt-0 mb-3 text-color-secondary text-sm">
+          {{ 'PUBLICATIONS.FORM.INFORMATION.SUBTITLE' | translate }}
+        </p>
+
+        <div class="flex flex-column gap-1 mb-3">
+          <label class="font-medium">{{ 'PUBLICATIONS.FORM.VENUE_TYPE' | translate }}</label>
+          <div class="flex">
+            <p-button
+              [label]="'PUBLICATIONS.FORM.VENUE_JOURNAL' | translate"
+              size="small"
+            />
+            <p-button
+              [label]="'PUBLICATIONS.FORM.VENUE_CONGRESS' | translate"
+              size="small"
+              severity="secondary"
+              [outlined]="true"
+              [disabled]="true"
+              pTooltip="{{ 'PUBLICATIONS.FORM.VENUE_CONGRESS_SOON' | translate }}"
+            />
+          </div>
+        </div>
+
+        <div class="flex flex-column gap-1 mb-3">
+          <label class="font-medium">{{ 'PUBLICATIONS.FORM.JOURNAL' | translate }}</label>
+          <p-autoComplete
+            formControlName="journal"
+            [suggestions]="journalSuggestions()"
+            (completeMethod)="onJournalSearch($event)"
+            optionLabel="name"
+            [forceSelection]="true"
+            [placeholder]="'PUBLICATIONS.FORM.JOURNAL_PLACEHOLDER' | translate"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+          />
+        </div>
+
+        <div class="grid">
+          <div class="col-12 md:col-6 flex flex-column gap-1">
+            <label class="font-medium">{{ 'PUBLICATIONS.FORM.INITIAL_STATUS' | translate }}</label>
+            <p-select
+              formControlName="status"
+              [options]="statusOptions"
+              optionValue="value"
+              styleClass="w-full"
+            >
+              <ng-template let-opt #selectedItem>{{ opt.label | translate }}</ng-template>
+              <ng-template let-opt #item>{{ opt.label | translate }}</ng-template>
+            </p-select>
+          </div>
+
+          @if (isPublished) {
+            <div class="col-12 md:col-6 flex flex-column gap-1">
+              <label for="pub-doi" class="font-medium">
+                {{ 'PUBLICATIONS.FORM.DOI' | translate }}
+              </label>
+              <input id="pub-doi" pInputText formControlName="doi" class="w-full" />
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Authors -->
+      <div class="surface-card border-round p-4">
+        <h2 class="mt-0 mb-1">{{ 'PUBLICATIONS.FORM.AUTHORS.TITLE' | translate }}</h2>
+        <p class="mt-0 mb-3 text-color-secondary text-sm">
+          {{ 'PUBLICATIONS.FORM.AUTHORS.SUBTITLE' | translate }}
+        </p>
+
+        <input
+          pInputText
+          [disabled]="true"
+          [placeholder]="'PUBLICATIONS.FORM.AUTHORS.SEARCH_PLACEHOLDER' | translate"
+          class="w-full mb-3"
+        />
+
+        <div class="surface-100 border-round p-3 flex align-items-center gap-2">
+          <i class="pi pi-user"></i>
+          <span class="font-medium">{{ 'PUBLICATIONS.FORM.AUTHORS.YOU' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Columna lateral -->
+    <div class="col-12 lg:col-4 flex flex-column gap-3">
+      <div class="flex flex-column gap-2" style="position: sticky; top: 1rem">
+        <p-button
+          [label]="'COMMON.BUTTONS.DISCARD' | translate"
+          severity="secondary"
+          [outlined]="true"
+          styleClass="w-full"
+          (onClick)="onDiscard()"
+          [disabled]="isSaving()"
+        />
+        <p-button
+          [label]="'COMMON.BUTTONS.SAVE' | translate"
+          styleClass="w-full"
+          (onClick)="onSave()"
+          [loading]="isSaving()"
+          [disabled]="createForm.invalid"
+        />
+      </div>
+    </div>
+  </form>
+</div>
