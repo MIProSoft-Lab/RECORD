@@ -28,9 +28,29 @@ class Publication(
         }
     }
 
-    fun addAuthor(userId: UUID) {
-        if (_authors.none { it.userId == userId }) {
-            _authors.add(PublicationAuthor(userId))
+    /** Añade un co-autor interno al final; deduplica por usuario (no se repite). */
+    fun addInternalAuthor(userId: UUID) {
+        if (!hasInternalAuthor(userId)) {
+            _authors.add(PublicationAuthor.InternalAuthor(userId))
         }
+    }
+
+    /**
+     * Garantiza que el usuario figure como autor interno. Si ya está (en cualquier
+     * posición) no hace nada; si no, lo inserta al principio. Permite que el orden de
+     * los autores —incluido el creador— lo decida quien crea la publicación.
+     */
+    fun prependInternalAuthorIfAbsent(userId: UUID) {
+        if (!hasInternalAuthor(userId)) {
+            _authors.add(0, PublicationAuthor.InternalAuthor(userId))
+        }
+    }
+
+    private fun hasInternalAuthor(userId: UUID) =
+        _authors.any { it is PublicationAuthor.InternalAuthor && it.userId == userId }
+
+    /** Añade un co-autor externo (no registrado). Se permiten nombres repetidos. */
+    fun addExternalAuthor(firstName: String, lastName: String) {
+        _authors.add(PublicationAuthor.ExternalAuthor(firstName, lastName))
     }
 }

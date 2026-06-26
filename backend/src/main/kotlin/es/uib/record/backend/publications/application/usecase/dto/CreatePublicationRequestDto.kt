@@ -10,4 +10,5 @@ data class CreatePublicationRequestDto(
     val journalId: UUID,
     val groupId: UUID,
     val status: PublicationStatus?,
+    val authors: List<PublicationAuthorInputDto> = emptyList(),
 )

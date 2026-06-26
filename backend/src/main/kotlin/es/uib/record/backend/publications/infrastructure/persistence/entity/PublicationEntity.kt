@@ -1,9 +1,8 @@
 package es.uib.record.backend.publications.infrastructure.persistence.entity
 
 import es.uib.record.backend.publications.domain.model.PublicationStatus
-import jakarta.persistence.CollectionTable
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
-import jakarta.persistence.ElementCollection
 import jakarta.persistence.Entity
 import jakarta.persistence.EnumType
 import jakarta.persistence.Enumerated
@@ -11,6 +10,8 @@ import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToMany
+import jakarta.persistence.OrderBy
 import jakarta.persistence.Table
 import java.time.Instant
 import java.util.UUID
@@ -28,10 +29,8 @@ class PublicationEntity(
     @Column(nullable = false, name = "created_by") var createdBy: UUID,
     @Column(nullable = false, name = "created_at", updatable = false)
     var createdAt: Instant = Instant.now(),
-    @ElementCollection
-    @CollectionTable(
-        name = "publication_authors",
-        joinColumns = [JoinColumn(name = "publication_id")],
-    )
-    var authors: MutableSet<PublicationAuthorEntity> = mutableSetOf(),
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "publication_id", nullable = false)
+    @OrderBy("position ASC")
+    var authors: MutableList<PublicationAuthorEntity> = mutableListOf(),
 )

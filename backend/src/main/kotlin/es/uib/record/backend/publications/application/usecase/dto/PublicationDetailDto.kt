@@ -15,4 +15,5 @@ data class PublicationDetailDto(
     val status: PublicationStatus,
     val createdBy: UUID,
     val createdAt: Instant,
+    val authors: List<PublicationAuthorDto> = emptyList(),
 )

@@ -15,7 +15,9 @@ class GetMyPublicationsUseCase(
 ) {
     fun execute(email: String): List<PublicationSummaryDto> {
         val userId = this.userFacade.getUserIdByEmail(email)
-        val publications = this.publicationRepository.findAllByCreatedBy(userId)
+        // Incluye publicaciones donde el usuario es creador o co-autor (el creador
+        // siempre figura como autor), de modo que aparezcan en el historial de cada autor.
+        val publications = this.publicationRepository.findAllByAuthor(userId)
 
         val journalNamesById =
             this.journalFacade

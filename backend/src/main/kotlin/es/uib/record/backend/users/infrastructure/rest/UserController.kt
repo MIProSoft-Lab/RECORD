@@ -4,15 +4,18 @@ import es.uib.record.backend.api.UsersApi
 import es.uib.record.backend.model.DeactivateAccountRequest
 import es.uib.record.backend.model.UserProfileImageSignatureResponse
 import es.uib.record.backend.model.UserResponse
+import es.uib.record.backend.model.UserSummaryResponse
 import es.uib.record.backend.model.UserUpdatePushNotificationRequest
 import es.uib.record.backend.model.UserUpdateRequest
 import es.uib.record.backend.users.application.usecase.DeactivateUserUseCase
 import es.uib.record.backend.users.application.usecase.GetUserByEmailUseCase
 import es.uib.record.backend.users.application.usecase.GetUserProfileImageSignatureUseCase
+import es.uib.record.backend.users.application.usecase.SearchUserUseCase
 import es.uib.record.backend.users.application.usecase.UpdateCurrentUserByEmailUseCase
 import es.uib.record.backend.users.application.usecase.UpdateUserPushNotificationsUseCase
 import es.uib.record.backend.users.infrastructure.mapper.toDto
 import es.uib.record.backend.users.infrastructure.mapper.toResponse
+import es.uib.record.backend.users.infrastructure.mapper.toSummaryResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
@@ -24,7 +27,13 @@ class UserController(
     private val getUserProfileImageSignatureUseCase: GetUserProfileImageSignatureUseCase,
     private val updateUserPushNotificationsUseCase: UpdateUserPushNotificationsUseCase,
     private val deactivateUserUseCase: DeactivateUserUseCase,
+    private val searchUserUseCase: SearchUserUseCase,
 ) : UsersApi {
+
+    override fun searchUsers(query: String): ResponseEntity<List<UserSummaryResponse>> {
+        val users = this.searchUserUseCase.execute(query)
+        return ResponseEntity.ok(users.map { it.toSummaryResponse() })
+    }
     override fun getCurrentUser(): ResponseEntity<UserResponse> {
         val authentication = SecurityContextHolder.getContext().authentication
         val email = authentication.name

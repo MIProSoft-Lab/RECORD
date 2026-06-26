@@ -26,4 +26,10 @@ class PublicationRepositoryAdapter(
             .findAllByCreatedByOrderByCreatedAtDesc(createdBy)
             .map { it.toDomain() }
     }
+
+    override fun findAllByAuthor(userId: UUID): List<Publication> {
+        return this.springDataJpaPublicationRepository
+            .findAllByAuthors_UserIdOrderByCreatedAtDesc(userId)
+            .map { it.toDomain() }
+    }
 }

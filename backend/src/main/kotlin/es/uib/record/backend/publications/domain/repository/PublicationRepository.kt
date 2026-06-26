@@ -9,4 +9,6 @@ interface PublicationRepository {
     fun findById(id: UUID): Publication?
 
     fun findAllByCreatedBy(createdBy: UUID): List<Publication>
+
+    fun findAllByAuthor(userId: UUID): List<Publication>
 }

@@ -6,4 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface SpringDataJpaPublicationRepository : JpaRepository<PublicationEntity, UUID> {
     fun findAllByCreatedByOrderByCreatedAtDesc(createdBy: UUID): List<PublicationEntity>
+
+    fun findAllByAuthors_UserIdOrderByCreatedAtDesc(userId: UUID): List<PublicationEntity>
 }

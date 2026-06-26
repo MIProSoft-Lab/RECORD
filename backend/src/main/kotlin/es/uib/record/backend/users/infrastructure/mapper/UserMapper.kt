@@ -2,6 +2,7 @@ package es.uib.record.backend.users.infrastructure.mapper
 
 import es.uib.record.backend.model.UserProfileImageSignatureResponse
 import es.uib.record.backend.model.UserResponse
+import es.uib.record.backend.model.UserSummaryResponse
 import es.uib.record.backend.model.UserUpdateRequest
 import es.uib.record.backend.users.application.usecase.dto.UserProfileImageSignatureResponseDto
 import es.uib.record.backend.users.application.usecase.dto.UserUpdateRequestDto
@@ -60,3 +61,12 @@ fun UserProfileImageSignatureResponseDto.toResponse() =
 
 fun User.toOpenDto() =
     UserOpenDto(this.id!!, this.firstName, this.lastName, this.email, this.profileImageUrl)
+
+fun User.toSummaryResponse() =
+    UserSummaryResponse(
+        this.id!!,
+        this.firstName,
+        this.lastName,
+        this.email,
+        this.profileImageUrl,
+    )
