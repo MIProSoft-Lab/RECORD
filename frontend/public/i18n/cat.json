@@ -355,7 +355,12 @@
       "AUTHORS": {
         "TITLE": "Autors",
         "SUBTITLE": "Investigadors amb qui has col·laborat per crear la teva publicació.",
-        "SEARCH_PLACEHOLDER": "Cerca altres investigadors",
+        "SEARCH_PLACEHOLDER": "Cerca usuaris registrats per nom o email",
+        "EXTERNAL_HINT": "Afegeix un co-autor que no estigui registrat a l'aplicació escrivint el seu nom.",
+        "EXTERNAL_FIRST_NAME": "Nom",
+        "EXTERNAL_LAST_NAME": "Cognoms",
+        "ADD_EXTERNAL": "Afegir",
+        "EXTERNAL_BADGE": "Extern",
         "YOU": "Tu"
       }
     },

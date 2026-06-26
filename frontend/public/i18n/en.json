@@ -355,7 +355,12 @@
       "AUTHORS": {
         "TITLE": "Authors",
         "SUBTITLE": "Researchers that you collaborated with to create your publication.",
-        "SEARCH_PLACEHOLDER": "Search for other researchers",
+        "SEARCH_PLACEHOLDER": "Search registered users by name or email",
+        "EXTERNAL_HINT": "Add a co-author who is not registered in the application by typing their name.",
+        "EXTERNAL_FIRST_NAME": "First name",
+        "EXTERNAL_LAST_NAME": "Last name",
+        "ADD_EXTERNAL": "Add",
+        "EXTERNAL_BADGE": "External",
         "YOU": "You"
       }
     },

@@ -2,13 +2,14 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Avatar } from 'primeng/avatar';
 import { Tag } from 'primeng/tag';
 import { PublicationResponse, PublicationsService } from '@core/api';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 
 @Component({
   selector: 'record-publication-detail',
-  imports: [TranslatePipe, DatePipe, Tag],
+  imports: [TranslatePipe, DatePipe, Avatar, Tag],
   templateUrl: './publication-detail.html',
 })
 export class PublicationDetail implements OnInit, OnDestroy {
@@ -46,5 +47,9 @@ export class PublicationDetail implements OnInit, OnDestroy {
     if (this.breadcrumbUrl) {
       this.breadcrumbService.clearDynamicLabel(this.breadcrumbUrl);
     }
+  }
+
+  initialsFor(person: { firstName?: string; lastName?: string }): string {
+    return ((person.firstName?.[0] ?? '') + (person.lastName?.[0] ?? '')).toUpperCase() || '?';
   }
 }

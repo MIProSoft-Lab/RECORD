@@ -119,16 +119,125 @@
           {{ 'PUBLICATIONS.FORM.AUTHORS.SUBTITLE' | translate }}
         </p>
 
-        <input
-          pInputText
-          [disabled]="true"
+        <p-autoComplete
+          formControlName="authorSearch"
+          [suggestions]="authorSuggestions()"
+          (completeMethod)="onAuthorSearch($event)"
+          (onSelect)="onAuthorSelect($event)"
+          [forceSelection]="true"
+          optionLabel="fullName"
+          dataKey="id"
           [placeholder]="'PUBLICATIONS.FORM.AUTHORS.SEARCH_PLACEHOLDER' | translate"
-          class="w-full mb-3"
-        />
+          styleClass="w-full mb-3"
+          inputStyleClass="w-full"
+        >
+          <ng-template let-member #item>
+            <div class="flex align-items-center gap-3 py-1">
+              <p-avatar
+                [image]="member.profileImageUrl || undefined"
+                [label]="member.profileImageUrl ? undefined : initialsFor(member)"
+                shape="circle"
+              />
+              <div class="flex flex-column">
+                <span class="font-medium">{{ member.firstName }} {{ member.lastName }}</span>
+                <span class="text-color-secondary text-sm">{{ member.email }}</span>
+              </div>
+            </div>
+          </ng-template>
+        </p-autoComplete>
 
-        <div class="surface-100 border-round p-3 flex align-items-center gap-2">
-          <i class="pi pi-user"></i>
-          <span class="font-medium">{{ 'PUBLICATIONS.FORM.AUTHORS.YOU' | translate }}</span>
+        <!-- Alta de co-autor externo (no registrado): nombre y apellidos en texto plano -->
+        <div class="flex flex-column gap-2 mb-3">
+          <span class="text-color-secondary text-sm">
+            {{ 'PUBLICATIONS.FORM.AUTHORS.EXTERNAL_HINT' | translate }}
+          </span>
+          <div class="flex gap-2 align-items-center">
+            <input
+              pInputText
+              formControlName="externalFirstName"
+              [placeholder]="'PUBLICATIONS.FORM.AUTHORS.EXTERNAL_FIRST_NAME' | translate"
+              class="flex-1"
+            />
+            <input
+              pInputText
+              formControlName="externalLastName"
+              [placeholder]="'PUBLICATIONS.FORM.AUTHORS.EXTERNAL_LAST_NAME' | translate"
+              class="flex-1"
+            />
+            <p-button
+              icon="pi pi-plus"
+              [label]="'PUBLICATIONS.FORM.AUTHORS.ADD_EXTERNAL' | translate"
+              [disabled]="!canAddExternal"
+              (onClick)="addExternalAuthor()"
+            />
+          </div>
+        </div>
+
+        <!-- Lista de autores ordenable: el creador es uno más (reordenable, no eliminable).
+             Internos con email/foto; externos con distintivo. -->
+        <div class="flex flex-column gap-2">
+          @for (author of selectedAuthors(); track author.key; let i = $index) {
+            <div
+              class="surface-100 border-round p-3 flex align-items-center justify-content-between gap-3"
+            >
+              <div class="flex align-items-center gap-3 flex-1 min-w-0">
+                <div class="flex flex-column">
+                  <p-button
+                    icon="pi pi-chevron-up"
+                    severity="secondary"
+                    [text]="true"
+                    [rounded]="true"
+                    size="small"
+                    [disabled]="i === 0"
+                    (onClick)="moveAuthor(i, -1)"
+                  />
+                  <p-button
+                    icon="pi pi-chevron-down"
+                    severity="secondary"
+                    [text]="true"
+                    [rounded]="true"
+                    size="small"
+                    [disabled]="i === selectedAuthors().length - 1"
+                    (onClick)="moveAuthor(i, 1)"
+                  />
+                </div>
+                <p-avatar
+                  [image]="author.profileImageUrl || undefined"
+                  [label]="author.profileImageUrl ? undefined : initialsFor(author)"
+                  shape="circle"
+                  size="large"
+                />
+                <div class="flex flex-column flex-1 min-w-0">
+                  <span class="font-medium flex align-items-center gap-2">
+                    {{ author.firstName }} {{ author.lastName }}
+                    @if (author.isCreator) {
+                      <span class="text-color-secondary font-normal">
+                        ({{ 'PUBLICATIONS.FORM.AUTHORS.YOU' | translate }})
+                      </span>
+                    }
+                    @if (author.type === 'EXTERNAL') {
+                      <p-tag
+                        severity="secondary"
+                        [value]="'PUBLICATIONS.FORM.AUTHORS.EXTERNAL_BADGE' | translate"
+                      />
+                    }
+                  </span>
+                  @if (author.email) {
+                    <span class="text-color-secondary text-sm">{{ author.email }}</span>
+                  }
+                </div>
+              </div>
+              @if (!author.isCreator) {
+                <p-button
+                  icon="pi pi-times"
+                  severity="secondary"
+                  [text]="true"
+                  [rounded]="true"
+                  (onClick)="removeAuthor(author.key)"
+                />
+              }
+            </div>
+          }
         </div>
       </div>
     </div>
