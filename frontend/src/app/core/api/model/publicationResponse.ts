@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PublicationAuthorResponse } from './publicationAuthorResponse';
 import { PublicationStatus } from './publicationStatus';
 
 
@@ -24,6 +25,10 @@ export interface PublicationResponse {
     status: PublicationStatus;
     createdBy: string;
     createdAt: string;
+    /**
+     * Autores internos de la publicación (incluye al creador).
+     */
+    authors?: Array<PublicationAuthorResponse>;
 }
 export namespace PublicationResponse {
 }

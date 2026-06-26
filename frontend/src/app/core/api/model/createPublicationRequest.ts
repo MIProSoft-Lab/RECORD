@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PublicationAuthorInput } from './publicationAuthorInput';
 import { PublicationStatus } from './publicationStatus';
 
 
@@ -32,6 +33,10 @@ export interface CreatePublicationRequest {
      */
     doi?: string;
     status?: PublicationStatus;
+    /**
+     * Co-autores de la publicación, en orden. El creador se añade siempre como primer autor interno.
+     */
+    authors?: Array<PublicationAuthorInput>;
 }
 export namespace CreatePublicationRequest {
 }
