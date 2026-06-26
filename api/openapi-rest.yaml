@@ -41,6 +41,9 @@ paths:
   /users/me/deactivate:
     $ref: "./users/deactivate-user.yaml"
 
+  /users/search:
+    $ref: "./users/search.yaml"
+
   /groups/create:
     $ref: "./groups/create.yaml"
 

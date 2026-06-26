@@ -54,6 +54,29 @@ schemas:
       - firstName
       - lastName
 
+  UserSummaryResponse:
+    type: object
+    description: "Resumen público de un usuario registrado, usado en búsquedas."
+    properties:
+      id:
+        type: string
+        format: uuid
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+        format: email
+      profileImageUrl:
+        type: string
+    required:
+      - id
+      - firstName
+      - lastName
+      - email
+      - profileImageUrl
+
   UserProfileImageSignatureResponse:
     type: object
     properties:

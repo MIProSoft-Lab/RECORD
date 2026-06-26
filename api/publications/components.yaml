@@ -42,10 +42,72 @@ schemas:
       status:
         $ref: "#/schemas/PublicationStatus"
         description: "Estado inicial. Si se omite, por defecto es PLANNED."
+      authors:
+        type: array
+        description: "Co-autores de la publicación, en orden. El creador se añade siempre como primer autor interno."
+        items:
+          $ref: "#/schemas/PublicationAuthorInput"
     required:
       - title
       - groupId
       - journalId
+
+  PublicationAuthorType:
+    type: string
+    description: "Tipo de autor: interno (usuario registrado) o externo (no registrado)."
+    enum:
+      - INTERNAL
+      - EXTERNAL
+
+  PublicationAuthorInput:
+    type: object
+    description: >-
+      Autor de entrada. Para un co-autor interno se indica únicamente userId;
+      para un co-autor externo se indican firstName y lastName.
+    properties:
+      userId:
+        type: string
+        format: uuid
+        description: "Identificador del usuario registrado (co-autor interno)."
+      firstName:
+        type: string
+        maxLength: 255
+        description: "Nombre del co-autor externo."
+      lastName:
+        type: string
+        maxLength: 255
+        description: "Apellidos del co-autor externo."
+
+  PublicationAuthorResponse:
+    type: object
+    description: "Autor de una publicación, interno (usuario registrado) o externo."
+    properties:
+      authorId:
+        type: string
+        format: uuid
+        description: "Identificador de la entrada de autoría dentro de la publicación."
+      type:
+        $ref: "#/schemas/PublicationAuthorType"
+      userId:
+        type: string
+        format: uuid
+        description: "Identificador del usuario registrado. Solo presente en autores internos."
+      firstName:
+        type: string
+      lastName:
+        type: string
+      email:
+        type: string
+        format: email
+        description: "Solo presente en autores internos."
+      profileImageUrl:
+        type: string
+        description: "URL de la imagen de perfil. Solo presente en autores internos."
+    required:
+      - authorId
+      - type
+      - firstName
+      - lastName
 
   PublicationResponse:
     type: object
@@ -76,6 +138,11 @@ schemas:
       createdAt:
         type: string
         format: date-time
+      authors:
+        type: array
+        description: "Autores internos de la publicación (incluye al creador)."
+        items:
+          $ref: "#/schemas/PublicationAuthorResponse"
     required:
       - id
       - title
