@@ -6,6 +6,7 @@ import es.uib.record.backend.publications.domain.exception.PublicationNotFoundEx
 import es.uib.record.backend.publications.domain.model.Publication
 import es.uib.record.backend.publications.domain.model.PublicationStatus
 import es.uib.record.backend.publications.domain.repository.PublicationRepository
+import es.uib.record.backend.users.open.UserFacade
 import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -27,6 +28,8 @@ class GetPublicationDetailUseCaseTest {
     @Mock private lateinit var publicationRepository: PublicationRepository
 
     @Mock private lateinit var journalFacade: JournalFacade
+
+    @Mock private lateinit var userFacade: UserFacade
 
     @InjectMocks private lateinit var getPublicationDetailUseCase: GetPublicationDetailUseCase
 

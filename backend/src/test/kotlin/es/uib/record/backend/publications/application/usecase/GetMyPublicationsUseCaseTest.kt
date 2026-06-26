@@ -3,6 +3,7 @@ package es.uib.record.backend.publications.application.usecase
 import es.uib.record.backend.journals.open.JournalFacade
 import es.uib.record.backend.journals.open.JournalRefDto
 import es.uib.record.backend.publications.domain.model.Publication
+import es.uib.record.backend.publications.domain.model.PublicationAuthor
 import es.uib.record.backend.publications.domain.model.PublicationStatus
 import es.uib.record.backend.publications.domain.repository.PublicationRepository
 import es.uib.record.backend.users.open.UserFacade
@@ -45,7 +46,7 @@ class GetMyPublicationsUseCaseTest {
                 createdBy = USER_ID,
             )
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
-        given(publicationRepository.findAllByCreatedBy(USER_ID)).willReturn(listOf(publication))
+        given(publicationRepository.findAllByAuthor(USER_ID)).willReturn(listOf(publication))
         given(journalFacade.getJournalsByIds(setOf(JOURNAL_ID)))
             .willReturn(mapOf(JOURNAL_ID to JournalRefDto(JOURNAL_ID, "Nature", null)))
 
@@ -57,5 +58,37 @@ class GetMyPublicationsUseCaseTest {
         assertEquals(publication.id, result[0].id)
         assertEquals("First", result[0].title)
         assertEquals("Nature", result[0].journalName)
+    }
+
+    @Test
+    fun `should include publications where the user is a co-author, not only the creator`() {
+        // Given: the user is a co-author (not the creator) of the publication.
+        val creatorId = UUID.fromString("00000000-0000-0000-0000-0000000000aa")
+        val publication =
+            Publication(
+                id = UUID.randomUUID(),
+                title = "Collaboration",
+                journalId = JOURNAL_ID,
+                groupId = UUID.randomUUID(),
+                status = PublicationStatus.PLANNED,
+                createdBy = creatorId,
+                authors =
+                    listOf(
+                        PublicationAuthor.InternalAuthor(creatorId),
+                        PublicationAuthor.InternalAuthor(USER_ID),
+                    ),
+            )
+        given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
+        given(publicationRepository.findAllByAuthor(USER_ID)).willReturn(listOf(publication))
+        given(journalFacade.getJournalsByIds(setOf(JOURNAL_ID)))
+            .willReturn(mapOf(JOURNAL_ID to JournalRefDto(JOURNAL_ID, "Nature", null)))
+
+        // When
+        val result = getMyPublicationsUseCase.execute(EMAIL)
+
+        // Then
+        assertEquals(1, result.size)
+        assertEquals(publication.id, result[0].id)
+        assertEquals("Collaboration", result[0].title)
     }
 }
