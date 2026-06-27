@@ -1,6 +1,7 @@
 package es.uib.record.backend.publications.domain.model
 
 import es.uib.record.backend.publications.domain.exception.DoiNotAllowedException
+import es.uib.record.backend.publications.domain.exception.InvalidPublicationStatusTransitionException
 import java.time.Instant
 import java.util.UUID
 
@@ -52,5 +53,28 @@ class Publication(
     /** Añade un co-autor externo (no registrado). Se permiten nombres repetidos. */
     fun addExternalAuthor(firstName: String, lastName: String) {
         _authors.add(PublicationAuthor.ExternalAuthor(firstName, lastName))
+    }
+
+    /**
+     * Devuelve una copia de la publicación con el nuevo estado [newStatus], conservando
+     * el resto de campos y los autores. Solo se permiten transiciones válidas del ciclo
+     * de vida; en caso contrario lanza [InvalidPublicationStatusTransitionException].
+     */
+    fun changeStatus(newStatus: PublicationStatus): Publication {
+        if (!status.canTransitionTo(newStatus)) {
+            throw InvalidPublicationStatusTransitionException(status, newStatus)
+        }
+        return Publication(
+            id = id,
+            title = title,
+            abstractText = abstractText,
+            doi = doi,
+            journalId = journalId,
+            groupId = groupId,
+            status = newStatus,
+            createdBy = createdBy,
+            createdAt = createdAt,
+            authors = authors,
+        )
     }
 }

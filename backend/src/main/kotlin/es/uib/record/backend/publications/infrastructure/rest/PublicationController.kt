@@ -1,14 +1,17 @@
 package es.uib.record.backend.publications.infrastructure.rest
 
 import es.uib.record.backend.api.PublicationsApi
+import es.uib.record.backend.model.ChangePublicationStatusRequest
 import es.uib.record.backend.model.CreatePublicationRequest
 import es.uib.record.backend.model.PublicationResponse
 import es.uib.record.backend.model.PublicationSummaryResponse
 import es.uib.record.backend.model.UpdatePublicationRequest
+import es.uib.record.backend.publications.application.usecase.ChangePublicationStatusUseCase
 import es.uib.record.backend.publications.application.usecase.CreatePublicationUseCase
 import es.uib.record.backend.publications.application.usecase.GetMyPublicationsUseCase
 import es.uib.record.backend.publications.application.usecase.GetPublicationDetailUseCase
 import es.uib.record.backend.publications.application.usecase.UpdatePublicationUseCase
+import es.uib.record.backend.publications.infrastructure.mapper.toDomain
 import es.uib.record.backend.publications.infrastructure.mapper.toDto
 import es.uib.record.backend.publications.infrastructure.mapper.toResponse
 import java.util.UUID
@@ -22,6 +25,7 @@ class PublicationController(
     private val getMyPublicationsUseCase: GetMyPublicationsUseCase,
     private val getPublicationDetailUseCase: GetPublicationDetailUseCase,
     private val updatePublicationUseCase: UpdatePublicationUseCase,
+    private val changePublicationStatusUseCase: ChangePublicationStatusUseCase,
 ) : PublicationsApi {
 
     override fun createPublication(
@@ -43,6 +47,21 @@ class PublicationController(
             this.updatePublicationUseCase.execute(
                 publicationId,
                 updatePublicationRequest.toDto(),
+                email,
+            )
+
+        return ResponseEntity.ok(updatedPublication.toResponse())
+    }
+
+    override fun changePublicationStatus(
+        publicationId: UUID,
+        changePublicationStatusRequest: ChangePublicationStatusRequest,
+    ): ResponseEntity<PublicationResponse> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        val updatedPublication =
+            this.changePublicationStatusUseCase.execute(
+                publicationId,
+                changePublicationStatusRequest.status.toDomain(),
                 email,
             )
 
