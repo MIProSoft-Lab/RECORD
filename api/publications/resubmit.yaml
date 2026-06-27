@@ -1,0 +1,69 @@
+patch:
+  summary: Resubmit a rejected publication to a different journal
+  description: >-
+    Resubmit a publication that is in REJECTED status to a different journal,
+    transitioning it back to SUBMITTED. The target journal must be different from
+    the current one. Only the creator or an associated author can perform this
+    action. This action is optional: not every rejected publication is resubmitted.
+  operationId: resubmitPublication
+  tags:
+    - Publications
+  parameters:
+    - name: publicationId
+      in: path
+      required: true
+      description: Unique identifier of the publication.
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/ResubmitPublicationRequest"
+  responses:
+    "200":
+      description: Publication resubmitted successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/PublicationResponse"
+    "400":
+      description: Bad request. Invalid input data.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. User is neither the creator nor an associated author.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Publication or target journal not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "409":
+      description: >-
+        Conflict. The publication is not in REJECTED status, or the target journal
+        is the same as the current one.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

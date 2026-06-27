@@ -94,6 +94,20 @@ schemas:
     required:
       - status
 
+  ResubmitPublicationRequest:
+    type: object
+    description: >-
+      Reenvío de una publicación rechazada a otro journal. Solo aplica a
+      publicaciones en estado REJECTED y el journal destino debe ser distinto
+      del actual.
+    properties:
+      journalId:
+        type: string
+        format: uuid
+        description: "Journal destino al que se reenvía la publicación. Debe ser distinto del actual."
+    required:
+      - journalId
+
   PublicationAuthorType:
     type: string
     description: "Tipo de autor: interno (usuario registrado) o externo (no registrado)."

@@ -101,6 +101,9 @@ paths:
   /publications/{publicationId}/status:
     $ref: "./publications/change-status.yaml"
 
+  /publications/{publicationId}/resubmit:
+    $ref: "./publications/resubmit.yaml"
+
   /invitations/me:
     $ref: "./invitations/list-invitations.yaml"
 
