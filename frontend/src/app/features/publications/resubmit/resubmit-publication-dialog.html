@@ -1,0 +1,50 @@
+<p-dialog
+  [visible]="visible()"
+  (visibleChange)="visible.set($event)"
+  (onHide)="onHide()"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '32rem' }"
+  [header]="'PUBLICATIONS.RESUBMIT.DIALOG_TITLE' | translate"
+>
+  <div class="flex flex-column gap-3">
+    <p class="m-0 text-color-secondary">
+      {{ 'PUBLICATIONS.RESUBMIT.DESCRIPTION' | translate }}
+    </p>
+
+    <div class="flex flex-column gap-1">
+      <label class="font-medium">{{ 'PUBLICATIONS.RESUBMIT.JOURNAL_LABEL' | translate }}</label>
+      <p-autoComplete
+        [ngModel]="selectedJournal()"
+        (ngModelChange)="selectedJournal.set($event)"
+        [suggestions]="journalSuggestions()"
+        (completeMethod)="onJournalSearch($event)"
+        optionLabel="name"
+        appendTo="body"
+        [forceSelection]="true"
+        [placeholder]="'PUBLICATIONS.FORM.JOURNAL_PLACEHOLDER' | translate"
+        styleClass="w-full"
+        inputStyleClass="w-full"
+      />
+      @if (isSameJournal()) {
+        <small class="text-red-500">{{ 'PUBLICATIONS.RESUBMIT.SAME_JOURNAL' | translate }}</small>
+      }
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button
+      [label]="'COMMON.BUTTONS.CANCEL' | translate"
+      severity="secondary"
+      [text]="true"
+      (onClick)="visible.set(false)"
+    />
+    <p-button
+      [label]="'PUBLICATIONS.RESUBMIT.CONFIRM' | translate"
+      icon="pi pi-send"
+      [loading]="isSaving()"
+      [disabled]="!canConfirm()"
+      (onClick)="confirm()"
+    />
+  </ng-template>
+</p-dialog>

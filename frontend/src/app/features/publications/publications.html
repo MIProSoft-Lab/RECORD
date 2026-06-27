@@ -46,10 +46,24 @@
               <i class="pi pi-chevron-down text-xs text-color-secondary"></i>
             </button>
           } @else {
-            <p-tag
-              [value]="'PUBLICATIONS.STATUS.' + publication.status | translate"
-              [severity]="statusSeverity(publication.status)"
-            />
+            <span class="inline-flex align-items-center gap-2">
+              <p-tag
+                [value]="'PUBLICATIONS.STATUS.' + publication.status | translate"
+                [severity]="statusSeverity(publication.status)"
+              />
+              @if (canResubmit(publication.status)) {
+                <p-button
+                  icon="pi pi-send"
+                  severity="secondary"
+                  [text]="true"
+                  [rounded]="true"
+                  size="small"
+                  [pTooltip]="'PUBLICATIONS.RESUBMIT.ACTION' | translate"
+                  tooltipPosition="top"
+                  (onClick)="openResubmit($event, publication)"
+                />
+              }
+            </span>
           }
         </td>
         <td>{{ publication.createdAt | date: 'mediumDate' }}</td>
@@ -78,4 +92,13 @@
   </p-table>
 
   <p-menu #statusMenu [model]="statusMenuItems()" [popup]="true" appendTo="body" />
+
+  @if (resubmitTarget(); as target) {
+    <record-resubmit-publication-dialog
+      [publicationId]="target.id"
+      [currentJournalId]="target.journalId"
+      [(visible)]="resubmitDialogVisible"
+      (resubmitted)="onResubmitted()"
+    />
+  }
 </div>

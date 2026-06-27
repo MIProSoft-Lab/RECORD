@@ -10,13 +10,23 @@ import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
 import { PublicationStatus, PublicationSummaryResponse, PublicationsService } from '@core/api';
 import { allowedStatusTransitions, publicationStatusSeverity } from './publication-status';
+import { ResubmitPublicationDialog } from './resubmit/resubmit-publication-dialog';
 
 /** Show the loading indicator only if the request is still pending after this delay. */
 const LOADER_DELAY_MS = 250;
 
 @Component({
   selector: 'record-publications',
-  imports: [TranslatePipe, DatePipe, Button, Menu, TableModule, Tag, Tooltip],
+  imports: [
+    TranslatePipe,
+    DatePipe,
+    Button,
+    Menu,
+    TableModule,
+    Tag,
+    Tooltip,
+    ResubmitPublicationDialog,
+  ],
   templateUrl: './publications.html',
 })
 export class Publications implements OnInit {
@@ -32,6 +42,10 @@ export class Publications implements OnInit {
   showLoader = signal(false);
   hasLoaded = signal(false);
   statusMenuItems = signal<MenuItem[]>([]);
+
+  /** Publicación rechazada seleccionada para reenviar (alimenta el diálogo). */
+  resubmitTarget = signal<PublicationSummaryResponse | null>(null);
+  resubmitDialogVisible = signal(false);
 
   ngOnInit() {
     this.loadPublications();
@@ -83,6 +97,22 @@ export class Publications implements OnInit {
   /** Indica si la publicación tiene transiciones de estado disponibles. */
   canChangeStatus(status: PublicationSummaryResponse['status']): boolean {
     return allowedStatusTransitions(status).length > 0;
+  }
+
+  /** Una publicación rechazada puede reenviarse a otro journal. */
+  canResubmit(status: PublicationSummaryResponse['status']): boolean {
+    return status === PublicationStatus.Rejected;
+  }
+
+  // Abre el diálogo de reenvío para la publicación rechazada de la fila.
+  openResubmit(event: Event, publication: PublicationSummaryResponse) {
+    event.stopPropagation();
+    this.resubmitTarget.set(publication);
+    this.resubmitDialogVisible.set(true);
+  }
+
+  onResubmitted() {
+    this.loadPublications();
   }
 
   // Acción rápida por fila: abre el menú con las transiciones válidas para esa publicación.
