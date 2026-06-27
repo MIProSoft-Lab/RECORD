@@ -5,6 +5,7 @@ import es.uib.record.backend.journals.open.JournalRefDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorInputDto
 import es.uib.record.backend.publications.application.usecase.dto.UpdatePublicationRequestDto
 import es.uib.record.backend.publications.domain.exception.AuthorUserNotFoundException
+import es.uib.record.backend.publications.domain.exception.DoiNotAllowedException
 import es.uib.record.backend.publications.domain.exception.PublicationEditForbiddenException
 import es.uib.record.backend.publications.domain.exception.PublicationNotFoundException
 import es.uib.record.backend.publications.domain.model.Publication
@@ -159,28 +160,42 @@ class UpdatePublicationUseCaseTest {
     }
 
     @Test
-    fun `should preserve the existing DOI without modifying it`() {
-        // Given: a published publication keeps its DOI after editing.
+    fun `should update the DOI when the publication is published`() {
+        // Given: a published publication can set or change its DOI when editing.
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
             .willReturn(
                 existingPublication(
                     createdBy = USER_ID,
                     status = PublicationStatus.PUBLISHED,
-                    doi = "10.1000/xyz123",
+                    doi = "10.1000/old",
                 )
             )
         givenSaveReturnsArgument()
         givenJournalLookup("Nature")
 
         // When
-        updatePublicationUseCase.execute(PUBLICATION_ID, updateDto(), EMAIL)
+        updatePublicationUseCase.execute(PUBLICATION_ID, updateDto(doi = "10.1000/new"), EMAIL)
 
         // Then
         val captor = argumentCaptor<Publication>()
         verify(publicationRepository).save(captor.capture())
-        assertEquals("10.1000/xyz123", captor.firstValue.doi)
+        assertEquals("10.1000/new", captor.firstValue.doi)
         assertEquals(PublicationStatus.PUBLISHED, captor.firstValue.status)
+    }
+
+    @Test
+    fun `should reject a DOI when the publication is not published`() {
+        // Given: a non-published publication cannot have a DOI.
+        given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
+        given(publicationRepository.findById(PUBLICATION_ID))
+            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED))
+
+        // When / Then
+        assertThrows<DoiNotAllowedException> {
+            updatePublicationUseCase.execute(PUBLICATION_ID, updateDto(doi = "10.1000/xyz123"), EMAIL)
+        }
+        verify(publicationRepository, never()).save(any())
     }
 
     @Test
@@ -324,11 +339,13 @@ class UpdatePublicationUseCaseTest {
     private fun updateDto(
         title: String = NEW_TITLE,
         abstractText: String? = "Updated abstract",
+        doi: String? = null,
         authors: List<PublicationAuthorInputDto> = emptyList(),
     ) =
         UpdatePublicationRequestDto(
             title = title,
             abstractText = abstractText,
+            doi = doi,
             authors = authors,
         )
 }
