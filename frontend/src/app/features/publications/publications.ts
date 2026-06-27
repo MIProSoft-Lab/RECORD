@@ -1,29 +1,37 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { MenuItem, MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
+import { Menu } from 'primeng/menu';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
 import { PublicationStatus, PublicationSummaryResponse, PublicationsService } from '@core/api';
+import { allowedStatusTransitions, publicationStatusSeverity } from './publication-status';
 
 /** Show the loading indicator only if the request is still pending after this delay. */
 const LOADER_DELAY_MS = 250;
 
 @Component({
   selector: 'record-publications',
-  imports: [TranslatePipe, DatePipe, Button, TableModule, Tag, Tooltip],
+  imports: [TranslatePipe, DatePipe, Button, Menu, TableModule, Tag, Tooltip],
   templateUrl: './publications.html',
 })
 export class Publications implements OnInit {
   private readonly publicationsService = inject(PublicationsService);
   private readonly router = inject(Router);
+  private readonly messageService = inject(MessageService);
+  private readonly translate = inject(TranslateService);
+
+  private readonly statusMenu = viewChild.required<Menu>('statusMenu');
 
   publications = signal<PublicationSummaryResponse[]>([]);
   isLoading = signal(false);
   showLoader = signal(false);
   hasLoaded = signal(false);
+  statusMenuItems = signal<MenuItem[]>([]);
 
   ngOnInit() {
     this.loadPublications();
@@ -69,18 +77,43 @@ export class Publications implements OnInit {
   statusSeverity(
     status: PublicationSummaryResponse['status'],
   ): 'success' | 'info' | 'warn' | 'danger' {
-    switch (status) {
-      case PublicationStatus.Published:
-      case PublicationStatus.Accepted:
-        return 'success';
-      case PublicationStatus.Rejected:
-        return 'danger';
-      case PublicationStatus.UnderReview:
-      case PublicationStatus.MinorRevision:
-      case PublicationStatus.MajorRevision:
-        return 'warn';
-      default:
-        return 'info';
-    }
+    return publicationStatusSeverity(status);
+  }
+
+  /** Indica si la publicación tiene transiciones de estado disponibles. */
+  canChangeStatus(status: PublicationSummaryResponse['status']): boolean {
+    return allowedStatusTransitions(status).length > 0;
+  }
+
+  // Acción rápida por fila: abre el menú con las transiciones válidas para esa publicación.
+  openStatusMenu(event: Event, publication: PublicationSummaryResponse) {
+    event.stopPropagation();
+    this.statusMenuItems.set(
+      allowedStatusTransitions(publication.status).map((status) => ({
+        label: this.translate.instant(`PUBLICATIONS.STATUS.${status}`),
+        command: () => this.changeStatus(publication.id, status),
+      })),
+    );
+    this.statusMenu().toggle(event);
+  }
+
+  private changeStatus(publicationId: string, status: PublicationStatus) {
+    this.publicationsService.changePublicationStatus(publicationId, { status }).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
+          detail: this.translate.instant('PUBLICATIONS.TOASTS.STATUS_UPDATED'),
+        });
+        this.loadPublications();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('PUBLICATIONS.TOASTS.ERROR'),
+          detail: this.translate.instant('PUBLICATIONS.CHANGE_STATUS.ERROR'),
+        });
+      },
+    });
   }
 }

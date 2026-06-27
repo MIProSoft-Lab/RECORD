@@ -351,7 +351,7 @@
       "VENUE_CONGRESS_SOON": "Coming soon",
       "JOURNAL": "Journal",
       "JOURNAL_PLACEHOLDER": "Search by name, ISSN...",
-      "INITIAL_STATUS": "Initialization status",
+      "INITIAL_STATUS": "Status",
       "DOI": "DOI",
       "AUTHORS": {
         "TITLE": "Authors",
@@ -367,8 +367,14 @@
     },
     "TOASTS": {
       "SUCCESS": "Success",
+      "ERROR": "Error",
       "CREATED": "Publication created successfully.",
-      "UPDATED": "Publication updated successfully."
+      "UPDATED": "Publication updated successfully.",
+      "STATUS_UPDATED": "Publication status updated."
+    },
+    "CHANGE_STATUS": {
+      "ACTION": "Change status",
+      "ERROR": "Could not change the publication status."
     },
     "DETAIL": {
       "NOT_FOUND": "Publication not found.",

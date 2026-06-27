@@ -31,10 +31,26 @@
         </td>
         <td>{{ publication.journalName || '—' }}</td>
         <td>
-          <p-tag
-            [value]="'PUBLICATIONS.STATUS.' + publication.status | translate"
-            [severity]="statusSeverity(publication.status)"
-          />
+          @if (canChangeStatus(publication.status)) {
+            <button
+              type="button"
+              class="p-0 bg-transparent border-none cursor-pointer inline-flex align-items-center gap-2"
+              [pTooltip]="'PUBLICATIONS.CHANGE_STATUS.ACTION' | translate"
+              tooltipPosition="top"
+              (click)="openStatusMenu($event, publication)"
+            >
+              <p-tag
+                [value]="'PUBLICATIONS.STATUS.' + publication.status | translate"
+                [severity]="statusSeverity(publication.status)"
+              />
+              <i class="pi pi-chevron-down text-xs text-color-secondary"></i>
+            </button>
+          } @else {
+            <p-tag
+              [value]="'PUBLICATIONS.STATUS.' + publication.status | translate"
+              [severity]="statusSeverity(publication.status)"
+            />
+          }
         </td>
         <td>{{ publication.createdAt | date: 'mediumDate' }}</td>
         <td class="text-right">
@@ -60,4 +76,6 @@
       </tr>
     </ng-template>
   </p-table>
+
+  <p-menu #statusMenu [model]="statusMenuItems()" [popup]="true" appendTo="body" />
 </div>

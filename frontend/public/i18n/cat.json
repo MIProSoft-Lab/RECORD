@@ -351,7 +351,7 @@
       "VENUE_CONGRESS_SOON": "Pròximament",
       "JOURNAL": "Journal",
       "JOURNAL_PLACEHOLDER": "Cerca per nom, ISSN...",
-      "INITIAL_STATUS": "Estat inicial",
+      "INITIAL_STATUS": "Estat",
       "DOI": "DOI",
       "AUTHORS": {
         "TITLE": "Autors",
@@ -367,8 +367,14 @@
     },
     "TOASTS": {
       "SUCCESS": "Èxit",
+      "ERROR": "Error",
       "CREATED": "Publicació creada correctament.",
-      "UPDATED": "Publicació actualitzada correctament."
+      "UPDATED": "Publicació actualitzada correctament.",
+      "STATUS_UPDATED": "Estat de la publicació actualitzat."
+    },
+    "CHANGE_STATUS": {
+      "ACTION": "Canviar estat",
+      "ERROR": "No s'ha pogut canviar l'estat de la publicació."
     },
     "DETAIL": {
       "NOT_FOUND": "Publicació no trobada.",
