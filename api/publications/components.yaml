@@ -52,6 +52,30 @@ schemas:
       - groupId
       - journalId
 
+  UpdatePublicationRequest:
+    type: object
+    description: >-
+      Campos editables de una publicación. El journal/grupo, el estado y el DOI
+      no se pueden modificar tras la creación.
+    properties:
+      title:
+        type: string
+        minLength: 1
+        maxLength: 512
+        description: "Título de la publicación. Obligatorio."
+        example: "Deep learning approaches for medical imaging"
+      abstract:
+        type: string
+        maxLength: 5000
+        description: "Resumen de la publicación."
+      authors:
+        type: array
+        description: "Co-autores de la publicación, en orden. El creador se mantiene siempre como autor interno."
+        items:
+          $ref: "#/schemas/PublicationAuthorInput"
+    required:
+      - title
+
   PublicationAuthorType:
     type: string
     description: "Tipo de autor: interno (usuario registrado) o externo (no registrado)."

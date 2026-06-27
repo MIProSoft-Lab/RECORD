@@ -36,3 +36,64 @@ get:
         application/json:
           schema:
             $ref: "../common.yaml#/schemas/ErrorResponse"
+
+put:
+  summary: Update a publication
+  description: >-
+    Update the editable fields of a publication (title, abstract and author
+    list). The associated journal/group, status and DOI cannot be changed after
+    creation. Only the creator or an associated author can perform this action.
+  operationId: updatePublication
+  tags:
+    - Publications
+  parameters:
+    - name: publicationId
+      in: path
+      required: true
+      description: Unique identifier of the publication.
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/UpdatePublicationRequest"
+  responses:
+    "200":
+      description: Publication updated successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/PublicationResponse"
+    "400":
+      description: Bad request. Invalid input data.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. User is neither the creator nor an associated author.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Publication not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
