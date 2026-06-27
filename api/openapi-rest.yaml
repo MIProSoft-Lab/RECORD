@@ -98,6 +98,9 @@ paths:
   /publications/{publicationId}:
     $ref: "./publications/publication-detail.yaml"
 
+  /publications/{publicationId}/status:
+    $ref: "./publications/change-status.yaml"
+
   /invitations/me:
     $ref: "./invitations/list-invitations.yaml"
 

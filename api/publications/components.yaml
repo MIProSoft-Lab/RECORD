@@ -55,8 +55,9 @@ schemas:
   UpdatePublicationRequest:
     type: object
     description: >-
-      Campos editables de una publicación. El journal/grupo, el estado y el DOI
-      no se pueden modificar tras la creación.
+      Campos editables de una publicación. El journal/grupo y el estado no se
+      pueden modificar desde aquí. El DOI solo puede establecerse cuando la
+      publicación está en estado PUBLISHED.
     properties:
       title:
         type: string
@@ -68,6 +69,11 @@ schemas:
         type: string
         maxLength: 5000
         description: "Resumen de la publicación."
+      doi:
+        type: string
+        maxLength: 255
+        description: "DOI de la publicación. Solo permitido cuando el estado es PUBLISHED."
+        example: "10.1000/xyz123"
       authors:
         type: array
         description: "Co-autores de la publicación, en orden. El creador se mantiene siempre como autor interno."
@@ -75,6 +81,18 @@ schemas:
           $ref: "#/schemas/PublicationAuthorInput"
     required:
       - title
+
+  ChangePublicationStatusRequest:
+    type: object
+    description: >-
+      Nuevo estado de la publicación. Solo se permiten transiciones válidas del
+      ciclo de vida de la publicación.
+    properties:
+      status:
+        $ref: "#/schemas/PublicationStatus"
+        description: "Estado destino al que se quiere transicionar la publicación."
+    required:
+      - status
 
   PublicationAuthorType:
     type: string

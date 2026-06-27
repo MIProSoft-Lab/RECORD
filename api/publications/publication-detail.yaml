@@ -40,9 +40,10 @@ get:
 put:
   summary: Update a publication
   description: >-
-    Update the editable fields of a publication (title, abstract and author
-    list). The associated journal/group, status and DOI cannot be changed after
-    creation. Only the creator or an associated author can perform this action.
+    Update the editable fields of a publication (title, abstract, author list and,
+    when the publication is PUBLISHED, its DOI). The associated journal/group and
+    status cannot be changed from here. Only the creator or an associated author
+    can perform this action.
   operationId: updatePublication
   tags:
     - Publications
