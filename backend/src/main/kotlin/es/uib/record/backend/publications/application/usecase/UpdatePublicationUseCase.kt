@@ -40,14 +40,15 @@ class UpdatePublicationUseCase(
 
         this.validateInternalAuthorsExist(updatePublicationRequestDto.authors)
 
-        // Solo se actualizan título, resumen y autores. El journal/grupo, el estado y el
-        // DOI son inmutables tras la creación, por lo que se conservan del agregado actual.
+        // Se actualizan título, resumen, autores y el DOI. El journal/grupo y el estado se
+        // conservan del agregado actual (no son editables desde aquí). El invariante de
+        // dominio garantiza que el DOI solo se acepte cuando el estado es PUBLISHED.
         val updated =
             Publication(
                 id = existing.id,
                 title = updatePublicationRequestDto.title,
                 abstractText = updatePublicationRequestDto.abstractText,
-                doi = existing.doi,
+                doi = updatePublicationRequestDto.doi,
                 journalId = existing.journalId,
                 groupId = existing.groupId,
                 status = existing.status,

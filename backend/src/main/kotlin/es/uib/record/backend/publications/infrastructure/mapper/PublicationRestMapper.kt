@@ -33,6 +33,7 @@ fun UpdatePublicationRequest.toDto() =
     UpdatePublicationRequestDto(
         title = this.title,
         abstractText = this.`abstract`,
+        doi = this.doi,
         authors = (this.authors ?: emptyList()).map { it.toDto() },
     )
 
