@@ -376,9 +376,22 @@
       "ACTION": "Cambiar estado",
       "ERROR": "No se ha podido cambiar el estado de la publicación."
     },
+    "RESUBMIT": {
+      "ACTION": "Reenviar",
+      "DIALOG_TITLE": "Reenviar publicación",
+      "DESCRIPTION": "Reenvía esta publicación rechazada a otro journal. Volverá al estado Enviada.",
+      "JOURNAL_LABEL": "Nuevo journal",
+      "CONFIRM": "Reenviar",
+      "SUCCESS": "Publicación reenviada al nuevo journal.",
+      "ERROR": "No se ha podido reenviar la publicación.",
+      "SAME_JOURNAL": "El nuevo journal debe ser distinto del actual."
+    },
     "DETAIL": {
       "NOT_FOUND": "Publicación no encontrada.",
-      "EDIT": "Editar"
+      "EDIT": "Editar",
+      "VIEW_JOURNAL": "Ver detalle del journal",
+      "SENT_TO": "Enviada a",
+      "AUTHOR_ORDER": "Orden de autoría"
     }
   }
 }

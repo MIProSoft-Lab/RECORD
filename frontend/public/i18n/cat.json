@@ -376,9 +376,22 @@
       "ACTION": "Canviar estat",
       "ERROR": "No s'ha pogut canviar l'estat de la publicació."
     },
+    "RESUBMIT": {
+      "ACTION": "Reenviar",
+      "DIALOG_TITLE": "Reenviar publicació",
+      "DESCRIPTION": "Reenvia aquesta publicació rebutjada a un altre journal. Tornarà a l'estat Enviada.",
+      "JOURNAL_LABEL": "Nou journal",
+      "CONFIRM": "Reenviar",
+      "SUCCESS": "Publicació reenviada al nou journal.",
+      "ERROR": "No s'ha pogut reenviar la publicació.",
+      "SAME_JOURNAL": "El nou journal ha de ser diferent de l'actual."
+    },
     "DETAIL": {
       "NOT_FOUND": "Publicació no trobada.",
-      "EDIT": "Editar"
+      "EDIT": "Editar",
+      "VIEW_JOURNAL": "Veure detall del journal",
+      "SENT_TO": "Enviada a",
+      "AUTHOR_ORDER": "Ordre d'autoria"
     }
   }
 }

@@ -376,9 +376,22 @@
       "ACTION": "Change status",
       "ERROR": "Could not change the publication status."
     },
+    "RESUBMIT": {
+      "ACTION": "Resubmit",
+      "DIALOG_TITLE": "Resubmit publication",
+      "DESCRIPTION": "Resubmit this rejected publication to a different journal. It will move back to Submitted status.",
+      "JOURNAL_LABEL": "New journal",
+      "CONFIRM": "Resubmit",
+      "SUCCESS": "Publication resubmitted to the new journal.",
+      "ERROR": "Could not resubmit the publication.",
+      "SAME_JOURNAL": "The new journal must be different from the current one."
+    },
     "DETAIL": {
       "NOT_FOUND": "Publication not found.",
-      "EDIT": "Edit"
+      "EDIT": "Edit",
+      "VIEW_JOURNAL": "View journal details",
+      "SENT_TO": "Submitted to",
+      "AUTHOR_ORDER": "Author order"
     }
   }
 }

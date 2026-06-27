@@ -8,18 +8,41 @@ import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
-import { PublicationStatus, PublicationResponse, PublicationsService } from '@core/api';
+import {
+  JournalDetailResponse,
+  JournalsService,
+  PublicationStatus,
+  PublicationResponse,
+  PublicationsService,
+  Quartile,
+} from '@core/api';
 import { UserState } from '@core/services/user-state';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { allowedStatusTransitions, publicationStatusSeverity } from '../publication-status';
+import { ResubmitPublicationDialog } from '../resubmit/resubmit-publication-dialog';
 
 @Component({
   selector: 'record-publication-detail',
-  imports: [TranslatePipe, DatePipe, Avatar, Button, Menu, Tag, Tooltip],
+  imports: [TranslatePipe, DatePipe, Avatar, Button, Menu, Tag, Tooltip, ResubmitPublicationDialog],
   templateUrl: './publication-detail.html',
+  styles: `
+    .journal-card {
+      cursor: pointer;
+      transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        transform 0.2s;
+    }
+    .journal-card:hover {
+      border-color: var(--p-primary-color);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      transform: translateY(-1px);
+    }
+  `,
 })
 export class PublicationDetail implements OnInit, OnDestroy {
   private readonly publicationsService = inject(PublicationsService);
+  private readonly journalsService = inject(JournalsService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly userState = inject(UserState);
@@ -32,8 +55,23 @@ export class PublicationDetail implements OnInit, OnDestroy {
   private breadcrumbUrl: string | null = null;
 
   publication = signal<PublicationResponse | null>(null);
+  /** Detalle del journal asociado, cargado aparte para enriquecer la vista. */
+  journal = signal<JournalDetailResponse | null>(null);
   isLoading = signal(true);
   statusMenuItems = signal<MenuItem[]>([]);
+  resubmitDialogVisible = signal(false);
+
+  // Mejor cuartil del journal en su año más reciente (Q1 es el mejor), para destacarlo.
+  readonly bestQuartile = computed(() => {
+    const quartiles = this.journal()?.categoryQuartiles;
+    if (!quartiles?.length) return null;
+    const latestYear = Math.max(...quartiles.map((q) => q.year));
+    return (
+      quartiles
+        .filter((q) => q.year === latestYear)
+        .sort((a, b) => a.quartile.localeCompare(b.quartile))[0] ?? null
+    );
+  });
 
   // El creador y cualquier autor interno pueden editar la publicación.
   readonly canEdit = computed(() => {
@@ -52,6 +90,12 @@ export class PublicationDetail implements OnInit, OnDestroy {
     return !!pub && allowedStatusTransitions(pub.status).length > 0;
   });
 
+  // Una publicación rechazada puede reenviarse a otro journal (solo creador/autor).
+  readonly canResubmit = computed(() => {
+    const pub = this.publication();
+    return !!pub && pub.status === PublicationStatus.Rejected && this.canEdit();
+  });
+
   ngOnInit() {
     const publicationId = this.route.snapshot.paramMap.get('id');
     if (!publicationId) {
@@ -65,10 +109,19 @@ export class PublicationDetail implements OnInit, OnDestroy {
         this.isLoading.set(false);
         this.breadcrumbUrl = this.router.url;
         this.breadcrumbService.setDynamicLabel(this.breadcrumbUrl, publication.title);
+        this.loadJournal(publication.journalId);
       },
       error: () => {
         this.isLoading.set(false);
       },
+    });
+  }
+
+  // Carga el detalle del journal para enriquecer la vista; si falla, se muestra solo el nombre.
+  private loadJournal(journalId: string) {
+    this.journalsService.getJournalDetail(journalId).subscribe({
+      next: (journal) => this.journal.set(journal),
+      error: () => this.journal.set(null),
     });
   }
 
@@ -116,8 +169,37 @@ export class PublicationDetail implements OnInit, OnDestroy {
     });
   }
 
+  openResubmit() {
+    this.resubmitDialogVisible.set(true);
+  }
+
+  onResubmitted(updated: PublicationResponse) {
+    this.publication.set(updated);
+    // El journal puede haber cambiado tras un reenvío: se recarga su detalle.
+    this.journal.set(null);
+    this.loadJournal(updated.journalId);
+  }
+
+  goToJournal() {
+    const pub = this.publication();
+    if (pub) this.router.navigate(['/journals', pub.journalId]);
+  }
+
   statusSeverity(status: PublicationResponse['status']): 'success' | 'info' | 'warn' | 'danger' {
     return publicationStatusSeverity(status);
+  }
+
+  quartileSeverity(quartile: Quartile): 'success' | 'info' | 'warn' | 'danger' {
+    switch (quartile) {
+      case Quartile.Q1:
+        return 'success';
+      case Quartile.Q2:
+        return 'info';
+      case Quartile.Q3:
+        return 'warn';
+      default:
+        return 'danger';
+    }
   }
 
   initialsFor(person: { firstName?: string; lastName?: string }): string {

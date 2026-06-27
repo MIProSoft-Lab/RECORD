@@ -2,97 +2,192 @@
   @let pub = publication();
 
   @if (pub) {
-    <div class="surface-card border-round p-4 flex flex-column gap-3">
-      <div class="flex align-items-center justify-content-between gap-3">
-        <h1 class="m-0">{{ pub.title }}</h1>
-        <div class="flex align-items-center gap-3">
-          @if (canEdit() && canChangeStatus()) {
-            <button
-              type="button"
-              class="p-0 bg-transparent border-none cursor-pointer inline-flex align-items-center gap-2"
-              [pTooltip]="'PUBLICATIONS.CHANGE_STATUS.ACTION' | translate"
-              tooltipPosition="bottom"
-              (click)="openStatusMenu($event)"
-            >
-              <p-tag
-                [value]="'PUBLICATIONS.STATUS.' + pub.status | translate"
-                [severity]="statusSeverity(pub.status)"
-              />
-              <i class="pi pi-chevron-down text-xs text-color-secondary"></i>
-            </button>
-            <p-menu #statusMenu [model]="statusMenuItems()" [popup]="true" appendTo="body" />
-          } @else {
-            <p-tag
-              [value]="'PUBLICATIONS.STATUS.' + pub.status | translate"
-              [severity]="statusSeverity(pub.status)"
-            />
-          }
-          @if (canEdit()) {
-            <p-button
-              icon="pi pi-pencil"
-              [label]="'PUBLICATIONS.DETAIL.EDIT' | translate"
-              size="small"
-              (onClick)="goToEdit()"
-            />
-          }
-        </div>
-      </div>
-
-      <div>
-        <span class="font-medium">{{ 'PUBLICATIONS.FORM.JOURNAL' | translate }}: </span>
-        <span>{{ pub.journalName || '—' }}</span>
-      </div>
-
-      @if (pub.abstract) {
-        <div>
-          <h3 class="mb-1">{{ 'PUBLICATIONS.FORM.ABSTRACT' | translate }}</h3>
-          <p class="m-0 text-color-secondary">{{ pub.abstract }}</p>
-        </div>
-      }
-
-      @if (pub.authors?.length) {
-        <div>
-          <h3 class="mb-2">{{ 'PUBLICATIONS.FORM.AUTHORS.TITLE' | translate }}</h3>
-          <div class="flex flex-column gap-2">
-            @for (author of pub.authors; track author.authorId) {
-              <div class="surface-100 border-round p-3 flex align-items-center gap-3">
-                <p-avatar
-                  [image]="author.profileImageUrl || undefined"
-                  [label]="author.profileImageUrl ? undefined : initialsFor(author)"
-                  shape="circle"
-                  size="large"
+    <div class="flex flex-column gap-4">
+      <!-- Cabecera: título, estado y acciones -->
+      <div class="surface-card border-round p-4 flex flex-column gap-3">
+        <div class="flex align-items-start justify-content-between gap-3 flex-wrap">
+          <div class="flex flex-column gap-2 min-w-0">
+            <h1 class="m-0 text-2xl line-height-2">{{ pub.title }}</h1>
+            <div class="flex align-items-center gap-3 flex-wrap">
+              @if (canEdit() && canChangeStatus()) {
+                <button
+                  type="button"
+                  class="p-0 bg-transparent border-none cursor-pointer inline-flex align-items-center gap-2"
+                  [pTooltip]="'PUBLICATIONS.CHANGE_STATUS.ACTION' | translate"
+                  tooltipPosition="bottom"
+                  (click)="openStatusMenu($event)"
+                >
+                  <p-tag
+                    [value]="'PUBLICATIONS.STATUS.' + pub.status | translate"
+                    [severity]="statusSeverity(pub.status)"
+                  />
+                  <i class="pi pi-chevron-down text-xs text-color-secondary"></i>
+                </button>
+                <p-menu #statusMenu [model]="statusMenuItems()" [popup]="true" appendTo="body" />
+              } @else {
+                <p-tag
+                  [value]="'PUBLICATIONS.STATUS.' + pub.status | translate"
+                  [severity]="statusSeverity(pub.status)"
                 />
-                <div class="flex flex-column flex-1 min-w-0">
-                  <span class="font-medium flex align-items-center gap-2">
-                    {{ author.firstName }} {{ author.lastName }}
-                    @if (author.type === 'EXTERNAL') {
-                      <p-tag
-                        severity="secondary"
-                        [value]="'PUBLICATIONS.FORM.AUTHORS.EXTERNAL_BADGE' | translate"
-                      />
-                    }
-                  </span>
-                  @if (author.email) {
-                    <span class="text-color-secondary text-sm">{{ author.email }}</span>
-                  }
-                </div>
-              </div>
+              }
+              <span class="text-color-secondary text-sm inline-flex align-items-center gap-1">
+                <i class="pi pi-calendar"></i>
+                {{ pub.createdAt | date: 'mediumDate' }}
+              </span>
+              @if (pub.doi) {
+                <a
+                  [href]="'https://doi.org/' + pub.doi"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-primary text-sm no-underline inline-flex align-items-center gap-1"
+                >
+                  <i class="pi pi-link"></i>
+                  {{ 'PUBLICATIONS.FORM.DOI' | translate }}: {{ pub.doi }}
+                </a>
+              }
+            </div>
+          </div>
+          <div class="flex align-items-center gap-2">
+            @if (canResubmit()) {
+              <p-button
+                icon="pi pi-send"
+                [label]="'PUBLICATIONS.RESUBMIT.ACTION' | translate"
+                severity="secondary"
+                size="small"
+                (onClick)="openResubmit()"
+              />
+            }
+            @if (canEdit()) {
+              <p-button
+                icon="pi pi-pencil"
+                [label]="'PUBLICATIONS.DETAIL.EDIT' | translate"
+                size="small"
+                (onClick)="goToEdit()"
+              />
             }
           </div>
         </div>
-      }
-
-      @if (pub.doi) {
-        <div>
-          <span class="font-medium">{{ 'PUBLICATIONS.FORM.DOI' | translate }}: </span>
-          <span>{{ pub.doi }}</span>
-        </div>
-      }
-
-      <div>
-        <span class="font-medium">{{ 'PUBLICATIONS.TABLE.CREATED_AT' | translate }}: </span>
-        <span>{{ pub.createdAt | date: 'medium' }}</span>
       </div>
+
+      <!-- Journal: tarjeta clicable hacia el detalle del journal -->
+      @let j = journal();
+      <div class="flex flex-column gap-2">
+        <span class="text-color-secondary text-sm font-semibold uppercase">
+          {{ 'PUBLICATIONS.DETAIL.SENT_TO' | translate }}
+        </span>
+        <div
+          class="journal-card surface-card border-round border-1 surface-border p-4 flex align-items-center gap-3"
+          role="link"
+          tabindex="0"
+          [pTooltip]="'PUBLICATIONS.DETAIL.VIEW_JOURNAL' | translate"
+          tooltipPosition="top"
+          (click)="goToJournal()"
+          (keydown.enter)="goToJournal()"
+        >
+          <span
+            class="flex align-items-center justify-content-center border-circle bg-primary-50 text-primary"
+            style="width: 3rem; height: 3rem; flex: 0 0 auto"
+          >
+            <i class="pi pi-book text-xl"></i>
+          </span>
+          <div class="flex flex-column flex-1 gap-1 min-w-0">
+            <span class="font-medium text-lg inline-flex align-items-center gap-2">
+              {{ pub.journalName || '—' }}
+              <i class="pi pi-external-link text-sm text-color-secondary"></i>
+            </span>
+            @if (j) {
+              @if (j.publisherName) {
+                <span class="text-color-secondary text-sm">
+                  {{ j.publisherName }}
+                  @if (j.publisherCountry) {
+                    · {{ j.publisherCountry }}
+                  }
+                </span>
+              }
+              @if (j.issn || j.eIssn) {
+                <span class="text-color-secondary text-sm flex flex-wrap gap-3">
+                  @if (j.issn) {
+                    <span>{{ 'JOURNALS.DETAIL.ISSN' | translate }}: {{ j.issn }}</span>
+                  }
+                  @if (j.eIssn) {
+                    <span>{{ 'JOURNALS.DETAIL.EISSN' | translate }}: {{ j.eIssn }}</span>
+                  }
+                </span>
+              }
+            }
+          </div>
+          @let bq = bestQuartile();
+          @if (bq) {
+            <span
+              class="inline-flex align-items-center gap-2"
+              style="flex: 0 0 auto"
+              [pTooltip]="bq.categoryName + ' · ' + bq.year"
+              tooltipPosition="left"
+            >
+              <p-tag [value]="bq.quartile" [severity]="quartileSeverity(bq.quartile)" />
+            </span>
+          }
+        </div>
+      </div>
+
+      <!-- Contenido: resumen, autores y metadatos -->
+      <div class="surface-card border-round p-4 flex flex-column gap-4">
+        @if (pub.abstract) {
+          <div>
+            <h3 class="mt-0 mb-2">{{ 'PUBLICATIONS.FORM.ABSTRACT' | translate }}</h3>
+            <p class="m-0 text-color-secondary line-height-3">{{ pub.abstract }}</p>
+          </div>
+        }
+
+        @if (pub.authors?.length) {
+          <div>
+            <h3 class="mt-0 mb-2">{{ 'PUBLICATIONS.FORM.AUTHORS.TITLE' | translate }}</h3>
+            <div class="grid">
+              @for (author of pub.authors; track author.authorId) {
+                <div class="col-12 md:col-6">
+                  <div class="surface-100 border-round p-3 flex align-items-center gap-3 h-full">
+                    <span
+                      class="flex align-items-center justify-content-center border-circle surface-300 text-color-secondary font-semibold text-sm"
+                      style="width: 1.5rem; height: 1.5rem; flex: 0 0 auto"
+                      [pTooltip]="'PUBLICATIONS.DETAIL.AUTHOR_ORDER' | translate"
+                      tooltipPosition="top"
+                    >
+                      {{ $index + 1 }}
+                    </span>
+                    <p-avatar
+                      [image]="author.profileImageUrl || undefined"
+                      [label]="author.profileImageUrl ? undefined : initialsFor(author)"
+                      shape="circle"
+                      size="large"
+                    />
+                    <div class="flex flex-column flex-1 min-w-0">
+                      <span class="font-medium flex align-items-center gap-2">
+                        {{ author.firstName }} {{ author.lastName }}
+                        @if (author.type === 'EXTERNAL') {
+                          <p-tag
+                            severity="secondary"
+                            [value]="'PUBLICATIONS.FORM.AUTHORS.EXTERNAL_BADGE' | translate"
+                          />
+                        }
+                      </span>
+                      @if (author.email) {
+                        <span class="text-color-secondary text-sm">{{ author.email }}</span>
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+
+      <record-resubmit-publication-dialog
+        [publicationId]="pub.id"
+        [currentJournalId]="pub.journalId"
+        [(visible)]="resubmitDialogVisible"
+        (resubmitted)="onResubmitted($event)"
+      />
     </div>
   } @else if (!isLoading()) {
     <div class="text-center text-color-secondary p-4">
