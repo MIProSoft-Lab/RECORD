@@ -14,7 +14,19 @@ class PublicationRepositoryAdapter(
 ) : PublicationRepository {
 
     override fun save(publication: Publication): Publication {
-        return this.springDataJpaPublicationRepository.save(publication.toEntity()).toDomain()
+        val entity = publication.toEntity()
+        // En actualizaciones (id presente) se vacían primero los autores existentes y se
+        // fuerza el flush antes de reinsertar los nuevos. Así se evita colisionar con la
+        // restricción única (publication_id, user_id) al conservar autores internos —p. ej.
+        // el creador—, ya que el borrado de la fila antigua ocurre antes de la nueva inserción.
+        val id = entity.id
+        if (id != null) {
+            this.springDataJpaPublicationRepository.findById(id).ifPresent { existing ->
+                existing.authors.clear()
+                this.springDataJpaPublicationRepository.saveAndFlush(existing)
+            }
+        }
+        return this.springDataJpaPublicationRepository.save(entity).toDomain()
     }
 
     override fun findById(id: UUID): Publication? {

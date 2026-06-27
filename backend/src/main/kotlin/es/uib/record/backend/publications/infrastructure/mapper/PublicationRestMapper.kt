@@ -5,12 +5,14 @@ import es.uib.record.backend.model.PublicationAuthorInput
 import es.uib.record.backend.model.PublicationAuthorResponse
 import es.uib.record.backend.model.PublicationResponse
 import es.uib.record.backend.model.PublicationSummaryResponse
+import es.uib.record.backend.model.UpdatePublicationRequest
 import es.uib.record.backend.publications.application.usecase.dto.CreatePublicationRequestDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorInputDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorType
 import es.uib.record.backend.publications.application.usecase.dto.PublicationDetailDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationSummaryDto
+import es.uib.record.backend.publications.application.usecase.dto.UpdatePublicationRequestDto
 import es.uib.record.backend.publications.domain.model.PublicationStatus
 import java.time.ZoneOffset
 import es.uib.record.backend.model.PublicationAuthorType as ApiPublicationAuthorType
@@ -24,6 +26,13 @@ fun CreatePublicationRequest.toDto() =
         journalId = this.journalId,
         groupId = this.groupId,
         status = this.status?.toDomain(),
+        authors = (this.authors ?: emptyList()).map { it.toDto() },
+    )
+
+fun UpdatePublicationRequest.toDto() =
+    UpdatePublicationRequestDto(
+        title = this.title,
+        abstractText = this.`abstract`,
         authors = (this.authors ?: emptyList()).map { it.toDto() },
     )
 
