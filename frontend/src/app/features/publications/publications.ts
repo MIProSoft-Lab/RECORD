@@ -5,6 +5,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
+import { Tooltip } from 'primeng/tooltip';
 import { PublicationStatus, PublicationSummaryResponse, PublicationsService } from '@core/api';
 
 /** Show the loading indicator only if the request is still pending after this delay. */
@@ -12,7 +13,7 @@ const LOADER_DELAY_MS = 250;
 
 @Component({
   selector: 'record-publications',
-  imports: [TranslatePipe, DatePipe, Button, TableModule, Tag],
+  imports: [TranslatePipe, DatePipe, Button, TableModule, Tag, Tooltip],
   templateUrl: './publications.html',
 })
 export class Publications implements OnInit {
@@ -57,6 +58,12 @@ export class Publications implements OnInit {
 
   openDetail(publicationId: string) {
     this.router.navigate(['/publications', publicationId]);
+  }
+
+  // Edición directa desde la tabla: se evita que el clic propague a la fila (detalle).
+  openEdit(event: Event, publicationId: string) {
+    event.stopPropagation();
+    this.router.navigate(['/publications', publicationId, 'edit']);
   }
 
   statusSeverity(

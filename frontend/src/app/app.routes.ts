@@ -63,6 +63,11 @@ export const routes: Routes = [
             data: { breadcrumb: 'PUBLICATIONS.FORM.TITLE' }
           },
           {
+            path: ':id/edit',
+            component: CreatePublication,
+            data: { breadcrumb: 'PUBLICATIONS.FORM.EDIT_TITLE' }
+          },
+          {
             path: ':id',
             component: PublicationDetail,
             data: { breadcrumb: 'PUBLICATIONS.TITLE' }

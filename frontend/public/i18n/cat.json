@@ -331,6 +331,7 @@
     },
     "FORM": {
       "TITLE": "Nova publicació",
+      "EDIT_TITLE": "Editar publicació",
       "ABOUT": {
         "TITLE": "Dades generals",
         "SUBTITLE": "Informació identificativa de la teva publicació."
@@ -366,10 +367,12 @@
     },
     "TOASTS": {
       "SUCCESS": "Èxit",
-      "CREATED": "Publicació creada correctament."
+      "CREATED": "Publicació creada correctament.",
+      "UPDATED": "Publicació actualitzada correctament."
     },
     "DETAIL": {
-      "NOT_FOUND": "Publicació no trobada."
+      "NOT_FOUND": "Publicació no trobada.",
+      "EDIT": "Editar"
     }
   }
 }

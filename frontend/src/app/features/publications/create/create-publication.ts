@@ -1,6 +1,6 @@
 import { Component, OnInit, effect, inject, signal, untracked } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { MessageService } from 'primeng/api';
 import {
@@ -47,6 +47,8 @@ interface SelectedAuthor {
   profileImageUrl?: string;
   /** El creador: reordenable pero no eliminable. */
   isCreator?: boolean;
+  /** El usuario actual: se marca con «(Tú)» en la lista. */
+  isYou?: boolean;
 }
 
 @Component({
@@ -74,7 +76,11 @@ export class CreatePublication implements OnInit {
   private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly userState = inject(UserState);
+
+  /** Id de la publicación a editar (presente solo en modo edición). */
+  readonly editingId = this.route.snapshot.paramMap.get('id');
 
   groups = signal<GroupSummaryResponse[]>([]);
   journalSuggestions = signal<JournalSummaryResponse[]>([]);
@@ -87,8 +93,10 @@ export class CreatePublication implements OnInit {
   readonly currentUser = this.userState.currentUser;
 
   // Inserta al creador como primer autor (reordenable, no eliminable) en cuanto se
-  // conoce el usuario actual. Solo se añade una vez.
+  // conoce el usuario actual. Solo aplica al crear: en edición los autores (y el
+  // creador) provienen de la publicación cargada.
   private readonly seedCreatorEffect = effect(() => {
+    if (this.isEditMode) return;
     const me = this.currentUser();
     if (!me) return;
     untracked(() => {
@@ -103,11 +111,16 @@ export class CreatePublication implements OnInit {
           email: me.email,
           profileImageUrl: me.profileImageUrl,
           isCreator: true,
+          isYou: true,
         },
         ...authors,
       ]);
     });
   });
+
+  get isEditMode(): boolean {
+    return this.editingId !== null;
+  }
 
   readonly statusOptions = Object.values(PublicationStatus).map((value) => ({
     value,
@@ -138,6 +151,52 @@ export class CreatePublication implements OnInit {
       if (status !== PublicationStatus.Published) {
         this.createForm.controls.doi.reset('');
       }
+    });
+
+    if (this.editingId) this.loadForEdit(this.editingId);
+  }
+
+  /**
+   * Carga la publicación a editar: rellena los campos editables (título, resumen y
+   * autores) y deja en solo lectura el grupo, journal, estado y DOI, que no se pueden
+   * modificar tras la creación.
+   */
+  private loadForEdit(publicationId: string) {
+    this.publicationsService.getPublicationDetail(publicationId).subscribe({
+      next: (pub) => {
+        this.createForm.patchValue(
+          {
+            groupId: pub.groupId,
+            title: pub.title,
+            abstract: pub.abstract ?? '',
+            journal: { id: pub.journalId, name: pub.journalName } as JournalSummaryResponse,
+            status: pub.status,
+            doi: pub.doi ?? '',
+          },
+          { emitEvent: false },
+        );
+        this.createForm.controls.groupId.disable({ emitEvent: false });
+        this.createForm.controls.journal.disable({ emitEvent: false });
+        this.createForm.controls.status.disable({ emitEvent: false });
+        this.createForm.controls.doi.disable({ emitEvent: false });
+
+        const currentUserId = this.currentUser()?.id;
+        this.selectedAuthors.set(
+          (pub.authors ?? []).map((author) => ({
+            key: author.authorId,
+            type: author.type as 'INTERNAL' | 'EXTERNAL',
+            userId: author.userId,
+            firstName: author.firstName,
+            lastName: author.lastName,
+            email: author.email,
+            profileImageUrl: author.profileImageUrl,
+            // El creador no se puede quitar; el backend lo mantiene siempre como autor.
+            isCreator: author.type === 'INTERNAL' && author.userId === pub.createdBy,
+            isYou: author.type === 'INTERNAL' && author.userId === currentUserId,
+          })),
+        );
+      },
+      error: () => this.router.navigate(['/publications', publicationId]),
     });
   }
 
@@ -244,6 +303,11 @@ export class CreatePublication implements OnInit {
         : { firstName: author.firstName, lastName: author.lastName },
     );
 
+    if (this.editingId) {
+      this.updateExisting(this.editingId, value.title!, value.abstract, authors);
+      return;
+    }
+
     this.publicationsService
       .createPublication({
         title: value.title!,
@@ -266,6 +330,28 @@ export class CreatePublication implements OnInit {
         error: () => {
           this.isSaving.set(false);
         },
+      });
+  }
+
+  /** Guarda los cambios de la publicación en edición (título, resumen y autores). */
+  private updateExisting(
+    publicationId: string,
+    title: string,
+    abstract: string | null | undefined,
+    authors: PublicationAuthorInput[],
+  ) {
+    this.publicationsService
+      .updatePublication(publicationId, { title, abstract: abstract || undefined, authors })
+      .subscribe({
+        next: (updated) => {
+          this.messageService.add({
+            severity: 'success',
+            summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
+            detail: this.translate.instant('PUBLICATIONS.TOASTS.UPDATED'),
+          });
+          this.router.navigate(['/publications', updated.id]);
+        },
+        error: () => this.isSaving.set(false),
       });
   }
 

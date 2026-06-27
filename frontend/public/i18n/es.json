@@ -331,6 +331,7 @@
     },
     "FORM": {
       "TITLE": "Nueva publicación",
+      "EDIT_TITLE": "Editar publicación",
       "ABOUT": {
         "TITLE": "Datos generales",
         "SUBTITLE": "Información identificativa de tu publicación."
@@ -366,10 +367,12 @@
     },
     "TOASTS": {
       "SUCCESS": "Éxito",
-      "CREATED": "Publicación creada correctamente."
+      "CREATED": "Publicación creada correctamente.",
+      "UPDATED": "Publicación actualizada correctamente."
     },
     "DETAIL": {
-      "NOT_FOUND": "Publicación no encontrada."
+      "NOT_FOUND": "Publicación no encontrada.",
+      "EDIT": "Editar"
     }
   }
 }

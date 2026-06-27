@@ -331,6 +331,7 @@
     },
     "FORM": {
       "TITLE": "New publication",
+      "EDIT_TITLE": "Edit publication",
       "ABOUT": {
         "TITLE": "About",
         "SUBTITLE": "Identifying information about your publication."
@@ -366,10 +367,12 @@
     },
     "TOASTS": {
       "SUCCESS": "Success",
-      "CREATED": "Publication created successfully."
+      "CREATED": "Publication created successfully.",
+      "UPDATED": "Publication updated successfully."
     },
     "DETAIL": {
-      "NOT_FOUND": "Publication not found."
+      "NOT_FOUND": "Publication not found.",
+      "EDIT": "Edit"
     }
   }
 }

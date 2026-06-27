@@ -21,6 +21,7 @@
         <th>{{ 'PUBLICATIONS.TABLE.JOURNAL' | translate }}</th>
         <th style="width: 12rem">{{ 'PUBLICATIONS.TABLE.STATUS' | translate }}</th>
         <th style="width: 12rem">{{ 'PUBLICATIONS.TABLE.CREATED_AT' | translate }}</th>
+        <th style="width: 5rem"></th>
       </tr>
     </ng-template>
     <ng-template #body let-publication>
@@ -36,11 +37,22 @@
           />
         </td>
         <td>{{ publication.createdAt | date: 'mediumDate' }}</td>
+        <td class="text-right">
+          <p-button
+            icon="pi pi-pencil"
+            severity="secondary"
+            [text]="true"
+            [rounded]="true"
+            [pTooltip]="'PUBLICATIONS.DETAIL.EDIT' | translate"
+            tooltipPosition="left"
+            (onClick)="openEdit($event, publication.id)"
+          />
+        </td>
       </tr>
     </ng-template>
     <ng-template #emptymessage>
       <tr>
-        <td colspan="4" class="text-center text-color-secondary p-4">
+        <td colspan="5" class="text-center text-color-secondary p-4">
           @if (hasLoaded() && !showLoader()) {
             {{ 'PUBLICATIONS.EMPTY_STATE' | translate }}
           }
