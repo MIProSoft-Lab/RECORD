@@ -133,7 +133,7 @@ export class CreatePublication implements OnInit {
     abstract: ['', [Validators.maxLength(5000)]],
     journal: [null as JournalSummaryResponse | null, Validators.required],
     status: [PublicationStatus.Planned as PublicationStatus, Validators.required],
-    doi: [''],
+    doi: ['', [Validators.maxLength(255)]],
     // Controles transitorios para gestionar autores (no se envían tal cual).
     authorSearch: [null as AuthorOption | null],
     externalFirstName: ['', [Validators.maxLength(255)]],
@@ -178,7 +178,11 @@ export class CreatePublication implements OnInit {
         this.createForm.controls.groupId.disable({ emitEvent: false });
         this.createForm.controls.journal.disable({ emitEvent: false });
         this.createForm.controls.status.disable({ emitEvent: false });
-        this.createForm.controls.doi.disable({ emitEvent: false });
+        // El estado no se edita aquí (se cambia con la acción dedicada), pero el DOI sí
+        // se puede introducir/editar cuando la publicación ya está PUBLISHED.
+        if (pub.status !== PublicationStatus.Published) {
+          this.createForm.controls.doi.disable({ emitEvent: false });
+        }
 
         const currentUserId = this.currentUser()?.id;
         this.selectedAuthors.set(
@@ -304,7 +308,10 @@ export class CreatePublication implements OnInit {
     );
 
     if (this.editingId) {
-      this.updateExisting(this.editingId, value.title!, value.abstract, authors);
+      // El DOI solo se envía cuando la publicación está PUBLISHED; en otro caso el backend
+      // lo rechazaría (el DOI solo es válido en ese estado).
+      const doi = this.isPublished ? value.doi || undefined : undefined;
+      this.updateExisting(this.editingId, value.title!, value.abstract, doi, authors);
       return;
     }
 
@@ -338,10 +345,11 @@ export class CreatePublication implements OnInit {
     publicationId: string,
     title: string,
     abstract: string | null | undefined,
+    doi: string | undefined,
     authors: PublicationAuthorInput[],
   ) {
     this.publicationsService
-      .updatePublication(publicationId, { title, abstract: abstract || undefined, authors })
+      .updatePublication(publicationId, { title, abstract: abstract || undefined, doi, authors })
       .subscribe({
         next: (updated) => {
           this.messageService.add({
