@@ -35,6 +35,7 @@ export * from './publicationSummaryResponse';
 export * from './quartile';
 export * from './refreshRequest';
 export * from './registerRequest';
+export * from './resubmitPublicationRequest';
 export * from './sendInvitationRequest';
 export * from './updateGroupMemberRoleRequest';
 export * from './updateGroupRequest';

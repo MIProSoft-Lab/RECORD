@@ -27,6 +27,8 @@ import { PublicationResponse } from '../model/publicationResponse';
 // @ts-ignore
 import { PublicationSummaryResponse } from '../model/publicationSummaryResponse';
 // @ts-ignore
+import { ResubmitPublicationRequest } from '../model/resubmitPublicationRequest';
+// @ts-ignore
 import { UpdatePublicationRequest } from '../model/updatePublicationRequest';
 
 // @ts-ignore
@@ -292,6 +294,80 @@ export class PublicationsService extends BaseService {
         return this.httpClient.request<Array<PublicationSummaryResponse>>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Resubmit a rejected publication to a different journal
+     * Resubmit a publication that is in REJECTED status to a different journal, transitioning it back to SUBMITTED. The target journal must be different from the current one. Only the creator or an associated author can perform this action. This action is optional: not every rejected publication is resubmitted.
+     * @endpoint patch /publications/{publicationId}/resubmit
+     * @param publicationId Unique identifier of the publication.
+     * @param resubmitPublicationRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public resubmitPublication(publicationId: string, resubmitPublicationRequest: ResubmitPublicationRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PublicationResponse>;
+    public resubmitPublication(publicationId: string, resubmitPublicationRequest: ResubmitPublicationRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PublicationResponse>>;
+    public resubmitPublication(publicationId: string, resubmitPublicationRequest: ResubmitPublicationRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PublicationResponse>>;
+    public resubmitPublication(publicationId: string, resubmitPublicationRequest: ResubmitPublicationRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (publicationId === null || publicationId === undefined) {
+            throw new Error('Required parameter publicationId was null or undefined when calling resubmitPublication.');
+        }
+        if (resubmitPublicationRequest === null || resubmitPublicationRequest === undefined) {
+            throw new Error('Required parameter resubmitPublicationRequest was null or undefined when calling resubmitPublication.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/publications/${this.configuration.encodeParam({name: "publicationId", value: publicationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/resubmit`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PublicationResponse>('patch', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: resubmitPublicationRequest,
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
