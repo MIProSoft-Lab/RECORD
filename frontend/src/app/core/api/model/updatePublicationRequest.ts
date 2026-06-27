@@ -11,7 +11,7 @@ import { PublicationAuthorInput } from './publicationAuthorInput';
 
 
 /**
- * Campos editables de una publicación. El journal/grupo, el estado y el DOI no se pueden modificar tras la creación.
+ * Campos editables de una publicación. El journal/grupo y el estado no se pueden modificar desde aquí. El DOI solo puede establecerse cuando la publicación está en estado PUBLISHED.
  */
 export interface UpdatePublicationRequest { 
     /**
@@ -22,6 +22,10 @@ export interface UpdatePublicationRequest {
      * Resumen de la publicación.
      */
     'abstract'?: string;
+    /**
+     * DOI de la publicación. Solo permitido cuando el estado es PUBLISHED.
+     */
+    doi?: string;
     /**
      * Co-autores de la publicación, en orden. El creador se mantiene siempre como autor interno.
      */

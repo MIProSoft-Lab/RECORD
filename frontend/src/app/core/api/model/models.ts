@@ -1,5 +1,6 @@
 export * from './authResponse';
 export * from './categoryResponse';
+export * from './changePublicationStatusRequest';
 export * from './createGroupRequest';
 export * from './createPublicationRequest';
 export * from './deactivateAccountRequest';

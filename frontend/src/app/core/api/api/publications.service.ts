@@ -17,6 +17,8 @@ import { Observable }                                        from 'rxjs';
 import { OpenApiHttpParams, QueryParamStyle } from '../query.params';
 
 // @ts-ignore
+import { ChangePublicationStatusRequest } from '../model/changePublicationStatusRequest';
+// @ts-ignore
 import { CreatePublicationRequest } from '../model/createPublicationRequest';
 // @ts-ignore
 import { ErrorResponse } from '../model/errorResponse';
@@ -41,6 +43,80 @@ export class PublicationsService extends BaseService {
 
     constructor(protected httpClient: HttpClient, @Optional() @Inject(BASE_PATH) basePath: string|string[], @Optional() configuration?: Configuration) {
         super(basePath, configuration);
+    }
+
+    /**
+     * Change a publication\&#39;s status
+     * Transition a publication to a new lifecycle status. Only transitions allowed by the publication state machine are accepted. Only the creator or an associated author can perform this action.
+     * @endpoint patch /publications/{publicationId}/status
+     * @param publicationId Unique identifier of the publication.
+     * @param changePublicationStatusRequest 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public changePublicationStatus(publicationId: string, changePublicationStatusRequest: ChangePublicationStatusRequest, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PublicationResponse>;
+    public changePublicationStatus(publicationId: string, changePublicationStatusRequest: ChangePublicationStatusRequest, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PublicationResponse>>;
+    public changePublicationStatus(publicationId: string, changePublicationStatusRequest: ChangePublicationStatusRequest, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PublicationResponse>>;
+    public changePublicationStatus(publicationId: string, changePublicationStatusRequest: ChangePublicationStatusRequest, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (publicationId === null || publicationId === undefined) {
+            throw new Error('Required parameter publicationId was null or undefined when calling changePublicationStatus.');
+        }
+        if (changePublicationStatusRequest === null || changePublicationStatusRequest === undefined) {
+            throw new Error('Required parameter changePublicationStatusRequest was null or undefined when calling changePublicationStatus.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/publications/${this.configuration.encodeParam({name: "publicationId", value: publicationId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}/status`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<PublicationResponse>('patch', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: changePublicationStatusRequest,
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
     }
 
     /**
@@ -228,7 +304,7 @@ export class PublicationsService extends BaseService {
 
     /**
      * Update a publication
-     * Update the editable fields of a publication (title, abstract and author list). The associated journal/group, status and DOI cannot be changed after creation. Only the creator or an associated author can perform this action.
+     * Update the editable fields of a publication (title, abstract, author list and, when the publication is PUBLISHED, its DOI). The associated journal/group and status cannot be changed from here. Only the creator or an associated author can perform this action.
      * @endpoint put /publications/{publicationId}
      * @param publicationId Unique identifier of the publication.
      * @param updatePublicationRequest 
