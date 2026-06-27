@@ -37,6 +37,7 @@ export * from './registerRequest';
 export * from './sendInvitationRequest';
 export * from './updateGroupMemberRoleRequest';
 export * from './updateGroupRequest';
+export * from './updatePublicationRequest';
 export * from './userProfileImageSignatureResponse';
 export * from './userResponse';
 export * from './userSummaryResponse';
