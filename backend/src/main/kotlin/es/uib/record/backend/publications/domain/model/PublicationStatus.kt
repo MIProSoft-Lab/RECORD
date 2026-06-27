@@ -19,10 +19,11 @@ enum class PublicationStatus {
     private companion object {
         /**
          * Máquina de estados del ciclo de vida de una publicación. REJECTED y PUBLISHED
-         * son estados terminales.
+         * son estados terminales para los cambios de estado genéricos ([changeStatus]).
          *
-         * Futuro (fuera de alcance): REJECTED -> SUBMITTED para reenviar la publicación a
-         * otro journal — bastaría con añadir SUBMITTED al conjunto de REJECTED.
+         * El reenvío de una publicación rechazada (REJECTED -> SUBMITTED cambiando de
+         * journal) se modela aparte en [Publication.resubmit], que es una operación atómica
+         * con sus propias reglas y no abre esta transición genérica.
          */
         val ALLOWED_TRANSITIONS: Map<PublicationStatus, Set<PublicationStatus>> =
             mapOf(

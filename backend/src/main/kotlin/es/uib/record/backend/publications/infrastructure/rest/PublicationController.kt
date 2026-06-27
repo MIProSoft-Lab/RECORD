@@ -5,11 +5,13 @@ import es.uib.record.backend.model.ChangePublicationStatusRequest
 import es.uib.record.backend.model.CreatePublicationRequest
 import es.uib.record.backend.model.PublicationResponse
 import es.uib.record.backend.model.PublicationSummaryResponse
+import es.uib.record.backend.model.ResubmitPublicationRequest
 import es.uib.record.backend.model.UpdatePublicationRequest
 import es.uib.record.backend.publications.application.usecase.ChangePublicationStatusUseCase
 import es.uib.record.backend.publications.application.usecase.CreatePublicationUseCase
 import es.uib.record.backend.publications.application.usecase.GetMyPublicationsUseCase
 import es.uib.record.backend.publications.application.usecase.GetPublicationDetailUseCase
+import es.uib.record.backend.publications.application.usecase.ResubmitPublicationUseCase
 import es.uib.record.backend.publications.application.usecase.UpdatePublicationUseCase
 import es.uib.record.backend.publications.infrastructure.mapper.toDomain
 import es.uib.record.backend.publications.infrastructure.mapper.toDto
@@ -26,6 +28,7 @@ class PublicationController(
     private val getPublicationDetailUseCase: GetPublicationDetailUseCase,
     private val updatePublicationUseCase: UpdatePublicationUseCase,
     private val changePublicationStatusUseCase: ChangePublicationStatusUseCase,
+    private val resubmitPublicationUseCase: ResubmitPublicationUseCase,
 ) : PublicationsApi {
 
     override fun createPublication(
@@ -62,6 +65,21 @@ class PublicationController(
             this.changePublicationStatusUseCase.execute(
                 publicationId,
                 changePublicationStatusRequest.status.toDomain(),
+                email,
+            )
+
+        return ResponseEntity.ok(updatedPublication.toResponse())
+    }
+
+    override fun resubmitPublication(
+        publicationId: UUID,
+        resubmitPublicationRequest: ResubmitPublicationRequest,
+    ): ResponseEntity<PublicationResponse> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        val updatedPublication =
+            this.resubmitPublicationUseCase.execute(
+                publicationId,
+                resubmitPublicationRequest.journalId,
                 email,
             )
 

@@ -2,6 +2,7 @@ package es.uib.record.backend.publications.domain.model
 
 import es.uib.record.backend.publications.domain.exception.DoiNotAllowedException
 import es.uib.record.backend.publications.domain.exception.InvalidPublicationStatusTransitionException
+import es.uib.record.backend.publications.domain.exception.SameJournalResubmitException
 import java.time.Instant
 import java.util.UUID
 
@@ -72,6 +73,36 @@ class Publication(
             journalId = journalId,
             groupId = groupId,
             status = newStatus,
+            createdBy = createdBy,
+            createdAt = createdAt,
+            authors = authors,
+        )
+    }
+
+    /**
+     * Reenvía una publicación rechazada a otro journal [newJournalId], devolviendo una
+     * copia con el nuevo journal y estado SUBMITTED. Solo se permite cuando la publicación
+     * está en estado REJECTED (en caso contrario lanza
+     * [InvalidPublicationStatusTransitionException]) y el journal destino debe ser distinto
+     * del actual (en caso contrario lanza [SameJournalResubmitException]). Es una operación
+     * atómica: cambia journal y estado a la vez, deliberadamente fuera de la máquina de
+     * estados genérica de [changeStatus] para no exponer un reenvío sin cambio de journal.
+     */
+    fun resubmit(newJournalId: UUID): Publication {
+        if (status != PublicationStatus.REJECTED) {
+            throw InvalidPublicationStatusTransitionException(status, PublicationStatus.SUBMITTED)
+        }
+        if (newJournalId == journalId) {
+            throw SameJournalResubmitException(newJournalId)
+        }
+        return Publication(
+            id = id,
+            title = title,
+            abstractText = abstractText,
+            doi = doi,
+            journalId = newJournalId,
+            groupId = groupId,
+            status = PublicationStatus.SUBMITTED,
             createdBy = createdBy,
             createdAt = createdAt,
             authors = authors,
