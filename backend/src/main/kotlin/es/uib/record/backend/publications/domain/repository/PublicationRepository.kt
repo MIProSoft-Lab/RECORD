@@ -11,4 +11,6 @@ interface PublicationRepository {
     fun findAllByCreatedBy(createdBy: UUID): List<Publication>
 
     fun findAllByAuthor(userId: UUID): List<Publication>
+
+    fun delete(id: UUID)
 }

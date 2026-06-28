@@ -55,4 +55,11 @@ class PublicationRepositoryAdapter(
             .findAllByAuthors_UserIdOrderByCreatedAtDesc(userId)
             .map { it.toDomain() }
     }
+
+    // El borrado es definitivo. Las filas de autores e historial se eliminan en cascada
+    // (ON DELETE CASCADE en publication_authors y publication_status_history).
+    @Transactional
+    override fun delete(id: UUID) {
+        this.springDataJpaPublicationRepository.deleteById(id)
+    }
 }

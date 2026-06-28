@@ -9,6 +9,7 @@ import es.uib.record.backend.model.ResubmitPublicationRequest
 import es.uib.record.backend.model.UpdatePublicationRequest
 import es.uib.record.backend.publications.application.usecase.ChangePublicationStatusUseCase
 import es.uib.record.backend.publications.application.usecase.CreatePublicationUseCase
+import es.uib.record.backend.publications.application.usecase.DeletePublicationUseCase
 import es.uib.record.backend.publications.application.usecase.GetMyPublicationsUseCase
 import es.uib.record.backend.publications.application.usecase.GetPublicationDetailUseCase
 import es.uib.record.backend.publications.application.usecase.ResubmitPublicationUseCase
@@ -29,6 +30,7 @@ class PublicationController(
     private val updatePublicationUseCase: UpdatePublicationUseCase,
     private val changePublicationStatusUseCase: ChangePublicationStatusUseCase,
     private val resubmitPublicationUseCase: ResubmitPublicationUseCase,
+    private val deletePublicationUseCase: DeletePublicationUseCase,
 ) : PublicationsApi {
 
     override fun createPublication(
@@ -101,5 +103,12 @@ class PublicationController(
         val publication = this.getPublicationDetailUseCase.execute(publicationId)
 
         return ResponseEntity.ok(publication.toResponse())
+    }
+
+    override fun deletePublication(publicationId: UUID): ResponseEntity<Unit> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        this.deletePublicationUseCase.execute(publicationId, email)
+
+        return ResponseEntity.noContent().build()
     }
 }
