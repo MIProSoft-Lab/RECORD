@@ -7,6 +7,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { PublicationStatusHistoryEntry } from './publicationStatusHistoryEntry';
 import { PublicationAuthorResponse } from './publicationAuthorResponse';
 import { PublicationStatus } from './publicationStatus';
 
@@ -29,6 +30,10 @@ export interface PublicationResponse {
      * Autores internos de la publicación (incluye al creador).
      */
     authors?: Array<PublicationAuthorResponse>;
+    /**
+     * Historial de estados en orden cronológico ascendente.
+     */
+    statusHistory: Array<PublicationStatusHistoryEntry>;
 }
 export namespace PublicationResponse {
 }

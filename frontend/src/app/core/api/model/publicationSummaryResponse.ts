@@ -21,6 +21,10 @@ export interface PublicationSummaryResponse {
     journalName?: string;
     status: PublicationStatus;
     createdAt: string;
+    /**
+     * Fecha en que la publicación pasó a su estado actual.
+     */
+    statusChangedAt: string;
 }
 export namespace PublicationSummaryResponse {
 }

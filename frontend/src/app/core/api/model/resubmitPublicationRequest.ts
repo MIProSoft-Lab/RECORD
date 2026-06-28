@@ -17,5 +17,9 @@ export interface ResubmitPublicationRequest {
      * Journal destino al que se reenvía la publicación. Debe ser distinto del actual.
      */
     journalId: string;
+    /**
+     * Comentario opcional asociado al reenvío.
+     */
+    comment?: string;
 }
 

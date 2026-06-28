@@ -31,6 +31,7 @@ export * from './publicationAuthorResponse';
 export * from './publicationAuthorType';
 export * from './publicationResponse';
 export * from './publicationStatus';
+export * from './publicationStatusHistoryEntry';
 export * from './publicationSummaryResponse';
 export * from './quartile';
 export * from './refreshRequest';

@@ -15,6 +15,10 @@ import { PublicationStatus } from './publicationStatus';
  */
 export interface ChangePublicationStatusRequest { 
     status: PublicationStatus;
+    /**
+     * Comentario opcional asociado a la transición de estado.
+     */
+    comment?: string;
 }
 export namespace ChangePublicationStatusRequest {
 }
