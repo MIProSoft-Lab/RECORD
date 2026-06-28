@@ -401,6 +401,15 @@
       "ERROR": "No s'ha pogut reenviar la publicació.",
       "SAME_JOURNAL": "El nou journal ha de ser diferent de l'actual."
     },
+    "DELETE": {
+      "ACTION": "Eliminar",
+      "CONFIRM_HEADER": "Eliminar publicació",
+      "CONFIRM_MESSAGE": "Segur que vols eliminar «{{title}}»? Aquesta acció és definitiva i no es pot desfer.",
+      "CONFIRM_YES": "Eliminar",
+      "CONFIRM_NO": "Cancel·lar",
+      "SUCCESS": "Publicació eliminada correctament.",
+      "ERROR": "No s'ha pogut eliminar la publicació."
+    },
     "DETAIL": {
       "NOT_FOUND": "Publicació no trobada.",
       "EDIT": "Editar",

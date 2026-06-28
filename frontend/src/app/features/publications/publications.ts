@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 import { TableModule } from 'primeng/table';
@@ -37,6 +37,8 @@ export class Publications implements OnInit {
   private readonly publicationsService = inject(PublicationsService);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
+  private readonly confirmationService = inject(ConfirmationService);
+  private readonly messageService = inject(MessageService);
 
   private readonly statusMenu = viewChild.required<Menu>('statusMenu');
 
@@ -94,6 +96,41 @@ export class Publications implements OnInit {
   openEdit(event: Event, publicationId: string) {
     event.stopPropagation();
     this.router.navigate(['/publications', publicationId, 'edit']);
+  }
+
+  // Borrado directo desde la tabla con confirmación previa. El listado solo contiene
+  // publicaciones del usuario (creador o autor), por lo que no requiere comprobación extra.
+  confirmDelete(event: Event, publication: PublicationSummaryResponse) {
+    event.stopPropagation();
+    this.confirmationService.confirm({
+      header: this.translate.instant('PUBLICATIONS.DELETE.CONFIRM_HEADER'),
+      message: this.translate.instant('PUBLICATIONS.DELETE.CONFIRM_MESSAGE', {
+        title: publication.title,
+      }),
+      acceptLabel: this.translate.instant('PUBLICATIONS.DELETE.CONFIRM_YES'),
+      rejectLabel: this.translate.instant('PUBLICATIONS.DELETE.CONFIRM_NO'),
+      accept: () => this.deletePublication(publication.id),
+    });
+  }
+
+  private deletePublication(publicationId: string) {
+    this.publicationsService.deletePublication(publicationId).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
+          detail: this.translate.instant('PUBLICATIONS.DELETE.SUCCESS'),
+        });
+        this.loadPublications();
+      },
+      error: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant('PUBLICATIONS.TOASTS.ERROR'),
+          detail: this.translate.instant('PUBLICATIONS.DELETE.ERROR'),
+        });
+      },
+    });
   }
 
   statusSeverity(

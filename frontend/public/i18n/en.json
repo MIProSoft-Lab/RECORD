@@ -401,6 +401,15 @@
       "ERROR": "Could not resubmit the publication.",
       "SAME_JOURNAL": "The new journal must be different from the current one."
     },
+    "DELETE": {
+      "ACTION": "Delete",
+      "CONFIRM_HEADER": "Delete publication",
+      "CONFIRM_MESSAGE": "Are you sure you want to delete \"{{title}}\"? This action is permanent and cannot be undone.",
+      "CONFIRM_YES": "Delete",
+      "CONFIRM_NO": "Cancel",
+      "SUCCESS": "Publication deleted successfully.",
+      "ERROR": "Could not delete the publication."
+    },
     "DETAIL": {
       "NOT_FOUND": "Publication not found.",
       "EDIT": "Edit",

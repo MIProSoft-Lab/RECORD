@@ -21,7 +21,7 @@
         <th>{{ 'PUBLICATIONS.TABLE.JOURNAL' | translate }}</th>
         <th style="width: 12rem">{{ 'PUBLICATIONS.TABLE.STATUS' | translate }}</th>
         <th style="width: 14rem">{{ 'PUBLICATIONS.TABLE.STATUS_SINCE' | translate }}</th>
-        <th style="width: 5rem"></th>
+        <th style="width: 8rem"></th>
       </tr>
     </ng-template>
     <ng-template #body let-publication>
@@ -80,7 +80,7 @@
             </span>
           </div>
         </td>
-        <td class="text-right">
+        <td class="text-right white-space-nowrap">
           <p-button
             icon="pi pi-pencil"
             severity="secondary"
@@ -89,6 +89,15 @@
             [pTooltip]="'PUBLICATIONS.DETAIL.EDIT' | translate"
             tooltipPosition="left"
             (onClick)="openEdit($event, publication.id)"
+          />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [text]="true"
+            [rounded]="true"
+            [pTooltip]="'PUBLICATIONS.DELETE.ACTION' | translate"
+            tooltipPosition="left"
+            (onClick)="confirmDelete($event, publication)"
           />
         </td>
       </tr>

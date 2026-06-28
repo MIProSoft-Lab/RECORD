@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, signal, viewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
 import { Avatar } from 'primeng/avatar';
 import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
@@ -90,6 +90,8 @@ export class PublicationDetail implements OnInit, OnDestroy {
   private readonly userState = inject(UserState);
   private readonly breadcrumbService = inject(BreadcrumbService);
   private readonly translate = inject(TranslateService);
+  private readonly confirmationService = inject(ConfirmationService);
+  private readonly messageService = inject(MessageService);
 
   private readonly statusMenu = viewChild.required<Menu>('statusMenu');
 
@@ -193,6 +195,37 @@ export class PublicationDetail implements OnInit, OnDestroy {
   goToEdit() {
     const pub = this.publication();
     if (pub) this.router.navigate(['/publications', pub.id, 'edit']);
+  }
+
+  // Borrado definitivo con confirmación previa. Solo accesible al creador y autores (canEdit).
+  confirmDelete() {
+    const pub = this.publication();
+    if (!pub) return;
+    this.confirmationService.confirm({
+      header: this.translate.instant('PUBLICATIONS.DELETE.CONFIRM_HEADER'),
+      message: this.translate.instant('PUBLICATIONS.DELETE.CONFIRM_MESSAGE', { title: pub.title }),
+      acceptLabel: this.translate.instant('PUBLICATIONS.DELETE.CONFIRM_YES'),
+      rejectLabel: this.translate.instant('PUBLICATIONS.DELETE.CONFIRM_NO'),
+      accept: () => {
+        this.publicationsService.deletePublication(pub.id).subscribe({
+          next: () => {
+            this.messageService.add({
+              severity: 'success',
+              summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
+              detail: this.translate.instant('PUBLICATIONS.DELETE.SUCCESS'),
+            });
+            this.router.navigate(['/publications']);
+          },
+          error: () => {
+            this.messageService.add({
+              severity: 'error',
+              summary: this.translate.instant('PUBLICATIONS.TOASTS.ERROR'),
+              detail: this.translate.instant('PUBLICATIONS.DELETE.ERROR'),
+            });
+          },
+        });
+      },
+    });
   }
 
   // Abre el menú con las transiciones de estado válidas desde el estado actual.
