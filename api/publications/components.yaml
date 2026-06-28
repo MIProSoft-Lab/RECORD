@@ -91,6 +91,10 @@ schemas:
       status:
         $ref: "#/schemas/PublicationStatus"
         description: "Estado destino al que se quiere transicionar la publicación."
+      comment:
+        type: string
+        maxLength: 2000
+        description: "Comentario opcional asociado a la transición de estado."
     required:
       - status
 
@@ -105,6 +109,10 @@ schemas:
         type: string
         format: uuid
         description: "Journal destino al que se reenvía la publicación. Debe ser distinto del actual."
+      comment:
+        type: string
+        maxLength: 2000
+        description: "Comentario opcional asociado al reenvío."
     required:
       - journalId
 
@@ -165,6 +173,35 @@ schemas:
       - firstName
       - lastName
 
+  PublicationStatusHistoryEntry:
+    type: object
+    description: >-
+      Entrada del historial de estados de una publicación. Representa el momento
+      en que la publicación pasó a un estado concreto, junto con el journal
+      asociado en ese momento (útil para reflejar el journal anterior en un
+      reenvío) y un comentario opcional.
+    properties:
+      status:
+        $ref: "#/schemas/PublicationStatus"
+      journalId:
+        type: string
+        format: uuid
+        description: "Journal asociado a la publicación en el momento de esta transición."
+      journalName:
+        type: string
+        description: "Nombre del journal asociado en el momento de esta transición."
+      changedAt:
+        type: string
+        format: date-time
+        description: "Fecha y hora en que la publicación pasó a este estado."
+      comment:
+        type: string
+        description: "Comentario opcional asociado a la transición."
+    required:
+      - status
+      - journalId
+      - changedAt
+
   PublicationResponse:
     type: object
     properties:
@@ -199,6 +236,11 @@ schemas:
         description: "Autores internos de la publicación (incluye al creador)."
         items:
           $ref: "#/schemas/PublicationAuthorResponse"
+      statusHistory:
+        type: array
+        description: "Historial de estados en orden cronológico ascendente."
+        items:
+          $ref: "#/schemas/PublicationStatusHistoryEntry"
     required:
       - id
       - title
@@ -207,6 +249,7 @@ schemas:
       - status
       - createdBy
       - createdAt
+      - statusHistory
 
   PublicationSummaryResponse:
     type: object
@@ -230,6 +273,10 @@ schemas:
       createdAt:
         type: string
         format: date-time
+      statusChangedAt:
+        type: string
+        format: date-time
+        description: "Fecha en que la publicación pasó a su estado actual."
     required:
       - id
       - title
@@ -237,3 +284,4 @@ schemas:
       - journalId
       - status
       - createdAt
+      - statusChangedAt
