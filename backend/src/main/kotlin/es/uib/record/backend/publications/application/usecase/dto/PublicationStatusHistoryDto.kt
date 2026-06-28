@@ -4,13 +4,10 @@ import es.uib.record.backend.publications.domain.model.PublicationStatus
 import java.time.Instant
 import java.util.UUID
 
-data class PublicationSummaryDto(
-    val id: UUID,
-    val title: String,
+data class PublicationStatusHistoryDto(
+    val status: PublicationStatus,
     val journalId: UUID,
     val journalName: String?,
-    val groupId: UUID,
-    val status: PublicationStatus,
-    val createdAt: Instant,
-    val statusChangedAt: Instant,
+    val changedAt: Instant,
+    val comment: String?,
 )

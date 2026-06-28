@@ -17,16 +17,30 @@ class Publication(
     val createdBy: UUID,
     val createdAt: Instant = Instant.now(),
     authors: List<PublicationAuthor> = emptyList(),
+    statusHistory: List<PublicationStatusHistoryEntry> = emptyList(),
 ) {
     private val _authors: MutableList<PublicationAuthor> = authors.toMutableList()
 
     val authors: List<PublicationAuthor>
         get() = _authors.toList()
 
+    private val _statusHistory: MutableList<PublicationStatusHistoryEntry> =
+        statusHistory.toMutableList()
+
+    /** Historial de estados en orden cronológico ascendente. */
+    val statusHistory: List<PublicationStatusHistoryEntry>
+        get() = _statusHistory.toList()
+
     init {
         // Invariante: el DOI solo puede tener valor cuando la publicación está PUBLISHED.
         if (!doi.isNullOrBlank() && status != PublicationStatus.PUBLISHED) {
             throw DoiNotAllowedException()
+        }
+        // Siembra la primera entrada del historial para publicaciones nuevas (aún sin
+        // historial persistido). Al rehidratar desde persistencia se recibe el historial
+        // existente y no se vuelve a sembrar.
+        if (_statusHistory.isEmpty()) {
+            _statusHistory.add(PublicationStatusHistoryEntry(status, journalId, createdAt))
         }
     }
 
@@ -61,7 +75,7 @@ class Publication(
      * el resto de campos y los autores. Solo se permiten transiciones válidas del ciclo
      * de vida; en caso contrario lanza [InvalidPublicationStatusTransitionException].
      */
-    fun changeStatus(newStatus: PublicationStatus): Publication {
+    fun changeStatus(newStatus: PublicationStatus, comment: String? = null): Publication {
         if (!status.canTransitionTo(newStatus)) {
             throw InvalidPublicationStatusTransitionException(status, newStatus)
         }
@@ -76,6 +90,8 @@ class Publication(
             createdBy = createdBy,
             createdAt = createdAt,
             authors = authors,
+            statusHistory =
+                statusHistory + PublicationStatusHistoryEntry(newStatus, journalId, Instant.now(), comment),
         )
     }
 
@@ -88,7 +104,7 @@ class Publication(
      * atómica: cambia journal y estado a la vez, deliberadamente fuera de la máquina de
      * estados genérica de [changeStatus] para no exponer un reenvío sin cambio de journal.
      */
-    fun resubmit(newJournalId: UUID): Publication {
+    fun resubmit(newJournalId: UUID, comment: String? = null): Publication {
         if (status != PublicationStatus.REJECTED) {
             throw InvalidPublicationStatusTransitionException(status, PublicationStatus.SUBMITTED)
         }
@@ -106,6 +122,14 @@ class Publication(
             createdBy = createdBy,
             createdAt = createdAt,
             authors = authors,
+            statusHistory =
+                statusHistory +
+                    PublicationStatusHistoryEntry(
+                        PublicationStatus.SUBMITTED,
+                        newJournalId,
+                        Instant.now(),
+                        comment,
+                    ),
         )
     }
 }

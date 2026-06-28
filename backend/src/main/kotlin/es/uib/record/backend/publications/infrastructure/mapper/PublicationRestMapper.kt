@@ -4,6 +4,7 @@ import es.uib.record.backend.model.CreatePublicationRequest
 import es.uib.record.backend.model.PublicationAuthorInput
 import es.uib.record.backend.model.PublicationAuthorResponse
 import es.uib.record.backend.model.PublicationResponse
+import es.uib.record.backend.model.PublicationStatusHistoryEntry
 import es.uib.record.backend.model.PublicationSummaryResponse
 import es.uib.record.backend.model.UpdatePublicationRequest
 import es.uib.record.backend.publications.application.usecase.dto.CreatePublicationRequestDto
@@ -11,6 +12,7 @@ import es.uib.record.backend.publications.application.usecase.dto.PublicationAut
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorInputDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorType
 import es.uib.record.backend.publications.application.usecase.dto.PublicationDetailDto
+import es.uib.record.backend.publications.application.usecase.dto.PublicationStatusHistoryDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationSummaryDto
 import es.uib.record.backend.publications.application.usecase.dto.UpdatePublicationRequestDto
 import es.uib.record.backend.publications.domain.model.PublicationStatus
@@ -70,10 +72,20 @@ fun PublicationDetailDto.toResponse() =
         status = this.status.toResponse(),
         createdBy = this.createdBy,
         createdAt = this.createdAt.atOffset(ZoneOffset.UTC),
+        statusHistory = this.statusHistory.map { it.toResponse() },
         journalName = this.journalName,
         abstract = this.abstractText,
         doi = this.doi,
         authors = this.authors.map { it.toResponse() },
+    )
+
+fun PublicationStatusHistoryDto.toResponse() =
+    PublicationStatusHistoryEntry(
+        status = this.status.toResponse(),
+        journalId = this.journalId,
+        changedAt = this.changedAt.atOffset(ZoneOffset.UTC),
+        journalName = this.journalName,
+        comment = this.comment,
     )
 
 fun PublicationSummaryDto.toResponse() =
@@ -84,6 +96,7 @@ fun PublicationSummaryDto.toResponse() =
         journalId = this.journalId,
         status = this.status.toResponse(),
         createdAt = this.createdAt.atOffset(ZoneOffset.UTC),
+        statusChangedAt = this.statusChangedAt.atOffset(ZoneOffset.UTC),
         journalName = this.journalName,
     )
 

@@ -69,14 +69,15 @@ class CreatePublicationUseCase(
         toSave.prependInternalAuthorIfAbsent(userId)
 
         val saved = this.publicationRepository.save(toSave)
-        val journalName =
-            this.journalFacade.getJournalsByIds(setOf(saved.journalId))[saved.journalId]?.name
+        val journalIds = (saved.statusHistory.map { it.journalId } + saved.journalId).toSet()
+        val journalNamesById =
+            this.journalFacade.getJournalsByIds(journalIds).mapValues { it.value.name }
         val usersById =
             this.userFacade
                 .getUsersByIds(saved.authors.mapNotNull { it.internalUserId() })
                 .associateBy { it.userId }
 
-        return saved.toDetailDto(journalName, saved.authors.toAuthorDtos(usersById))
+        return saved.toDetailDto(journalNamesById, saved.authors.toAuthorDtos(usersById))
     }
 
     /** Valida que cada co-autor interno indicado exista como usuario registrado. */

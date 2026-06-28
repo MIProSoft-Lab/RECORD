@@ -27,13 +27,15 @@ class PublicationRepositoryAdapter(
         if (id != null) {
             this.springDataJpaPublicationRepository.findById(id).ifPresent { existing ->
                 existing.authors.clear()
+                existing.statusHistory.clear()
                 this.springDataJpaPublicationRepository.saveAndFlush(existing)
             }
             // Los autores entrantes pueden conservar el id de las filas recién borradas (p. ej.
             // al cambiar solo el estado preservando los autores). Se reinsertan siempre como
             // filas nuevas para que sean INSERT y no un merge sobre una fila inexistente
-            // (StaleObjectStateException).
+            // (StaleObjectStateException). El historial se reinserta por el mismo motivo.
             entity.authors.forEach { it.id = null }
+            entity.statusHistory.forEach { it.id = null }
         }
         return this.springDataJpaPublicationRepository.save(entity).toDomain()
     }

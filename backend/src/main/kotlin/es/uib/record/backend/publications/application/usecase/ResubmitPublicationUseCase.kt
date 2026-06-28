@@ -24,6 +24,7 @@ class ResubmitPublicationUseCase(
         publicationId: UUID,
         newJournalId: UUID,
         email: String,
+        comment: String? = null,
     ): PublicationDetailDto {
         val userId = this.userFacade.getUserIdByEmail(email)
 
@@ -39,17 +40,19 @@ class ResubmitPublicationUseCase(
             throw JournalNotFoundForPublicationException(newJournalId)
 
         // Las validaciones de estado (REJECTED) y journal distinto viven en el dominio.
-        val updated = existing.resubmit(newJournalId)
+        val updated = existing.resubmit(newJournalId, comment)
 
         val saved = this.publicationRepository.save(updated)
-        val journalName =
-            this.journalFacade.getJournalsByIds(setOf(saved.journalId))[saved.journalId]?.name
+        // Incluye el journal actual y todos los del historial (incluido el anterior al reenvío).
+        val journalIds = (saved.statusHistory.map { it.journalId } + saved.journalId).toSet()
+        val journalNamesById =
+            this.journalFacade.getJournalsByIds(journalIds).mapValues { it.value.name }
         val usersById =
             this.userFacade
                 .getUsersByIds(saved.authors.mapNotNull { it.internalUserId() })
                 .associateBy { it.userId }
 
-        return saved.toDetailDto(journalName, saved.authors.toAuthorDtos(usersById))
+        return saved.toDetailDto(journalNamesById, saved.authors.toAuthorDtos(usersById))
     }
 
     private fun canEdit(publication: Publication, userId: UUID): Boolean =

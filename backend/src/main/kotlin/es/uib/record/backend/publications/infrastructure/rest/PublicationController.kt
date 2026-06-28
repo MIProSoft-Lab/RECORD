@@ -66,6 +66,7 @@ class PublicationController(
                 publicationId,
                 changePublicationStatusRequest.status.toDomain(),
                 email,
+                changePublicationStatusRequest.comment,
             )
 
         return ResponseEntity.ok(updatedPublication.toResponse())
@@ -81,6 +82,7 @@ class PublicationController(
                 publicationId,
                 resubmitPublicationRequest.journalId,
                 email,
+                resubmitPublicationRequest.comment,
             )
 
         return ResponseEntity.ok(updatedPublication.toResponse())

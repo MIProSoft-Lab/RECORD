@@ -40,7 +40,7 @@ fun List<PublicationAuthor>.toAuthorDtos(
     }
 
 fun Publication.toDetailDto(
-    journalName: String?,
+    journalNamesById: Map<UUID, String?>,
     authors: List<PublicationAuthorDto> = emptyList(),
 ) =
     PublicationDetailDto(
@@ -49,12 +49,22 @@ fun Publication.toDetailDto(
         abstractText = this.abstractText,
         doi = this.doi,
         journalId = this.journalId,
-        journalName = journalName,
+        journalName = journalNamesById[this.journalId],
         groupId = this.groupId,
         status = this.status,
         createdBy = this.createdBy,
         createdAt = this.createdAt,
         authors = authors,
+        statusHistory =
+            this.statusHistory.map { entry ->
+                PublicationStatusHistoryDto(
+                    status = entry.status,
+                    journalId = entry.journalId,
+                    journalName = journalNamesById[entry.journalId],
+                    changedAt = entry.changedAt,
+                    comment = entry.comment,
+                )
+            },
     )
 
 fun Publication.toSummaryDto(journalName: String?) =
@@ -66,4 +76,6 @@ fun Publication.toSummaryDto(journalName: String?) =
         groupId = this.groupId,
         status = this.status,
         createdAt = this.createdAt,
+        // Fecha de entrada al estado actual: última transición registrada (fallback a la creación).
+        statusChangedAt = this.statusHistory.lastOrNull()?.changedAt ?: this.createdAt,
     )

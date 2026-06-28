@@ -33,4 +33,8 @@ class PublicationEntity(
     @JoinColumn(name = "publication_id", nullable = false)
     @OrderBy("position ASC")
     var authors: MutableList<PublicationAuthorEntity> = mutableListOf(),
+    @OneToMany(cascade = [CascadeType.ALL], orphanRemoval = true)
+    @JoinColumn(name = "publication_id", nullable = false)
+    @OrderBy("position ASC")
+    var statusHistory: MutableList<PublicationStatusHistoryEntity> = mutableListOf(),
 )

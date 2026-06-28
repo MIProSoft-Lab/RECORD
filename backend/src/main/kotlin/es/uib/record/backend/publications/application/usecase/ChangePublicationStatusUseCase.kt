@@ -24,6 +24,7 @@ class ChangePublicationStatusUseCase(
         publicationId: UUID,
         newStatus: PublicationStatus,
         email: String,
+        comment: String? = null,
     ): PublicationDetailDto {
         val userId = this.userFacade.getUserIdByEmail(email)
 
@@ -36,17 +37,19 @@ class ChangePublicationStatusUseCase(
             throw PublicationEditForbiddenException(publicationId, userId)
 
         // La validación de transición vive en el dominio (changeStatus).
-        val updated = existing.changeStatus(newStatus)
+        val updated = existing.changeStatus(newStatus, comment)
 
         val saved = this.publicationRepository.save(updated)
-        val journalName =
-            this.journalFacade.getJournalsByIds(setOf(saved.journalId))[saved.journalId]?.name
+        // Incluye el journal actual y todos los del historial (p. ej. el anterior a un reenvío).
+        val journalIds = (saved.statusHistory.map { it.journalId } + saved.journalId).toSet()
+        val journalNamesById =
+            this.journalFacade.getJournalsByIds(journalIds).mapValues { it.value.name }
         val usersById =
             this.userFacade
                 .getUsersByIds(saved.authors.mapNotNull { it.internalUserId() })
                 .associateBy { it.userId }
 
-        return saved.toDetailDto(journalName, saved.authors.toAuthorDtos(usersById))
+        return saved.toDetailDto(journalNamesById, saved.authors.toAuthorDtos(usersById))
     }
 
     private fun canEdit(publication: Publication, userId: UUID): Boolean =

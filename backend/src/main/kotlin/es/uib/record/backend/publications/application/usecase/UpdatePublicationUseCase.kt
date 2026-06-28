@@ -54,6 +54,8 @@ class UpdatePublicationUseCase(
                 status = existing.status,
                 createdBy = existing.createdBy,
                 createdAt = existing.createdAt,
+                // Se conserva el historial existente: editar no es una transición de estado.
+                statusHistory = existing.statusHistory,
             )
         // Se respeta el orden de autores recibido. El creador se mantiene siempre como
         // autor interno aunque no venga en la lista enviada.
@@ -68,14 +70,15 @@ class UpdatePublicationUseCase(
         updated.prependInternalAuthorIfAbsent(existing.createdBy)
 
         val saved = this.publicationRepository.save(updated)
-        val journalName =
-            this.journalFacade.getJournalsByIds(setOf(saved.journalId))[saved.journalId]?.name
+        val journalIds = (saved.statusHistory.map { it.journalId } + saved.journalId).toSet()
+        val journalNamesById =
+            this.journalFacade.getJournalsByIds(journalIds).mapValues { it.value.name }
         val usersById =
             this.userFacade
                 .getUsersByIds(saved.authors.mapNotNull { it.internalUserId() })
                 .associateBy { it.userId }
 
-        return saved.toDetailDto(journalName, saved.authors.toAuthorDtos(usersById))
+        return saved.toDetailDto(journalNamesById, saved.authors.toAuthorDtos(usersById))
     }
 
     private fun canEdit(publication: Publication, userId: UUID): Boolean =
