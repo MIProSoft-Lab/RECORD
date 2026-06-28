@@ -25,6 +25,14 @@
     "MENU": {
       "LOGOUT": "Cerrar sesión",
       "SETTINGS": "Ajustes"
+    },
+    "DURATION": {
+      "MINUTE": "{{count}} minuto",
+      "MINUTES": "{{count}} minutos",
+      "HOUR": "{{count}} hora",
+      "HOURS": "{{count}} horas",
+      "DAY": "{{count}} día",
+      "DAYS": "{{count}} días"
     }
   },
   "CONFIG": {
@@ -317,7 +325,9 @@
       "TITLE": "Título",
       "STATUS": "Estado",
       "CREATED_AT": "Creada",
-      "JOURNAL": "Journal"
+      "JOURNAL": "Journal",
+      "STATUS_SINCE": "En estado desde",
+      "DAYS_IN_STATUS": "{{count}} días en este estado"
     },
     "STATUS": {
       "PLANNED": "Planificada",
@@ -374,7 +384,12 @@
     },
     "CHANGE_STATUS": {
       "ACTION": "Cambiar estado",
-      "ERROR": "No se ha podido cambiar el estado de la publicación."
+      "ERROR": "No se ha podido cambiar el estado de la publicación.",
+      "DIALOG_TITLE": "Cambiar estado",
+      "CONFIRM_TO": "Cambiar el estado de la publicación a",
+      "COMMENT_LABEL": "Comentario (opcional)",
+      "COMMENT_PLACEHOLDER": "Añade una nota sobre este cambio…",
+      "CONFIRM": "Confirmar"
     },
     "RESUBMIT": {
       "ACTION": "Reenviar",
@@ -391,7 +406,10 @@
       "EDIT": "Editar",
       "VIEW_JOURNAL": "Ver detalle del journal",
       "SENT_TO": "Enviada a",
-      "AUTHOR_ORDER": "Orden de autoría"
+      "AUTHOR_ORDER": "Orden de autoría",
+      "TIMELINE": "Línea de tiempo de estados",
+      "IN_STATE_FOR": "{{duration}} en este estado",
+      "AFTER_DURATION": "tras {{duration}}"
     }
   }
 }

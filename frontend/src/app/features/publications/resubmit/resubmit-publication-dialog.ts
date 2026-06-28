@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { Button } from 'primeng/button';
 import { Dialog } from 'primeng/dialog';
+import { Textarea } from 'primeng/textarea';
 import {
   JournalSummaryResponse,
   PublicationResponse,
@@ -23,7 +24,7 @@ const JOURNAL_SEARCH_PAGE_SIZE = 10;
  */
 @Component({
   selector: 'record-resubmit-publication-dialog',
-  imports: [FormsModule, TranslatePipe, Dialog, AutoComplete, Button],
+  imports: [FormsModule, TranslatePipe, Dialog, AutoComplete, Button, Textarea],
   templateUrl: './resubmit-publication-dialog.html',
 })
 export class ResubmitPublicationDialog {
@@ -40,6 +41,7 @@ export class ResubmitPublicationDialog {
 
   readonly journalSuggestions = signal<JournalSummaryResponse[]>([]);
   readonly selectedJournal = signal<JournalSummaryResponse | string | null>(null);
+  readonly comment = signal('');
   readonly isSaving = signal(false);
 
   /** Journal seleccionado válido (objeto), o null si aún es texto o no hay selección. */
@@ -71,8 +73,12 @@ export class ResubmitPublicationDialog {
     if (!journal || this.isSameJournal()) return;
 
     this.isSaving.set(true);
+    const comment = this.comment().trim();
     this.publicationsService
-      .resubmitPublication(this.publicationId(), { journalId: journal.id })
+      .resubmitPublication(this.publicationId(), {
+        journalId: journal.id,
+        comment: comment || undefined,
+      })
       .subscribe({
         next: (updated) => {
           this.isSaving.set(false);
@@ -104,6 +110,7 @@ export class ResubmitPublicationDialog {
     // Estado limpio al cerrar para que reabrir empiece de cero.
     this.selectedJournal.set(null);
     this.journalSuggestions.set([]);
+    this.comment.set('');
     this.isSaving.set(false);
   }
 }

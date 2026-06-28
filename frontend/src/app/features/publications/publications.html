@@ -20,7 +20,7 @@
         <th>{{ 'PUBLICATIONS.TABLE.TITLE' | translate }}</th>
         <th>{{ 'PUBLICATIONS.TABLE.JOURNAL' | translate }}</th>
         <th style="width: 12rem">{{ 'PUBLICATIONS.TABLE.STATUS' | translate }}</th>
-        <th style="width: 12rem">{{ 'PUBLICATIONS.TABLE.CREATED_AT' | translate }}</th>
+        <th style="width: 14rem">{{ 'PUBLICATIONS.TABLE.STATUS_SINCE' | translate }}</th>
         <th style="width: 5rem"></th>
       </tr>
     </ng-template>
@@ -66,7 +66,20 @@
             </span>
           }
         </td>
-        <td>{{ publication.createdAt | date: 'mediumDate' }}</td>
+        <td>
+          <div class="flex flex-column">
+            <span class="inline-flex align-items-center gap-1">
+              <i class="pi pi-calendar text-xs text-color-secondary"></i>
+              {{ publication.statusChangedAt | date: 'mediumDate' }}
+            </span>
+            <span class="text-color-secondary text-sm">
+              {{
+                'PUBLICATIONS.TABLE.DAYS_IN_STATUS'
+                  | translate: { count: publication.statusChangedAt | daysSince }
+              }}
+            </span>
+          </div>
+        </td>
         <td class="text-right">
           <p-button
             icon="pi pi-pencil"
@@ -92,6 +105,15 @@
   </p-table>
 
   <p-menu #statusMenu [model]="statusMenuItems()" [popup]="true" appendTo="body" />
+
+  @if (changeStatusTargetId(); as targetId) {
+    <record-change-status-dialog
+      [publicationId]="targetId"
+      [targetStatus]="changeStatusTargetStatus()"
+      [(visible)]="changeStatusDialogVisible"
+      (changed)="onStatusChanged()"
+    />
+  }
 
   @if (resubmitTarget(); as target) {
     <record-resubmit-publication-dialog

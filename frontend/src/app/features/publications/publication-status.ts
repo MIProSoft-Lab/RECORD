@@ -29,6 +29,15 @@ export function allowedStatusTransitions(status: PublicationStatus): Publication
   return ALLOWED_TRANSITIONS[status] ?? [];
 }
 
+/**
+ * Indica si [status] es un estado final (terminal) del ciclo de vida: no admite más
+ * transiciones. Hoy son REJECTED y PUBLISHED. Se deriva de la máquina de estados para
+ * no duplicar la lista.
+ */
+export function isFinalStatus(status: PublicationStatus): boolean {
+  return allowedStatusTransitions(status).length === 0;
+}
+
 /** Severidad de PrimeNG (`p-tag`) asociada a cada estado de publicación. */
 export function publicationStatusSeverity(
   status: PublicationStatus,

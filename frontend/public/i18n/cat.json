@@ -25,6 +25,14 @@
     "MENU": {
       "LOGOUT": "Tancar sessió",
       "SETTINGS": "Ajusts"
+    },
+    "DURATION": {
+      "MINUTE": "{{count}} minut",
+      "MINUTES": "{{count}} minuts",
+      "HOUR": "{{count}} hora",
+      "HOURS": "{{count}} hores",
+      "DAY": "{{count}} dia",
+      "DAYS": "{{count}} dies"
     }
   },
   "CONFIG": {
@@ -317,7 +325,9 @@
       "TITLE": "Títol",
       "STATUS": "Estat",
       "CREATED_AT": "Creada",
-      "JOURNAL": "Journal"
+      "JOURNAL": "Journal",
+      "STATUS_SINCE": "En estat des de",
+      "DAYS_IN_STATUS": "{{count}} dies en aquest estat"
     },
     "STATUS": {
       "PLANNED": "Planificada",
@@ -374,7 +384,12 @@
     },
     "CHANGE_STATUS": {
       "ACTION": "Canviar estat",
-      "ERROR": "No s'ha pogut canviar l'estat de la publicació."
+      "ERROR": "No s'ha pogut canviar l'estat de la publicació.",
+      "DIALOG_TITLE": "Canviar estat",
+      "CONFIRM_TO": "Canviar l'estat de la publicació a",
+      "COMMENT_LABEL": "Comentari (opcional)",
+      "COMMENT_PLACEHOLDER": "Afegeix una nota sobre aquest canvi…",
+      "CONFIRM": "Confirmar"
     },
     "RESUBMIT": {
       "ACTION": "Reenviar",
@@ -391,7 +406,10 @@
       "EDIT": "Editar",
       "VIEW_JOURNAL": "Veure detall del journal",
       "SENT_TO": "Enviada a",
-      "AUTHOR_ORDER": "Ordre d'autoria"
+      "AUTHOR_ORDER": "Ordre d'autoria",
+      "TIMELINE": "Línia de temps d'estats",
+      "IN_STATE_FOR": "{{duration}} en aquest estat",
+      "AFTER_DURATION": "després de {{duration}}"
     }
   }
 }

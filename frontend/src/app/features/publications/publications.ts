@@ -2,14 +2,16 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
 import { PublicationStatus, PublicationSummaryResponse, PublicationsService } from '@core/api';
+import { DaysSincePipe } from '@shared/pipes/days-since.pipe';
 import { allowedStatusTransitions, publicationStatusSeverity } from './publication-status';
+import { ChangeStatusDialog } from './change-status/change-status-dialog';
 import { ResubmitPublicationDialog } from './resubmit/resubmit-publication-dialog';
 
 /** Show the loading indicator only if the request is still pending after this delay. */
@@ -20,11 +22,13 @@ const LOADER_DELAY_MS = 250;
   imports: [
     TranslatePipe,
     DatePipe,
+    DaysSincePipe,
     Button,
     Menu,
     TableModule,
     Tag,
     Tooltip,
+    ChangeStatusDialog,
     ResubmitPublicationDialog,
   ],
   templateUrl: './publications.html',
@@ -32,7 +36,6 @@ const LOADER_DELAY_MS = 250;
 export class Publications implements OnInit {
   private readonly publicationsService = inject(PublicationsService);
   private readonly router = inject(Router);
-  private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
 
   private readonly statusMenu = viewChild.required<Menu>('statusMenu');
@@ -46,6 +49,11 @@ export class Publications implements OnInit {
   /** Publicación rechazada seleccionada para reenviar (alimenta el diálogo). */
   resubmitTarget = signal<PublicationSummaryResponse | null>(null);
   resubmitDialogVisible = signal(false);
+
+  /** Cambio de estado pendiente de confirmar (alimenta el diálogo de confirmación). */
+  changeStatusTargetId = signal<string | null>(null);
+  changeStatusTargetStatus = signal<PublicationStatus | null>(null);
+  changeStatusDialogVisible = signal(false);
 
   ngOnInit() {
     this.loadPublications();
@@ -121,29 +129,20 @@ export class Publications implements OnInit {
     this.statusMenuItems.set(
       allowedStatusTransitions(publication.status).map((status) => ({
         label: this.translate.instant(`PUBLICATIONS.STATUS.${status}`),
-        command: () => this.changeStatus(publication.id, status),
+        command: () => this.promptStatusChange(publication.id, status),
       })),
     );
     this.statusMenu().toggle(event);
   }
 
-  private changeStatus(publicationId: string, status: PublicationStatus) {
-    this.publicationsService.changePublicationStatus(publicationId, { status }).subscribe({
-      next: () => {
-        this.messageService.add({
-          severity: 'success',
-          summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
-          detail: this.translate.instant('PUBLICATIONS.TOASTS.STATUS_UPDATED'),
-        });
-        this.loadPublications();
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('PUBLICATIONS.TOASTS.ERROR'),
-          detail: this.translate.instant('PUBLICATIONS.CHANGE_STATUS.ERROR'),
-        });
-      },
-    });
+  // Abre el diálogo de confirmación (con comentario opcional) antes de cambiar el estado.
+  private promptStatusChange(publicationId: string, status: PublicationStatus) {
+    this.changeStatusTargetId.set(publicationId);
+    this.changeStatusTargetStatus.set(status);
+    this.changeStatusDialogVisible.set(true);
+  }
+
+  onStatusChanged() {
+    this.loadPublications();
   }
 }

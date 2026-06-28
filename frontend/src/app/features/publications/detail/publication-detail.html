@@ -182,6 +182,78 @@
         }
       </div>
 
+      <!-- Línea de tiempo: estados por los que ha pasado la publicación -->
+      @if (timeline().length) {
+        <div class="surface-card border-round p-4 flex flex-column gap-3">
+          <h3 class="mt-0 mb-2">{{ 'PUBLICATIONS.DETAIL.TIMELINE' | translate }}</h3>
+          <p-timeline [value]="timeline()" align="left">
+            <ng-template #marker let-item>
+              @let variant = markerVariant(item.entry.status, item.isCurrent);
+              <span class="timeline-marker" [class.timeline-marker--final]="variant === 'final'">
+                @if (variant === 'passed') {
+                  <span class="timeline-marker__inner"></span>
+                }
+              </span>
+            </ng-template>
+            <ng-template #opposite let-item>
+              <div class="flex flex-column text-sm text-color-secondary">
+                <span class="inline-flex align-items-center gap-1">
+                  <i class="pi pi-calendar text-xs"></i>
+                  {{ item.entry.changedAt | date: 'mediumDate' }}
+                </span>
+                <span class="inline-flex align-items-center gap-1">
+                  <i class="pi pi-clock text-xs"></i>
+                  {{ item.entry.changedAt | date: 'shortTime' }}
+                </span>
+                @if (item.previousChangedAt) {
+                  <span>
+                    {{
+                      'PUBLICATIONS.DETAIL.AFTER_DURATION'
+                        | translate
+                          : { duration: (item.previousChangedAt | relativeDuration: item.entry.changedAt) }
+                    }}
+                  </span>
+                }
+              </div>
+            </ng-template>
+            <ng-template #content let-item>
+              <div class="flex flex-column gap-1 pb-3">
+                <p-tag
+                  [value]="'PUBLICATIONS.STATUS.' + item.entry.status | translate"
+                  [severity]="statusSeverity(item.entry.status)"
+                />
+                @if (item.entry.journalName) {
+                  <span class="text-sm inline-flex align-items-center gap-1">
+                    <i class="pi pi-book text-xs text-color-secondary"></i>
+                    {{ item.entry.journalName }}
+                  </span>
+                }
+                @if (item.entry.comment) {
+                  <p class="m-0 text-sm text-color-secondary font-italic">
+                    "{{ item.entry.comment }}"
+                  </p>
+                }
+                @if (item.isCurrent && !isFinal(item.entry.status)) {
+                  <span class="text-sm text-primary">
+                    {{
+                      'PUBLICATIONS.DETAIL.IN_STATE_FOR'
+                        | translate: { duration: (item.entry.changedAt | relativeDuration) }
+                    }}
+                  </span>
+                }
+              </div>
+            </ng-template>
+          </p-timeline>
+        </div>
+      }
+
+      <record-change-status-dialog
+        [publicationId]="pub.id"
+        [targetStatus]="changeStatusTargetStatus()"
+        [(visible)]="changeStatusDialogVisible"
+        (changed)="onStatusChanged($event)"
+      />
+
       <record-resubmit-publication-dialog
         [publicationId]="pub.id"
         [currentJournalId]="pub.journalId"

@@ -2,11 +2,12 @@ import { DatePipe } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, signal, viewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
-import { MenuItem, MessageService } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 import { Avatar } from 'primeng/avatar';
 import { Button } from 'primeng/button';
 import { Menu } from 'primeng/menu';
 import { Tag } from 'primeng/tag';
+import { Timeline } from 'primeng/timeline';
 import { Tooltip } from 'primeng/tooltip';
 import {
   JournalDetailResponse,
@@ -17,13 +18,31 @@ import {
   Quartile,
 } from '@core/api';
 import { UserState } from '@core/services/user-state';
+import { RelativeDurationPipe } from '@shared/pipes/relative-duration.pipe';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
-import { allowedStatusTransitions, publicationStatusSeverity } from '../publication-status';
+import {
+  allowedStatusTransitions,
+  isFinalStatus,
+  publicationStatusSeverity,
+} from '../publication-status';
+import { ChangeStatusDialog } from '../change-status/change-status-dialog';
 import { ResubmitPublicationDialog } from '../resubmit/resubmit-publication-dialog';
 
 @Component({
   selector: 'record-publication-detail',
-  imports: [TranslatePipe, DatePipe, Avatar, Button, Menu, Tag, Tooltip, ResubmitPublicationDialog],
+  imports: [
+    TranslatePipe,
+    DatePipe,
+    RelativeDurationPipe,
+    Avatar,
+    Button,
+    Menu,
+    Tag,
+    Timeline,
+    Tooltip,
+    ChangeStatusDialog,
+    ResubmitPublicationDialog,
+  ],
   templateUrl: './publication-detail.html',
   styles: `
     .journal-card {
@@ -38,6 +57,29 @@ import { ResubmitPublicationDialog } from '../resubmit/resubmit-publication-dial
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       transform: translateY(-1px);
     }
+
+    /* Marcador minimalista. Base: aro hueco (estado actual no terminal). */
+    .timeline-marker {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 0.85rem;
+      height: 0.85rem;
+      border-radius: 50%;
+      border: 2px solid var(--p-primary-color);
+      background: var(--p-content-background, var(--p-surface-0));
+    }
+    /* Estado ya superado (no terminal): aro con un punto pequeño dentro. */
+    .timeline-marker__inner {
+      width: 0.35rem;
+      height: 0.35rem;
+      border-radius: 50%;
+      background: var(--p-primary-color);
+    }
+    /* Estado terminal (REJECTED/PUBLISHED): punto completamente relleno. */
+    .timeline-marker--final {
+      background: var(--p-primary-color);
+    }
   `,
 })
 export class PublicationDetail implements OnInit, OnDestroy {
@@ -47,7 +89,6 @@ export class PublicationDetail implements OnInit, OnDestroy {
   private readonly router = inject(Router);
   private readonly userState = inject(UserState);
   private readonly breadcrumbService = inject(BreadcrumbService);
-  private readonly messageService = inject(MessageService);
   private readonly translate = inject(TranslateService);
 
   private readonly statusMenu = viewChild.required<Menu>('statusMenu');
@@ -60,6 +101,24 @@ export class PublicationDetail implements OnInit, OnDestroy {
   isLoading = signal(true);
   statusMenuItems = signal<MenuItem[]>([]);
   resubmitDialogVisible = signal(false);
+
+  /** Cambio de estado pendiente de confirmar (alimenta el diálogo de confirmación). */
+  changeStatusTargetStatus = signal<PublicationStatus | null>(null);
+  changeStatusDialogVisible = signal(false);
+
+  // Historial de estados enriquecido para la línea de tiempo: cada entrada guarda la fecha
+  // de la transición anterior (para mostrar la duración transcurrida entre estados) y la
+  // marca del estado actual. Se invierte para mostrar lo más reciente arriba.
+  readonly timeline = computed(() => {
+    const history = this.publication()?.statusHistory ?? [];
+    return history
+      .map((entry, index) => ({
+        entry,
+        previousChangedAt: index > 0 ? history[index - 1].changedAt : null,
+        isCurrent: index === history.length - 1,
+      }))
+      .reverse();
+  });
 
   // Mejor cuartil del journal en su año más reciente (Q1 es el mejor), para destacarlo.
   readonly bestQuartile = computed(() => {
@@ -143,30 +202,20 @@ export class PublicationDetail implements OnInit, OnDestroy {
     this.statusMenuItems.set(
       allowedStatusTransitions(pub.status).map((status) => ({
         label: this.translate.instant(`PUBLICATIONS.STATUS.${status}`),
-        command: () => this.changeStatus(pub.id, status),
+        command: () => this.promptStatusChange(status),
       })),
     );
     this.statusMenu().toggle(event);
   }
 
-  private changeStatus(publicationId: string, status: PublicationStatus) {
-    this.publicationsService.changePublicationStatus(publicationId, { status }).subscribe({
-      next: (updated) => {
-        this.publication.set(updated);
-        this.messageService.add({
-          severity: 'success',
-          summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
-          detail: this.translate.instant('PUBLICATIONS.TOASTS.STATUS_UPDATED'),
-        });
-      },
-      error: () => {
-        this.messageService.add({
-          severity: 'error',
-          summary: this.translate.instant('PUBLICATIONS.TOASTS.ERROR'),
-          detail: this.translate.instant('PUBLICATIONS.CHANGE_STATUS.ERROR'),
-        });
-      },
-    });
+  // Abre el diálogo de confirmación (con comentario opcional) antes de cambiar el estado.
+  private promptStatusChange(status: PublicationStatus) {
+    this.changeStatusTargetStatus.set(status);
+    this.changeStatusDialogVisible.set(true);
+  }
+
+  onStatusChanged(updated: PublicationResponse) {
+    this.publication.set(updated);
   }
 
   openResubmit() {
@@ -187,6 +236,22 @@ export class PublicationDetail implements OnInit, OnDestroy {
 
   statusSeverity(status: PublicationResponse['status']): 'success' | 'info' | 'warn' | 'danger' {
     return publicationStatusSeverity(status);
+  }
+
+  /** Un estado final (REJECTED/PUBLISHED) se representa con un punto relleno. */
+  isFinal(status: PublicationStatus): boolean {
+    return isFinalStatus(status);
+  }
+
+  /**
+   * Variante del marcador de la línea de tiempo:
+   * - `final`: estado terminal (relleno completo), aunque haya sido superado (rechazo→reenvío).
+   * - `current`: estado actual no terminal (aro hueco).
+   * - `passed`: estado intermedio ya superado (aro con punto dentro).
+   */
+  markerVariant(status: PublicationStatus, isCurrent: boolean): 'final' | 'current' | 'passed' {
+    if (isFinalStatus(status)) return 'final';
+    return isCurrent ? 'current' : 'passed';
   }
 
   quartileSeverity(quartile: Quartile): 'success' | 'info' | 'warn' | 'danger' {

@@ -25,6 +25,14 @@
     "MENU": {
       "LOGOUT": "Log out",
       "SETTINGS": "Settings"
+    },
+    "DURATION": {
+      "MINUTE": "{{count}} minute",
+      "MINUTES": "{{count}} minutes",
+      "HOUR": "{{count}} hour",
+      "HOURS": "{{count}} hours",
+      "DAY": "{{count}} day",
+      "DAYS": "{{count}} days"
     }
   },
   "CONFIG": {
@@ -317,7 +325,9 @@
       "TITLE": "Title",
       "STATUS": "Status",
       "CREATED_AT": "Created",
-      "JOURNAL": "Journal"
+      "JOURNAL": "Journal",
+      "STATUS_SINCE": "In status since",
+      "DAYS_IN_STATUS": "{{count}} days in this status"
     },
     "STATUS": {
       "PLANNED": "Planned",
@@ -374,7 +384,12 @@
     },
     "CHANGE_STATUS": {
       "ACTION": "Change status",
-      "ERROR": "Could not change the publication status."
+      "ERROR": "Could not change the publication status.",
+      "DIALOG_TITLE": "Change status",
+      "CONFIRM_TO": "Change the publication status to",
+      "COMMENT_LABEL": "Comment (optional)",
+      "COMMENT_PLACEHOLDER": "Add a note about this change…",
+      "CONFIRM": "Confirm"
     },
     "RESUBMIT": {
       "ACTION": "Resubmit",
@@ -391,7 +406,10 @@
       "EDIT": "Edit",
       "VIEW_JOURNAL": "View journal details",
       "SENT_TO": "Submitted to",
-      "AUTHOR_ORDER": "Author order"
+      "AUTHOR_ORDER": "Author order",
+      "TIMELINE": "Status timeline",
+      "IN_STATE_FOR": "{{duration}} in this status",
+      "AFTER_DURATION": "after {{duration}}"
     }
   }
 }

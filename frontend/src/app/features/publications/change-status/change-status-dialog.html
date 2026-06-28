@@ -1,0 +1,52 @@
+<p-dialog
+  [visible]="visible()"
+  (visibleChange)="visible.set($event)"
+  (onHide)="onHide()"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '32rem' }"
+  [header]="'PUBLICATIONS.CHANGE_STATUS.DIALOG_TITLE' | translate"
+>
+  @let status = targetStatus();
+  @if (status) {
+    <div class="flex flex-column gap-3">
+      <p class="m-0 text-color-secondary inline-flex align-items-center gap-2 flex-wrap">
+        {{ 'PUBLICATIONS.CHANGE_STATUS.CONFIRM_TO' | translate }}
+        <p-tag
+          [value]="'PUBLICATIONS.STATUS.' + status | translate"
+          [severity]="statusSeverity(status)"
+        />
+      </p>
+
+      <div class="flex flex-column gap-1">
+        <label for="status-comment" class="font-medium">
+          {{ 'PUBLICATIONS.CHANGE_STATUS.COMMENT_LABEL' | translate }}
+        </label>
+        <textarea
+          id="status-comment"
+          pTextarea
+          [ngModel]="comment()"
+          (ngModelChange)="comment.set($event)"
+          rows="3"
+          class="w-full"
+          [placeholder]="'PUBLICATIONS.CHANGE_STATUS.COMMENT_PLACEHOLDER' | translate"
+        ></textarea>
+      </div>
+    </div>
+  }
+
+  <ng-template #footer>
+    <p-button
+      [label]="'COMMON.BUTTONS.CANCEL' | translate"
+      severity="secondary"
+      [text]="true"
+      (onClick)="visible.set(false)"
+    />
+    <p-button
+      [label]="'PUBLICATIONS.CHANGE_STATUS.CONFIRM' | translate"
+      icon="pi pi-check"
+      [loading]="isSaving()"
+      (onClick)="confirm()"
+    />
+  </ng-template>
+</p-dialog>

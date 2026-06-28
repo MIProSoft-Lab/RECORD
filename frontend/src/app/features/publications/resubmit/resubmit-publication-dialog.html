@@ -30,6 +30,21 @@
         <small class="text-red-500">{{ 'PUBLICATIONS.RESUBMIT.SAME_JOURNAL' | translate }}</small>
       }
     </div>
+
+    <div class="flex flex-column gap-1">
+      <label for="resubmit-comment" class="font-medium">
+        {{ 'PUBLICATIONS.CHANGE_STATUS.COMMENT_LABEL' | translate }}
+      </label>
+      <textarea
+        id="resubmit-comment"
+        pTextarea
+        [ngModel]="comment()"
+        (ngModelChange)="comment.set($event)"
+        rows="3"
+        class="w-full"
+        [placeholder]="'PUBLICATIONS.CHANGE_STATUS.COMMENT_PLACEHOLDER' | translate"
+      ></textarea>
+    </div>
   </div>
 
   <ng-template #footer>
