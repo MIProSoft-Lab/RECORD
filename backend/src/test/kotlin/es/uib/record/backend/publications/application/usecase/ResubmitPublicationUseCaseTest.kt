@@ -183,6 +183,49 @@ class ResubmitPublicationUseCaseTest {
         verify(publicationRepository, never()).save(any())
     }
 
+    @Test
+    fun `should record the previous journal and the comment in the status history on resubmit`() {
+        // Given: a REJECTED publication on JOURNAL_ID (its history starts with that entry).
+        given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
+        given(publicationRepository.findById(PUBLICATION_ID))
+            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED))
+        given(journalFacade.existsById(NEW_JOURNAL_ID)).willReturn(true)
+        given(userFacade.getUsersByIds(listOf(USER_ID))).willReturn(listOf(userOpenDto(USER_ID)))
+        givenSaveReturnsArgument()
+        // Both the previous and the target journals are resolvable by name.
+        given(journalFacade.getJournalsByIds(setOf(JOURNAL_ID, NEW_JOURNAL_ID)))
+            .willReturn(
+                mapOf(
+                    JOURNAL_ID to JournalRefDto(JOURNAL_ID, "Nature", null),
+                    NEW_JOURNAL_ID to JournalRefDto(NEW_JOURNAL_ID, "Science", null),
+                )
+            )
+
+        // When
+        val result =
+            resubmitPublicationUseCase.execute(
+                PUBLICATION_ID,
+                NEW_JOURNAL_ID,
+                EMAIL,
+                "Trying a better fit",
+            )
+
+        // Then: the history keeps the previous journal and appends the resubmission.
+        val captor = argumentCaptor<Publication>()
+        verify(publicationRepository).save(captor.capture())
+        val history = captor.firstValue.statusHistory
+        assertEquals(2, history.size)
+        assertEquals(PublicationStatus.REJECTED, history.first().status)
+        assertEquals(JOURNAL_ID, history.first().journalId)
+        val last = history.last()
+        assertEquals(PublicationStatus.SUBMITTED, last.status)
+        assertEquals(NEW_JOURNAL_ID, last.journalId)
+        assertEquals("Trying a better fit", last.comment)
+        // The returned detail exposes the previous journal name for the rejected entry.
+        assertEquals("Nature", result.statusHistory.first().journalName)
+        assertEquals("Science", result.statusHistory.last().journalName)
+    }
+
     /** Simula la persistencia asignando id a cada autor, preservando el resto del agregado. */
     private fun givenSaveReturnsArgument() {
         given(publicationRepository.save(any())).willAnswer {
@@ -204,13 +247,21 @@ class ResubmitPublicationUseCaseTest {
                             is PublicationAuthor.ExternalAuthor -> author.copy(id = UUID.randomUUID())
                         }
                     },
+                statusHistory = p.statusHistory,
             )
         }
     }
 
+    // El reenvío resuelve los nombres del journal actual y de todos los del historial
+    // (incluido el anterior, JOURNAL_ID), de ahí que se stubee el conjunto completo.
     private fun givenJournalLookup(journalId: UUID, name: String) {
-        given(journalFacade.getJournalsByIds(setOf(journalId)))
-            .willReturn(mapOf(journalId to JournalRefDto(journalId, name, null)))
+        given(journalFacade.getJournalsByIds(setOf(JOURNAL_ID, journalId)))
+            .willReturn(
+                mapOf(
+                    JOURNAL_ID to JournalRefDto(JOURNAL_ID, "Nature", null),
+                    journalId to JournalRefDto(journalId, name, null),
+                )
+            )
     }
 
     private fun existingPublication(

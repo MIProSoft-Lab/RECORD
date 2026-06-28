@@ -161,6 +161,39 @@ class ChangePublicationStatusUseCaseTest {
         verify(publicationRepository, never()).save(any())
     }
 
+    @Test
+    fun `should append a status history entry with the optional comment on a valid transition`() {
+        // Given: a SUBMITTED publication (its history starts with one seeded SUBMITTED entry).
+        given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
+        given(publicationRepository.findById(PUBLICATION_ID))
+            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED))
+        given(userFacade.getUsersByIds(listOf(USER_ID))).willReturn(listOf(userOpenDto(USER_ID)))
+        givenSaveReturnsArgument()
+        givenJournalLookup("Nature")
+
+        // When
+        val result =
+            changePublicationStatusUseCase.execute(
+                PUBLICATION_ID,
+                PublicationStatus.UNDER_REVIEW,
+                EMAIL,
+                "Sent for peer review",
+            )
+
+        // Then: a new entry is appended with the target status, current journal and comment.
+        val captor = argumentCaptor<Publication>()
+        verify(publicationRepository).save(captor.capture())
+        val history = captor.firstValue.statusHistory
+        assertEquals(2, history.size)
+        val last = history.last()
+        assertEquals(PublicationStatus.UNDER_REVIEW, last.status)
+        assertEquals(JOURNAL_ID, last.journalId)
+        assertEquals("Sent for peer review", last.comment)
+        // The returned detail also exposes the chronological history.
+        assertEquals(2, result.statusHistory.size)
+        assertEquals(PublicationStatus.UNDER_REVIEW, result.statusHistory.last().status)
+    }
+
     /** Simula la persistencia asignando id a cada autor, preservando el resto del agregado. */
     private fun givenSaveReturnsArgument() {
         given(publicationRepository.save(any())).willAnswer {
@@ -182,6 +215,7 @@ class ChangePublicationStatusUseCaseTest {
                             is PublicationAuthor.ExternalAuthor -> author.copy(id = UUID.randomUUID())
                         }
                     },
+                statusHistory = p.statusHistory,
             )
         }
     }

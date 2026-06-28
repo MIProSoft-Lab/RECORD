@@ -80,6 +80,28 @@ class CreatePublicationUseCaseTest {
     }
 
     @Test
+    fun `should seed the initial status history entry with the chosen status`() {
+        // Given
+        givenValidContext()
+        givenSaveReturnsPersisted()
+        givenJournalLookup("Nature")
+        val dto = createDto(status = PublicationStatus.SUBMITTED)
+
+        // When
+        val result = createPublicationUseCase.execute(dto, EMAIL)
+
+        // Then: a single seeded entry reflects the initial status and journal.
+        val captor = argumentCaptor<Publication>()
+        verify(publicationRepository).save(captor.capture())
+        val history = captor.firstValue.statusHistory
+        assertEquals(1, history.size)
+        assertEquals(PublicationStatus.SUBMITTED, history.first().status)
+        assertEquals(JOURNAL_ID, history.first().journalId)
+        assertEquals(1, result.statusHistory.size)
+        assertEquals(PublicationStatus.SUBMITTED, result.statusHistory.first().status)
+    }
+
+    @Test
     fun `should default to PLANNED status when no status is provided`() {
         // Given
         givenValidContext()
