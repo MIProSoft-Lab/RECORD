@@ -12,6 +12,7 @@ import { Tooltip } from 'primeng/tooltip';
 import {
   JournalDetailResponse,
   JournalsService,
+  PublicationAuthorResponse,
   PublicationStatus,
   PublicationResponse,
   PublicationsService,
@@ -26,6 +27,7 @@ import {
   publicationStatusSeverity,
 } from '../publication-status';
 import { ChangeStatusDialog } from '../change-status/change-status-dialog';
+import { LinkAuthorDialog } from '../link-author/link-author-dialog';
 import { ResubmitPublicationDialog } from '../resubmit/resubmit-publication-dialog';
 
 @Component({
@@ -41,6 +43,7 @@ import { ResubmitPublicationDialog } from '../resubmit/resubmit-publication-dial
     Timeline,
     Tooltip,
     ChangeStatusDialog,
+    LinkAuthorDialog,
     ResubmitPublicationDialog,
   ],
   templateUrl: './publication-detail.html',
@@ -107,6 +110,10 @@ export class PublicationDetail implements OnInit, OnDestroy {
   /** Cambio de estado pendiente de confirmar (alimenta el diálogo de confirmación). */
   changeStatusTargetStatus = signal<PublicationStatus | null>(null);
   changeStatusDialogVisible = signal(false);
+
+  /** Autor externo a convertir en interno (alimenta el diálogo de vinculación). */
+  linkAuthorTarget = signal<PublicationAuthorResponse | null>(null);
+  linkAuthorDialogVisible = signal(false);
 
   // Historial de estados enriquecido para la línea de tiempo: cada entrada guarda la fecha
   // de la transición anterior (para mostrar la duración transcurrida entre estados) y la
@@ -248,6 +255,17 @@ export class PublicationDetail implements OnInit, OnDestroy {
   }
 
   onStatusChanged(updated: PublicationResponse) {
+    this.publication.set(updated);
+  }
+
+  // Abre el diálogo para vincular un autor externo a un usuario registrado (convertirlo en interno).
+  openLinkAuthor(author: PublicationAuthorResponse) {
+    this.linkAuthorTarget.set(author);
+    this.linkAuthorDialogVisible.set(true);
+  }
+
+  // Tras la conversión, la respuesta trae la lista de autores ya actualizada: se refresca in situ.
+  onAuthorConverted(updated: PublicationResponse) {
     this.publication.set(updated);
   }
 

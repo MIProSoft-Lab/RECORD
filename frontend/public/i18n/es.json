@@ -401,6 +401,16 @@
       "ERROR": "No se ha podido reenviar la publicación.",
       "SAME_JOURNAL": "El nuevo journal debe ser distinto del actual."
     },
+    "LINK_AUTHOR": {
+      "BUTTON_TOOLTIP": "Vincular a un usuario registrado",
+      "DIALOG_TITLE": "Vincular autor a un usuario",
+      "DESCRIPTION": "Sustituye al autor externo «{{name}}» por un usuario registrado. La publicación pasará a aparecer en su historial.",
+      "USER_LABEL": "Usuario registrado",
+      "SEARCH_PLACEHOLDER": "Busca usuarios registrados por nombre o email",
+      "CONFIRM": "Vincular",
+      "SUCCESS": "Autor vinculado al usuario correctamente.",
+      "ERROR": "No se ha podido vincular el autor."
+    },
     "DELETE": {
       "ACTION": "Eliminar",
       "CONFIRM_HEADER": "Eliminar publicación",

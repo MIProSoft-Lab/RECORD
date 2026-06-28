@@ -401,6 +401,16 @@
       "ERROR": "No s'ha pogut reenviar la publicació.",
       "SAME_JOURNAL": "El nou journal ha de ser diferent de l'actual."
     },
+    "LINK_AUTHOR": {
+      "BUTTON_TOOLTIP": "Vincular a un usuari registrat",
+      "DIALOG_TITLE": "Vincular autor a un usuari",
+      "DESCRIPTION": "Substitueix l'autor extern «{{name}}» per un usuari registrat. La publicació passarà a aparèixer al seu historial.",
+      "USER_LABEL": "Usuari registrat",
+      "SEARCH_PLACEHOLDER": "Cerca usuaris registrats per nom o email",
+      "CONFIRM": "Vincular",
+      "SUCCESS": "Autor vinculat a l'usuari correctament.",
+      "ERROR": "No s'ha pogut vincular l'autor."
+    },
     "DELETE": {
       "ACTION": "Eliminar",
       "CONFIRM_HEADER": "Eliminar publicació",

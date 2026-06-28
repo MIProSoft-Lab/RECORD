@@ -1,0 +1,68 @@
+<p-dialog
+  [visible]="visible()"
+  (visibleChange)="visible.set($event)"
+  (onHide)="onHide()"
+  [modal]="true"
+  [draggable]="false"
+  [style]="{ width: '32rem' }"
+  [header]="'PUBLICATIONS.LINK_AUTHOR.DIALOG_TITLE' | translate"
+>
+  <div class="flex flex-column gap-3">
+    <p class="m-0 text-color-secondary">
+      {{
+        'PUBLICATIONS.LINK_AUTHOR.DESCRIPTION'
+          | translate
+            : {
+                name: externalAuthor().firstName + ' ' + externalAuthor().lastName,
+              }
+      }}
+    </p>
+
+    <div class="flex flex-column gap-1">
+      <label class="font-medium">{{ 'PUBLICATIONS.LINK_AUTHOR.USER_LABEL' | translate }}</label>
+      <p-autoComplete
+        [ngModel]="selectedUser()"
+        (ngModelChange)="selectedUser.set($event)"
+        [suggestions]="userSuggestions()"
+        (completeMethod)="onUserSearch($event)"
+        optionLabel="fullName"
+        dataKey="id"
+        appendTo="body"
+        [forceSelection]="true"
+        [placeholder]="'PUBLICATIONS.LINK_AUTHOR.SEARCH_PLACEHOLDER' | translate"
+        styleClass="w-full"
+        inputStyleClass="w-full"
+      >
+        <ng-template let-member #item>
+          <div class="flex align-items-center gap-3 py-1">
+            <p-avatar
+              [image]="member.profileImageUrl || undefined"
+              [label]="member.profileImageUrl ? undefined : initialsFor(member)"
+              shape="circle"
+            />
+            <div class="flex flex-column">
+              <span class="font-medium">{{ member.firstName }} {{ member.lastName }}</span>
+              <span class="text-color-secondary text-sm">{{ member.email }}</span>
+            </div>
+          </div>
+        </ng-template>
+      </p-autoComplete>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <p-button
+      [label]="'COMMON.BUTTONS.CANCEL' | translate"
+      severity="secondary"
+      [text]="true"
+      (onClick)="visible.set(false)"
+    />
+    <p-button
+      [label]="'PUBLICATIONS.LINK_AUTHOR.CONFIRM' | translate"
+      icon="pi pi-link"
+      [loading]="isSaving()"
+      [disabled]="!canConfirm()"
+      (onClick)="confirm()"
+    />
+  </ng-template>
+</p-dialog>

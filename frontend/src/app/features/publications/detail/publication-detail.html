@@ -182,6 +182,17 @@
                         <span class="text-color-secondary text-sm">{{ author.email }}</span>
                       }
                     </div>
+                    @if (author.type === 'EXTERNAL' && canEdit()) {
+                      <p-button
+                        icon="pi pi-link"
+                        severity="secondary"
+                        [text]="true"
+                        [rounded]="true"
+                        [pTooltip]="'PUBLICATIONS.LINK_AUTHOR.BUTTON_TOOLTIP' | translate"
+                        tooltipPosition="top"
+                        (onClick)="openLinkAuthor(author)"
+                      />
+                    }
                   </div>
                 </div>
               }
@@ -268,6 +279,15 @@
         [(visible)]="resubmitDialogVisible"
         (resubmitted)="onResubmitted($event)"
       />
+
+      @if (linkAuthorTarget(); as target) {
+        <record-link-author-dialog
+          [publication]="pub"
+          [externalAuthor]="target"
+          [(visible)]="linkAuthorDialogVisible"
+          (converted)="onAuthorConverted($event)"
+        />
+      }
     </div>
   } @else if (!isLoading()) {
     <div class="text-center text-color-secondary p-4">

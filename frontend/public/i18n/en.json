@@ -401,6 +401,16 @@
       "ERROR": "Could not resubmit the publication.",
       "SAME_JOURNAL": "The new journal must be different from the current one."
     },
+    "LINK_AUTHOR": {
+      "BUTTON_TOOLTIP": "Link to a registered user",
+      "DIALOG_TITLE": "Link author to a user",
+      "DESCRIPTION": "Replace the external author \"{{name}}\" with a registered user. The publication will start showing up in their history.",
+      "USER_LABEL": "Registered user",
+      "SEARCH_PLACEHOLDER": "Search registered users by name or email",
+      "CONFIRM": "Link",
+      "SUCCESS": "Author linked to the user successfully.",
+      "ERROR": "Could not link the author."
+    },
     "DELETE": {
       "ACTION": "Delete",
       "CONFIRM_HEADER": "Delete publication",
