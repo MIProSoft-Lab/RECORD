@@ -4,7 +4,9 @@ import es.uib.record.backend.publications.domain.model.PublicationStatus
 import java.time.Instant
 import java.util.UUID
 
-/** Creador (dueño) de una publicación, para mostrar de quién es cada fila en el listado de grupo. */
+/**
+ * Creador (dueño) de una publicación, para mostrar de quién es cada fila en el listado de grupo.
+ */
 data class PublicationCreatorDto(
     val userId: UUID,
     val firstName: String,

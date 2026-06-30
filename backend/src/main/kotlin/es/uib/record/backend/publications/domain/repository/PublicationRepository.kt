@@ -40,9 +40,9 @@ interface PublicationRepository {
 
     /**
      * Página de las publicaciones que pertenecen al grupo [groupId], ordenada por fecha de creación
-     * descendente. Cuando [authorIds] es `null` se incluyen todas las publicaciones del grupo; cuando
-     * trae una lista, solo las publicaciones en las que alguno de esos usuarios figura como autor
-     * (creador o co-autor). El resto de filtros se comportan igual que en [searchByAuthor].
+     * descendente. Cuando [authorIds] es `null` se incluyen todas las publicaciones del grupo;
+     * cuando trae una lista, solo las publicaciones en las que alguno de esos usuarios figura como
+     * autor (creador o co-autor). El resto de filtros se comportan igual que en [searchByAuthor].
      */
     fun searchByGroup(
         groupId: UUID,
