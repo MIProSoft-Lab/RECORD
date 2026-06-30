@@ -7,6 +7,7 @@ import es.uib.record.backend.groups.domain.exception.NotGroupMemberException
 import es.uib.record.backend.groups.domain.model.Group
 import es.uib.record.backend.groups.domain.model.GroupRole
 import es.uib.record.backend.groups.domain.repository.GroupRepository
+import es.uib.record.backend.groups.domain.repository.PublicationVisibilityRepository
 import es.uib.record.backend.users.open.UserFacade
 import java.util.UUID
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -36,6 +37,8 @@ class KickGroupMemberUseCaseTest {
     }
 
     @Mock private lateinit var groupRepository: GroupRepository
+
+    @Mock private lateinit var publicationVisibilityRepository: PublicationVisibilityRepository
 
     @Mock private lateinit var userFacade: UserFacade
 

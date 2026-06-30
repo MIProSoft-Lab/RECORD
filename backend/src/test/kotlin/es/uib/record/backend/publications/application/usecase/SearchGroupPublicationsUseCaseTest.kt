@@ -82,7 +82,17 @@ class SearchGroupPublicationsUseCaseTest {
             )
         }
         verify(publicationRepository, never())
-            .searchByGroup(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), any(), any(), any())
+            .searchByGroup(
+                any(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                any(),
+                any(),
+                any(),
+            )
     }
 
     @Test
@@ -91,6 +101,7 @@ class SearchGroupPublicationsUseCaseTest {
         val publication = publication()
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(groupFacade.isMember(GROUP_ID, USER_ID)).willReturn(true)
+        given(groupFacade.getOwnersHiddenFromViewer(GROUP_ID, USER_ID)).willReturn(emptySet())
         given(
                 publicationRepository.searchByGroup(
                     any(),
@@ -151,6 +162,7 @@ class SearchGroupPublicationsUseCaseTest {
         val foreignId = UUID.fromString("00000000-0000-0000-0000-0000000000ff")
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(groupFacade.isMember(GROUP_ID, USER_ID)).willReturn(true)
+        given(groupFacade.getOwnersHiddenFromViewer(GROUP_ID, USER_ID)).willReturn(emptySet())
         given(groupFacade.getMemberIds(GROUP_ID)).willReturn(listOf(USER_ID, OTHER_MEMBER_ID))
         given(
                 publicationRepository.searchByGroup(
@@ -202,6 +214,7 @@ class SearchGroupPublicationsUseCaseTest {
         // Given
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(groupFacade.isMember(GROUP_ID, USER_ID)).willReturn(true)
+        given(groupFacade.getOwnersHiddenFromViewer(GROUP_ID, USER_ID)).willReturn(emptySet())
         given(groupFacade.getMemberIds(GROUP_ID)).willReturn(listOf(USER_ID))
         val foreignId = UUID.fromString("00000000-0000-0000-0000-0000000000ff")
 
@@ -223,7 +236,17 @@ class SearchGroupPublicationsUseCaseTest {
         assertEquals(0, result.totalElements)
         assertTrue(result.items.isEmpty())
         verify(publicationRepository, never())
-            .searchByGroup(any(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), anyOrNull(), any(), any(), any())
+            .searchByGroup(
+                any(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                any(),
+                any(),
+                any(),
+            )
     }
 
     @Test
@@ -231,6 +254,7 @@ class SearchGroupPublicationsUseCaseTest {
         // Given
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(groupFacade.isMember(GROUP_ID, USER_ID)).willReturn(true)
+        given(groupFacade.getOwnersHiddenFromViewer(GROUP_ID, USER_ID)).willReturn(emptySet())
         given(
                 publicationRepository.searchByGroup(
                     any(),
@@ -276,5 +300,109 @@ class SearchGroupPublicationsUseCaseTest {
             )
         assertTrue(excludeFinal.firstValue)
         assertNotNull(staleBefore.firstValue)
+    }
+
+    @Test
+    fun `should exclude owners who hid their publications from a non-admin viewer`() {
+        // Given a non-admin viewer to whom OTHER_MEMBER hid their publications
+        given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
+        given(groupFacade.isMember(GROUP_ID, USER_ID)).willReturn(true)
+        given(groupFacade.getOwnersHiddenFromViewer(GROUP_ID, USER_ID))
+            .willReturn(setOf(OTHER_MEMBER_ID))
+        given(groupFacade.getMemberIds(GROUP_ID)).willReturn(listOf(USER_ID, OTHER_MEMBER_ID))
+        given(
+                publicationRepository.searchByGroup(
+                    any(),
+                    anyOrNull(),
+                    anyOrNull(),
+                    anyOrNull(),
+                    anyOrNull(),
+                    anyOrNull(),
+                    any(),
+                    any(),
+                    any(),
+                )
+            )
+            .willReturn(PageResult(emptyList(), totalElements = 0, page = 0, size = 20))
+
+        // When (no explicit member filter)
+        searchGroupPublicationsUseCase.execute(
+            email = EMAIL,
+            groupId = GROUP_ID,
+            memberIds = null,
+            title = null,
+            journalId = null,
+            status = null,
+            minDaysInStatus = null,
+            page = 0,
+            size = 20,
+        )
+
+        // Then the hidden owner is excluded; only the visible member survives
+        val authorIds = argumentCaptor<List<UUID>>()
+        verify(publicationRepository)
+            .searchByGroup(
+                eq(GROUP_ID),
+                authorIds.capture(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                any(),
+                any(),
+                any(),
+            )
+        assertEquals(listOf(USER_ID), authorIds.firstValue)
+    }
+
+    @Test
+    fun `should not apply visibility filtering for an admin viewer`() {
+        // Given an admin viewer (sees everything regardless of hidden exceptions)
+        given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
+        given(groupFacade.isMember(GROUP_ID, USER_ID)).willReturn(true)
+        given(groupFacade.isAdmin(GROUP_ID, USER_ID)).willReturn(true)
+        given(
+                publicationRepository.searchByGroup(
+                    any(),
+                    anyOrNull(),
+                    anyOrNull(),
+                    anyOrNull(),
+                    anyOrNull(),
+                    anyOrNull(),
+                    any(),
+                    any(),
+                    any(),
+                )
+            )
+            .willReturn(PageResult(emptyList(), totalElements = 0, page = 0, size = 20))
+
+        // When (no explicit member filter)
+        searchGroupPublicationsUseCase.execute(
+            email = EMAIL,
+            groupId = GROUP_ID,
+            memberIds = null,
+            title = null,
+            journalId = null,
+            status = null,
+            minDaysInStatus = null,
+            page = 0,
+            size = 20,
+        )
+
+        // Then authorIds stays null (all group publications)
+        val authorIds = argumentCaptor<List<UUID>>()
+        verify(publicationRepository)
+            .searchByGroup(
+                eq(GROUP_ID),
+                authorIds.capture(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                anyOrNull(),
+                any(),
+                any(),
+                any(),
+            )
+        assertNull(authorIds.firstValue)
     }
 }
