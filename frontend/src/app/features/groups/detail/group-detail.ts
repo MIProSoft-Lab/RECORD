@@ -15,6 +15,7 @@ import { UserState } from '@core/services/user-state';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { EditGroupDialog } from './edit-group-dialog';
 import { GroupJournalInterests } from './group-journal-interests';
+import { GroupPublicationVisibility } from './group-publication-visibility';
 import { GroupPublications } from './group-publications';
 import { InviteUsersDialog } from './invite-users-dialog';
 
@@ -38,6 +39,7 @@ interface RoleOption {
     EditGroupDialog,
     GroupJournalInterests,
     GroupPublications,
+    GroupPublicationVisibility,
   ],
   templateUrl: './group-detail.html',
 })

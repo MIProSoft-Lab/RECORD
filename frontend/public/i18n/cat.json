@@ -170,7 +170,8 @@
         "YOU": "Tu",
         "CREATOR": "Creador",
         "NO_MEMBERS_SELECTED": "Selecciona almenys un membre per veure les seves publicacions.",
-        "EMPTY_STATE": "No hi ha publicacions que coincideixin amb els filtres."
+        "EMPTY_STATE": "No hi ha publicacions que coincideixin amb els filtres.",
+        "HIDDEN_MEMBER": "Aquest membre ha amagat les seves publicacions per a tu"
       },
       "ADMINISTRATION": {
         "COMING_SOON": "Pròximament.",
@@ -197,6 +198,18 @@
           "TOAST_ERROR_KICK_LAST_ADMIN": "No es pot expulsar l'únic administrador del grup.",
           "TOAST_ERROR_KICK_FORBIDDEN": "No tens permisos per expulsar aquest membre.",
           "TOAST_ERROR_KICK_GENERIC": "No s'ha pogut expulsar el membre."
+        },
+        "PRIVACY": {
+          "SECTION_TITLE": "Privadesa de publicacions",
+          "SECTION_DESCRIPTION": "Tria quins membres poden veure el teu historial de publicacions. Els administradors sempre el poden veure.",
+          "NO_MEMBERS": "Encara no hi ha altres membres en aquest grup.",
+          "ADMIN_LOCKED": "Els administradors sempre poden veure les teves publicacions",
+          "TOGGLE_LABEL": "Pot veure les meves publicacions",
+          "TOAST_SUCCESS_SUMMARY": "Privadesa actualitzada",
+          "TOAST_SHOWN": "{{name}} ja pot veure les teves publicacions",
+          "TOAST_HIDDEN": "{{name}} ja no pot veure les teves publicacions",
+          "TOAST_ERROR_SUMMARY": "Error",
+          "TOAST_ERROR_DETAIL": "No s'ha pogut actualitzar la visibilitat. Torna-ho a provar."
         }
       },
       "DELETE": {

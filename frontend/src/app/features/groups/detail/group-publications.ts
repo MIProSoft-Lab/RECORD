@@ -16,6 +16,7 @@ import { Tooltip } from 'primeng/tooltip';
 import {
   GroupMemberDetail,
   GroupPublicationSummaryResponse,
+  GroupsService,
   JournalSummaryResponse,
   JournalsService,
   PublicationStatus,
@@ -64,6 +65,7 @@ export class GroupPublications implements OnInit {
 
   private readonly publicationsService = inject(PublicationsService);
   private readonly journalsService = inject(JournalsService);
+  private readonly groupsService = inject(GroupsService);
   private readonly router = inject(Router);
   private readonly userState = inject(UserState);
 
@@ -75,8 +77,18 @@ export class GroupPublications implements OnInit {
 
   readonly pageSize = PAGE_SIZE;
 
-  /** Miembros cuyas publicaciones se muestran. Por defecto, todos. */
+  /** Miembros cuyas publicaciones se muestran. Por defecto, todos los visibles. */
   readonly selectedMemberIds = signal<Set<string>>(new Set());
+
+  /** Miembros que ocultan sus publicaciones al usuario actual (no seleccionables). */
+  readonly hiddenMemberIds = signal<Set<string>>(new Set());
+
+  /** Miembros que el usuario actual puede ver (todos menos los que le ocultan). */
+  readonly selectableMemberIds = computed(() =>
+    this.members()
+      .filter((m) => !this.hiddenMemberIds().has(m.userId))
+      .map((m) => m.userId),
+  );
 
   // --- Filtros (mismos que el listado general, sin "solo autor principal") ---
   title = '';
@@ -89,7 +101,9 @@ export class GroupPublications implements OnInit {
 
   readonly currentUserId = computed(() => this.userState.currentUser()?.id);
   readonly allMembersSelected = computed(
-    () => this.selectedMemberIds().size === this.members().length,
+    () =>
+      this.selectedMemberIds().size > 0 &&
+      this.selectedMemberIds().size === this.selectableMemberIds().length,
   );
   readonly noMembersSelected = computed(() => this.selectedMemberIds().size === 0);
 
@@ -97,8 +111,22 @@ export class GroupPublications implements OnInit {
   private loaderTimer?: ReturnType<typeof setTimeout>;
 
   ngOnInit() {
-    // Por defecto se incluyen todos los miembros.
-    this.selectedMemberIds.set(new Set(this.members().map((m) => m.userId)));
+    // Primero se averigua quién oculta sus publicaciones al usuario; esos miembros no son
+    // seleccionables. La selección por defecto incluye al resto (los visibles).
+    this.groupsService.getMembersHiddenFromMe(this.groupId()).subscribe({
+      next: (response) => {
+        this.hiddenMemberIds.set(new Set(response.hiddenMemberIds));
+        this.initSelectionAndLoad();
+      },
+      error: () => {
+        this.hiddenMemberIds.set(new Set());
+        this.initSelectionAndLoad();
+      },
+    });
+  }
+
+  private initSelectionAndLoad() {
+    this.selectedMemberIds.set(new Set(this.selectableMemberIds()));
     this.load();
   }
 
@@ -108,7 +136,12 @@ export class GroupPublications implements OnInit {
     return this.selectedMemberIds().has(userId);
   }
 
+  isMemberHidden(userId: string): boolean {
+    return this.hiddenMemberIds().has(userId);
+  }
+
   onMemberToggle(userId: string, checked: boolean) {
+    if (this.isMemberHidden(userId)) return;
     const next = new Set(this.selectedMemberIds());
     if (checked) {
       next.add(userId);

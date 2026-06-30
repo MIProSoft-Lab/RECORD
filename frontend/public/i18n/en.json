@@ -170,7 +170,8 @@
         "YOU": "You",
         "CREATOR": "Creator",
         "NO_MEMBERS_SELECTED": "Select at least one member to see their publications.",
-        "EMPTY_STATE": "No publications match the filters."
+        "EMPTY_STATE": "No publications match the filters.",
+        "HIDDEN_MEMBER": "This member has hidden their publications from you"
       },
       "ADMINISTRATION": {
         "COMING_SOON": "Coming soon.",
@@ -197,6 +198,18 @@
           "TOAST_ERROR_KICK_LAST_ADMIN": "Cannot kick the only administrator of the group.",
           "TOAST_ERROR_KICK_FORBIDDEN": "You don't have permission to kick this member.",
           "TOAST_ERROR_KICK_GENERIC": "Could not kick the member."
+        },
+        "PRIVACY": {
+          "SECTION_TITLE": "Publication privacy",
+          "SECTION_DESCRIPTION": "Choose which members can see your publication history. Administrators can always see it.",
+          "NO_MEMBERS": "There are no other members in this group yet.",
+          "ADMIN_LOCKED": "Administrators can always see your publications",
+          "TOGGLE_LABEL": "Can see my publications",
+          "TOAST_SUCCESS_SUMMARY": "Privacy updated",
+          "TOAST_SHOWN": "{{name}} can now see your publications",
+          "TOAST_HIDDEN": "{{name}} can no longer see your publications",
+          "TOAST_ERROR_SUMMARY": "Error",
+          "TOAST_ERROR_DETAIL": "The visibility could not be updated. Please try again."
         }
       },
       "DELETE": {

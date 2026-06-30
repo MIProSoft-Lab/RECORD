@@ -21,13 +21,28 @@
               [binary]="true"
               [ngModel]="isMemberSelected(member.userId)"
               (ngModelChange)="onMemberToggle(member.userId, $event)"
+              [disabled]="isMemberHidden(member.userId)"
             />
-            <label [for]="'member-' + member.userId" class="cursor-pointer flex-1">
-              {{ member.firstName }} {{ member.lastName }}
-              @if (member.userId === currentUserId()) {
-                <span class="text-color-secondary">
-                  ({{ 'GROUPS.DETAIL.POSTS.YOU' | translate }})
-                </span>
+            <label
+              [for]="'member-' + member.userId"
+              class="flex-1 flex align-items-center gap-1"
+              [class.cursor-pointer]="!isMemberHidden(member.userId)"
+              [class.text-color-secondary]="isMemberHidden(member.userId)"
+            >
+              <span>
+                {{ member.firstName }} {{ member.lastName }}
+                @if (member.userId === currentUserId()) {
+                  <span class="text-color-secondary">
+                    ({{ 'GROUPS.DETAIL.POSTS.YOU' | translate }})
+                  </span>
+                }
+              </span>
+              @if (isMemberHidden(member.userId)) {
+                <i
+                  class="pi pi-lock text-xs"
+                  [pTooltip]="'GROUPS.DETAIL.POSTS.HIDDEN_MEMBER' | translate"
+                  tooltipPosition="top"
+                ></i>
               }
             </label>
           </div>

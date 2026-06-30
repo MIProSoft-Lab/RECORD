@@ -250,6 +250,10 @@
               </div>
             }
 
+            @if (activeTab() === 'administration') {
+              <record-group-publication-visibility [groupId]="g.id" />
+            }
+
             <div>
               <h3 class="m-0 mb-2">
                 {{ 'GROUPS.DETAIL.LEAVE.SECTION_TITLE' | translate }}

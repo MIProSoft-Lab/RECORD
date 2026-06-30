@@ -1,0 +1,59 @@
+<div>
+  <h3 class="m-0 mb-2">
+    {{ 'GROUPS.DETAIL.ADMINISTRATION.PRIVACY.SECTION_TITLE' | translate }}
+  </h3>
+  <p class="m-0 mb-3 text-color-secondary">
+    {{ 'GROUPS.DETAIL.ADMINISTRATION.PRIVACY.SECTION_DESCRIPTION' | translate }}
+  </p>
+
+  @if (loading()) {
+    <div class="flex align-items-center justify-content-center p-4">
+      <i class="pi pi-spin pi-spinner text-xl"></i>
+    </div>
+  } @else if (members().length === 0) {
+    <p class="m-0 text-color-secondary">
+      {{ 'GROUPS.DETAIL.ADMINISTRATION.PRIVACY.NO_MEMBERS' | translate }}
+    </p>
+  } @else {
+    <div class="surface-card border-round p-3 flex flex-column gap-3 w-full md:w-30rem">
+      @for (member of members(); track member.userId) {
+        <div class="flex align-items-center justify-content-between gap-3">
+          <div class="flex align-items-center gap-2">
+            @if (member.profileImageUrl) {
+              <img
+                [src]="member.profileImageUrl"
+                [alt]="member.firstName + ' ' + member.lastName"
+                class="border-circle border-1 surface-border object-cover"
+                style="width: 2rem; height: 2rem"
+              />
+            } @else {
+              <div
+                class="border-circle surface-200 flex align-items-center justify-content-center"
+                style="width: 2rem; height: 2rem"
+              >
+                <i class="pi pi-user text-color-secondary"></i>
+              </div>
+            }
+            <span class="font-medium">{{ member.firstName }} {{ member.lastName }}</span>
+          </div>
+
+          <div class="flex align-items-center gap-2">
+            @if (member.locked) {
+              <i
+                class="pi pi-lock text-color-secondary"
+                [pTooltip]="'GROUPS.DETAIL.ADMINISTRATION.PRIVACY.ADMIN_LOCKED' | translate"
+                tooltipPosition="left"
+              ></i>
+            }
+            <p-toggleswitch
+              [ngModel]="member.canSee"
+              (ngModelChange)="onToggle(member, $event)"
+              [disabled]="member.locked || updatingMemberId() === member.userId"
+              [ariaLabel]="'GROUPS.DETAIL.ADMINISTRATION.PRIVACY.TOGGLE_LABEL' | translate"
+            />
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

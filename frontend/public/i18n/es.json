@@ -170,7 +170,8 @@
         "YOU": "Tú",
         "CREATOR": "Creador",
         "NO_MEMBERS_SELECTED": "Selecciona al menos un miembro para ver sus publicaciones.",
-        "EMPTY_STATE": "No hay publicaciones que coincidan con los filtros."
+        "EMPTY_STATE": "No hay publicaciones que coincidan con los filtros.",
+        "HIDDEN_MEMBER": "Este miembro ha ocultado sus publicaciones para ti"
       },
       "ADMINISTRATION": {
         "COMING_SOON": "Próximamente.",
@@ -197,6 +198,18 @@
           "TOAST_ERROR_KICK_LAST_ADMIN": "No se puede expulsar al único administrador del grupo.",
           "TOAST_ERROR_KICK_FORBIDDEN": "No tienes permisos para expulsar a este miembro.",
           "TOAST_ERROR_KICK_GENERIC": "No se ha podido expulsar al miembro."
+        },
+        "PRIVACY": {
+          "SECTION_TITLE": "Privacidad de publicaciones",
+          "SECTION_DESCRIPTION": "Elige qué miembros pueden ver tu historial de publicaciones. Los administradores siempre pueden verlo.",
+          "NO_MEMBERS": "Todavía no hay otros miembros en este grupo.",
+          "ADMIN_LOCKED": "Los administradores siempre pueden ver tus publicaciones",
+          "TOGGLE_LABEL": "Puede ver mis publicaciones",
+          "TOAST_SUCCESS_SUMMARY": "Privacidad actualizada",
+          "TOAST_SHOWN": "{{name}} ya puede ver tus publicaciones",
+          "TOAST_HIDDEN": "{{name}} ya no puede ver tus publicaciones",
+          "TOAST_ERROR_SUMMARY": "Error",
+          "TOAST_ERROR_DETAIL": "No se pudo actualizar la visibilidad. Inténtalo de nuevo."
         }
       },
       "DELETE": {
