@@ -23,9 +23,13 @@ import { CreatePublicationRequest } from '../model/createPublicationRequest';
 // @ts-ignore
 import { ErrorResponse } from '../model/errorResponse';
 // @ts-ignore
+import { GroupPublicationListPageResponse } from '../model/groupPublicationListPageResponse';
+// @ts-ignore
+import { PublicationListPageResponse } from '../model/publicationListPageResponse';
+// @ts-ignore
 import { PublicationResponse } from '../model/publicationResponse';
 // @ts-ignore
-import { PublicationSummaryResponse } from '../model/publicationSummaryResponse';
+import { PublicationStatus } from '../model/publicationStatus';
 // @ts-ignore
 import { ResubmitPublicationRequest } from '../model/resubmitPublicationRequest';
 // @ts-ignore
@@ -310,16 +314,222 @@ export class PublicationsService extends BaseService {
     }
 
     /**
-     * List the publications created by the current user
-     * @endpoint get /publications/me
+     * List the publications of a research group
+     * Devuelve una página de las publicaciones que pertenecen al grupo (de todos sus miembros). Disponible solo para miembros del grupo. El filtro &#x60;memberIds&#x60; permite acotar el listado a las publicaciones en las que esos miembros figuran como autores (creador o co-autor); si se omite, se incluyen las de todos los miembros. El resto de filtros son opcionales y combinables. 
+     * @endpoint get /publications/groups/{groupId}
+     * @param groupId Identificador del grupo de investigación.
+     * @param memberIds Miembros cuyas publicaciones se quieren incluir (el miembro figura como autor, creador o co-autor). Si se omite, se incluyen las publicaciones de todos los miembros del grupo. 
+     * @param title Búsqueda parcial e insensible a mayúsculas por título de la publicación.
+     * @param journalId Filtra por el journal asociado a la publicación.
+     * @param status Filtra por estado del ciclo de vida de la publicación.
+     * @param minDaysInStatus Solo publicaciones que llevan al menos N días en su estado actual (útil para detectar publicaciones estancadas sin respuesta). Cuando se aplica, se excluyen automáticamente las publicaciones en estado final (REJECTED, PUBLISHED). 
+     * @param page Índice de página (base 0).
+     * @param size Tamaño de página.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public listMyPublications(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<Array<PublicationSummaryResponse>>;
-    public listMyPublications(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<Array<PublicationSummaryResponse>>>;
-    public listMyPublications(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<Array<PublicationSummaryResponse>>>;
-    public listMyPublications(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+    public listGroupPublications(groupId: string, memberIds?: Array<string>, title?: string, journalId?: string, status?: PublicationStatus, minDaysInStatus?: number, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<GroupPublicationListPageResponse>;
+    public listGroupPublications(groupId: string, memberIds?: Array<string>, title?: string, journalId?: string, status?: PublicationStatus, minDaysInStatus?: number, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<GroupPublicationListPageResponse>>;
+    public listGroupPublications(groupId: string, memberIds?: Array<string>, title?: string, journalId?: string, status?: PublicationStatus, minDaysInStatus?: number, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<GroupPublicationListPageResponse>>;
+    public listGroupPublications(groupId: string, memberIds?: Array<string>, title?: string, journalId?: string, status?: PublicationStatus, minDaysInStatus?: number, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+        if (groupId === null || groupId === undefined) {
+            throw new Error('Required parameter groupId was null or undefined when calling listGroupPublications.');
+        }
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'memberIds',
+            <any>memberIds,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'title',
+            <any>title,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'journalId',
+            <any>journalId,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'minDaysInStatus',
+            <any>minDaysInStatus,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        let localVarHeaders = this.defaultHeaders;
+
+        // authentication (bearerAuth) required
+        localVarHeaders = this.configuration.addCredentialToHeaders('bearerAuth', 'Authorization', localVarHeaders, 'Bearer ');
+
+        const localVarHttpHeaderAcceptSelected: string | undefined = options?.httpHeaderAccept ?? this.configuration.selectHeaderAccept([
+            'application/json'
+        ]);
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
+
+        const localVarTransferCache: boolean = options?.transferCache ?? true;
+
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/publications/groups/${this.configuration.encodeParam({name: "groupId", value: groupId, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: "uuid"})}`;
+        const { basePath, withCredentials } = this.configuration;
+        return this.httpClient.request<GroupPublicationListPageResponse>('get', `${basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
+                responseType: <any>responseType_,
+                ...(withCredentials ? { withCredentials } : {}),
+                headers: localVarHeaders,
+                observe: observe,
+                ...(localVarTransferCache !== undefined ? { transferCache: localVarTransferCache } : {}),
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * List the publications of the current user
+     * Devuelve una página del historial de publicaciones del usuario (creadas por él o en las que figura como autor). Todos los filtros son opcionales y combinables. 
+     * @endpoint get /publications/me
+     * @param title Búsqueda parcial e insensible a mayúsculas por título de la publicación.
+     * @param journalId Filtra por el journal asociado a la publicación.
+     * @param status Filtra por estado del ciclo de vida de la publicación.
+     * @param minDaysInStatus Solo publicaciones que llevan al menos N días en su estado actual (útil para detectar publicaciones estancadas sin respuesta). Cuando se aplica, se excluyen automáticamente las publicaciones en estado final (REJECTED, PUBLISHED). 
+     * @param onlyAsMainAuthor Solo publicaciones en las que el usuario es el autor principal (primer autor).
+     * @param page Índice de página (base 0).
+     * @param size Tamaño de página.
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     * @param options additional options
+     */
+    public listMyPublications(title?: string, journalId?: string, status?: PublicationStatus, minDaysInStatus?: number, onlyAsMainAuthor?: boolean, page?: number, size?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<PublicationListPageResponse>;
+    public listMyPublications(title?: string, journalId?: string, status?: PublicationStatus, minDaysInStatus?: number, onlyAsMainAuthor?: boolean, page?: number, size?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpResponse<PublicationListPageResponse>>;
+    public listMyPublications(title?: string, journalId?: string, status?: PublicationStatus, minDaysInStatus?: number, onlyAsMainAuthor?: boolean, page?: number, size?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<HttpEvent<PublicationListPageResponse>>;
+    public listMyPublications(title?: string, journalId?: string, status?: PublicationStatus, minDaysInStatus?: number, onlyAsMainAuthor?: boolean, page?: number, size?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext, transferCache?: boolean}): Observable<any> {
+
+        let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'title',
+            <any>title,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'journalId',
+            <any>journalId,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'status',
+            <any>status,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'minDaysInStatus',
+            <any>minDaysInStatus,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'onlyAsMainAuthor',
+            <any>onlyAsMainAuthor,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'page',
+            <any>page,
+            QueryParamStyle.Form,
+            false,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'size',
+            <any>size,
+            QueryParamStyle.Form,
+            false,
+        );
+
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -351,9 +561,10 @@ export class PublicationsService extends BaseService {
 
         let localVarPath = `/publications/me`;
         const { basePath, withCredentials } = this.configuration;
-        return this.httpClient.request<Array<PublicationSummaryResponse>>('get', `${basePath}${localVarPath}`,
+        return this.httpClient.request<PublicationListPageResponse>('get', `${basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters.toHttpParams(),
                 responseType: <any>responseType_,
                 ...(withCredentials ? { withCredentials } : {}),
                 headers: localVarHeaders,
