@@ -9,9 +9,5 @@ class PublicationEditForbiddenException(publicationId: UUID, userId: UUID) :
         message = "User $userId is not allowed to edit publication $publicationId",
         code = "PUBLICATION_EDIT_FORBIDDEN",
         type = ErrorType.FORBIDDEN,
-        params =
-            mapOf(
-                "publicationId" to publicationId.toString(),
-                "userId" to userId.toString(),
-            ),
+        params = mapOf("publicationId" to publicationId.toString(), "userId" to userId.toString()),
     )

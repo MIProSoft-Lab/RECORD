@@ -10,7 +10,9 @@ interface SpringDataJpaJournalCategoryQuartileRepository :
     JpaRepository<JournalCategoryQuartileEntity, UUID> {
     fun deleteByJournalMetricId(journalMetricId: UUID)
 
-    /** Cuartiles del último año disponible de cada una de las revistas indicadas, con su categoría. */
+    /**
+     * Cuartiles del último año disponible de cada una de las revistas indicadas, con su categoría.
+     */
     @Query(
         "SELECT new es.uib.record.backend.journals.infrastructure.persistence.repository.JournalCategoryQuartileView(" +
             "jcq.journalId, jcq.categoryId, c.name, c.edition, jcq.year, jcq.quartile, jcq.impactFactor) " +
@@ -23,7 +25,10 @@ interface SpringDataJpaJournalCategoryQuartileRepository :
         @Param("journalIds") journalIds: Collection<UUID>
     ): List<JournalCategoryQuartileView>
 
-    /** Todos los cuartiles de una revista (todos los años), con su categoría, para la vista de detalle. */
+    /**
+     * Todos los cuartiles de una revista (todos los años), con su categoría, para la vista de
+     * detalle.
+     */
     @Query(
         "SELECT new es.uib.record.backend.journals.infrastructure.persistence.repository.JournalCategoryQuartileView(" +
             "jcq.journalId, jcq.categoryId, c.name, c.edition, jcq.year, jcq.quartile, jcq.impactFactor) " +

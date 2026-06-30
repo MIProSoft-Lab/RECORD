@@ -22,8 +22,7 @@ class UnmarkJournalInterestUseCaseTest {
     @Mock private lateinit var userJournalInterestRepository: UserJournalInterestRepository
     @Mock private lateinit var userFacade: UserFacade
 
-    private fun useCase() =
-        UnmarkJournalInterestUseCase(userJournalInterestRepository, userFacade)
+    private fun useCase() = UnmarkJournalInterestUseCase(userJournalInterestRepository, userFacade)
 
     @Test
     fun `removes the interest for the resolved user`() {

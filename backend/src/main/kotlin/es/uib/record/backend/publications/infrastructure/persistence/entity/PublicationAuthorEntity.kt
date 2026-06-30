@@ -9,9 +9,9 @@ import jakarta.persistence.Table
 import java.util.UUID
 
 /**
- * Autor de una publicación. Es interno cuando [userId] tiene valor (referencia
- * débil al usuario, sin foreign key entre dominios) o externo cuando se rellenan
- * [firstName] y [lastName]. [position] preserva el orden de autoría.
+ * Autor de una publicación. Es interno cuando [userId] tiene valor (referencia débil al usuario,
+ * sin foreign key entre dominios) o externo cuando se rellenan [firstName] y [lastName]. [position]
+ * preserva el orden de autoría.
  */
 @Entity
 @Table(name = "publication_authors")

@@ -9,9 +9,5 @@ class PublicationDeleteForbiddenException(publicationId: UUID, userId: UUID) :
         message = "User $userId is not allowed to delete publication $publicationId",
         code = "PUBLICATION_DELETE_FORBIDDEN",
         type = ErrorType.FORBIDDEN,
-        params =
-            mapOf(
-                "publicationId" to publicationId.toString(),
-                "userId" to userId.toString(),
-            ),
+        params = mapOf("publicationId" to publicationId.toString(), "userId" to userId.toString()),
     )

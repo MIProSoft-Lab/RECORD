@@ -56,7 +56,9 @@ class ResubmitPublicationUseCaseTest {
         // Given: a REJECTED publication is resubmitted to a different journal.
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED)
+            )
         given(journalFacade.existsById(NEW_JOURNAL_ID)).willReturn(true)
         given(userFacade.getUsersByIds(listOf(USER_ID))).willReturn(listOf(userOpenDto(USER_ID)))
         givenSaveReturnsArgument()
@@ -110,7 +112,9 @@ class ResubmitPublicationUseCaseTest {
         // Given: only REJECTED publications can be resubmitted.
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED)
+            )
         given(journalFacade.existsById(NEW_JOURNAL_ID)).willReturn(true)
 
         // When / Then
@@ -125,7 +129,9 @@ class ResubmitPublicationUseCaseTest {
         // Given: the target journal equals the current one.
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED)
+            )
         given(journalFacade.existsById(JOURNAL_ID)).willReturn(true)
 
         // When / Then
@@ -140,7 +146,9 @@ class ResubmitPublicationUseCaseTest {
         // Given
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED)
+            )
         given(journalFacade.existsById(NEW_JOURNAL_ID)).willReturn(false)
 
         // When / Then
@@ -188,7 +196,9 @@ class ResubmitPublicationUseCaseTest {
         // Given: a REJECTED publication on JOURNAL_ID (its history starts with that entry).
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.REJECTED)
+            )
         given(journalFacade.existsById(NEW_JOURNAL_ID)).willReturn(true)
         given(userFacade.getUsersByIds(listOf(USER_ID))).willReturn(listOf(userOpenDto(USER_ID)))
         givenSaveReturnsArgument()
@@ -243,8 +253,10 @@ class ResubmitPublicationUseCaseTest {
                 authors =
                     p.authors.map { author ->
                         when (author) {
-                            is PublicationAuthor.InternalAuthor -> author.copy(id = UUID.randomUUID())
-                            is PublicationAuthor.ExternalAuthor -> author.copy(id = UUID.randomUUID())
+                            is PublicationAuthor.InternalAuthor ->
+                                author.copy(id = UUID.randomUUID())
+                            is PublicationAuthor.ExternalAuthor ->
+                                author.copy(id = UUID.randomUUID())
                         }
                     },
                 statusHistory = p.statusHistory,

@@ -59,7 +59,8 @@ fun Publication.toEntity() =
         status = this.status,
         createdBy = this.createdBy,
         createdAt = this.createdAt,
-        authors = this.authors.mapIndexed { index, author -> author.toEntity(index) }.toMutableList(),
+        authors =
+            this.authors.mapIndexed { index, author -> author.toEntity(index) }.toMutableList(),
         statusHistory =
             this.statusHistory.mapIndexed { index, entry -> entry.toEntity(index) }.toMutableList(),
     )

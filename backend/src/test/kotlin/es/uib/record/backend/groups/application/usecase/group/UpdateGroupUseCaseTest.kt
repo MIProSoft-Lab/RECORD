@@ -85,8 +85,7 @@ class UpdateGroupUseCaseTest {
     fun `should throw GroupNameAlreadyExistsException when the name belongs to another group`() {
         // Given
         val group = createGroup()
-        val otherGroup =
-            Group(id = OTHER_GROUP_ID, name = NEW_NAME, createdBy = MEMBER_USER_ID)
+        val otherGroup = Group(id = OTHER_GROUP_ID, name = NEW_NAME, createdBy = MEMBER_USER_ID)
         given(groupRepository.findById(GROUP_ID)).willReturn(group)
         given(userFacade.getUserIdByEmail(ADMIN_EMAIL)).willReturn(ADMIN_USER_ID)
         given(groupRepository.findByName(NEW_NAME)).willReturn(otherGroup)

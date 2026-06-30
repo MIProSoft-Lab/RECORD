@@ -26,8 +26,7 @@ class UpdateGroupUseCase(
             throw GroupMemberNotAdminException(actingUserId, groupId)
 
         val existing = groupRepository.findByName(name)
-        if (existing != null && existing.id != group.id)
-            throw GroupNameAlreadyExistsException(name)
+        if (existing != null && existing.id != group.id) throw GroupNameAlreadyExistsException(name)
 
         val updated =
             Group(

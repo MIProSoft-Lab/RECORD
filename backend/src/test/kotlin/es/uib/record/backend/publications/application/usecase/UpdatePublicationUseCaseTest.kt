@@ -141,7 +141,9 @@ class UpdatePublicationUseCaseTest {
         // Given
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED)
+            )
         givenSaveReturnsArgument()
         givenJournalLookup("Nature")
 
@@ -189,11 +191,17 @@ class UpdatePublicationUseCaseTest {
         // Given: a non-published publication cannot have a DOI.
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED)
+            )
 
         // When / Then
         assertThrows<DoiNotAllowedException> {
-            updatePublicationUseCase.execute(PUBLICATION_ID, updateDto(doi = "10.1000/xyz123"), EMAIL)
+            updatePublicationUseCase.execute(
+                PUBLICATION_ID,
+                updateDto(doi = "10.1000/xyz123"),
+                EMAIL,
+            )
         }
         verify(publicationRepository, never()).save(any())
     }
@@ -287,8 +295,10 @@ class UpdatePublicationUseCaseTest {
                 authors =
                     p.authors.map { author ->
                         when (author) {
-                            is PublicationAuthor.InternalAuthor -> author.copy(id = UUID.randomUUID())
-                            is PublicationAuthor.ExternalAuthor -> author.copy(id = UUID.randomUUID())
+                            is PublicationAuthor.InternalAuthor ->
+                                author.copy(id = UUID.randomUUID())
+                            is PublicationAuthor.ExternalAuthor ->
+                                author.copy(id = UUID.randomUUID())
                         }
                     },
             )

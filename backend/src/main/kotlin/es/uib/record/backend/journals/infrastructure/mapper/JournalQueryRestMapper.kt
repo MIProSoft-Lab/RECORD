@@ -12,8 +12,8 @@ import es.uib.record.backend.model.JournalDetailResponse
 import es.uib.record.backend.model.JournalMetricResponse
 import es.uib.record.backend.model.JournalSearchPageResponse
 import es.uib.record.backend.model.JournalSummaryResponse
-import es.uib.record.backend.shared.domain.PageResult
 import es.uib.record.backend.model.Quartile as ApiQuartile
+import es.uib.record.backend.shared.domain.PageResult
 
 fun PageResult<JournalSearchItem>.toResponse() =
     JournalSearchPageResponse(
@@ -45,7 +45,8 @@ fun JournalCategoryQuartileInfo.toSummary() =
         impactFactor = this.impactFactor?.toDouble(),
     )
 
-fun Category.toResponse() = CategoryResponse(id = this.id!!, name = this.name, edition = this.edition)
+fun Category.toResponse() =
+    CategoryResponse(id = this.id!!, name = this.name, edition = this.edition)
 
 fun JournalDetail.toResponse() =
     JournalDetailResponse(

@@ -13,8 +13,8 @@ import java.time.Instant
 import java.util.UUID
 
 /**
- * Entrada del historial de estados de una publicación. [position] preserva el orden
- * cronológico de las transiciones.
+ * Entrada del historial de estados de una publicación. [position] preserva el orden cronológico de
+ * las transiciones.
  */
 @Entity
 @Table(name = "publication_status_history")

@@ -52,9 +52,9 @@ class Publication(
     }
 
     /**
-     * Garantiza que el usuario figure como autor interno. Si ya está (en cualquier
-     * posición) no hace nada; si no, lo inserta al principio. Permite que el orden de
-     * los autores —incluido el creador— lo decida quien crea la publicación.
+     * Garantiza que el usuario figure como autor interno. Si ya está (en cualquier posición) no
+     * hace nada; si no, lo inserta al principio. Permite que el orden de los autores —incluido el
+     * creador— lo decida quien crea la publicación.
      */
     fun prependInternalAuthorIfAbsent(userId: UUID) {
         if (!hasInternalAuthor(userId)) {
@@ -71,9 +71,9 @@ class Publication(
     }
 
     /**
-     * Devuelve una copia de la publicación con el nuevo estado [newStatus], conservando
-     * el resto de campos y los autores. Solo se permiten transiciones válidas del ciclo
-     * de vida; en caso contrario lanza [InvalidPublicationStatusTransitionException].
+     * Devuelve una copia de la publicación con el nuevo estado [newStatus], conservando el resto de
+     * campos y los autores. Solo se permiten transiciones válidas del ciclo de vida; en caso
+     * contrario lanza [InvalidPublicationStatusTransitionException].
      */
     fun changeStatus(newStatus: PublicationStatus, comment: String? = null): Publication {
         if (!status.canTransitionTo(newStatus)) {
@@ -91,18 +91,19 @@ class Publication(
             createdAt = createdAt,
             authors = authors,
             statusHistory =
-                statusHistory + PublicationStatusHistoryEntry(newStatus, journalId, Instant.now(), comment),
+                statusHistory +
+                    PublicationStatusHistoryEntry(newStatus, journalId, Instant.now(), comment),
         )
     }
 
     /**
-     * Reenvía una publicación rechazada a otro journal [newJournalId], devolviendo una
-     * copia con el nuevo journal y estado SUBMITTED. Solo se permite cuando la publicación
-     * está en estado REJECTED (en caso contrario lanza
-     * [InvalidPublicationStatusTransitionException]) y el journal destino debe ser distinto
-     * del actual (en caso contrario lanza [SameJournalResubmitException]). Es una operación
-     * atómica: cambia journal y estado a la vez, deliberadamente fuera de la máquina de
-     * estados genérica de [changeStatus] para no exponer un reenvío sin cambio de journal.
+     * Reenvía una publicación rechazada a otro journal [newJournalId], devolviendo una copia con el
+     * nuevo journal y estado SUBMITTED. Solo se permite cuando la publicación está en estado
+     * REJECTED (en caso contrario lanza [InvalidPublicationStatusTransitionException]) y el journal
+     * destino debe ser distinto del actual (en caso contrario lanza
+     * [SameJournalResubmitException]). Es una operación atómica: cambia journal y estado a la vez,
+     * deliberadamente fuera de la máquina de estados genérica de [changeStatus] para no exponer un
+     * reenvío sin cambio de journal.
      */
     fun resubmit(newJournalId: UUID, comment: String? = null): Publication {
         if (status != PublicationStatus.REJECTED) {

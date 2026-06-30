@@ -23,7 +23,8 @@ class GetPublicationDetailUseCase(
                 ?: throw PublicationNotFoundException(publicationId)
 
         // Incluye el journal actual y todos los del historial (p. ej. el anterior a un reenvío).
-        val journalIds = (publication.statusHistory.map { it.journalId } + publication.journalId).toSet()
+        val journalIds =
+            (publication.statusHistory.map { it.journalId } + publication.journalId).toSet()
         val journalNamesById =
             this.journalFacade.getJournalsByIds(journalIds).mapValues { it.value.name }
         val usersById =
@@ -31,6 +32,9 @@ class GetPublicationDetailUseCase(
                 .getUsersByIds(publication.authors.mapNotNull { it.internalUserId() })
                 .associateBy { it.userId }
 
-        return publication.toDetailDto(journalNamesById, publication.authors.toAuthorDtos(usersById))
+        return publication.toDetailDto(
+            journalNamesById,
+            publication.authors.toAuthorDtos(usersById),
+        )
     }
 }

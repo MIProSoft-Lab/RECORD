@@ -64,8 +64,7 @@ class SearchJournalsUseCaseTest {
     @Test
     fun `trims the name and delegates the filters to the repository`() {
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
-        given(userJournalInterestRepository.findInterestJournalIds(USER_ID))
-            .willReturn(emptySet())
+        given(userJournalInterestRepository.findInterestJournalIds(USER_ID)).willReturn(emptySet())
         given(journalRepository.search(anyOrNull(), anyOrNull(), anyOrNull(), any(), any()))
             .willReturn(samplePage())
 
@@ -79,8 +78,7 @@ class SearchJournalsUseCaseTest {
     @Test
     fun `normalizes a blank name to null`() {
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
-        given(userJournalInterestRepository.findInterestJournalIds(USER_ID))
-            .willReturn(emptySet())
+        given(userJournalInterestRepository.findInterestJournalIds(USER_ID)).willReturn(emptySet())
         given(journalRepository.search(anyOrNull(), anyOrNull(), anyOrNull(), any(), any()))
             .willReturn(samplePage())
 
@@ -99,8 +97,7 @@ class SearchJournalsUseCaseTest {
                 size = 20,
             )
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
-        given(userJournalInterestRepository.findInterestJournalIds(USER_ID))
-            .willReturn(emptySet())
+        given(userJournalInterestRepository.findInterestJournalIds(USER_ID)).willReturn(emptySet())
         given(journalRepository.search(anyOrNull(), anyOrNull(), anyOrNull(), any(), any()))
             .willReturn(page)
 
@@ -127,8 +124,7 @@ class SearchJournalsUseCaseTest {
     @Test
     fun `leaves isInterest false for journals outside the user's interest set`() {
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
-        given(userJournalInterestRepository.findInterestJournalIds(USER_ID))
-            .willReturn(emptySet())
+        given(userJournalInterestRepository.findInterestJournalIds(USER_ID)).willReturn(emptySet())
         given(journalRepository.search(anyOrNull(), anyOrNull(), anyOrNull(), any(), any()))
             .willReturn(samplePage())
 

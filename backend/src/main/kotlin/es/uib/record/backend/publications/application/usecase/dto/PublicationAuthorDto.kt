@@ -8,9 +8,9 @@ enum class PublicationAuthorType {
 }
 
 /**
- * Autor de una publicación devuelto en las respuestas. [firstName] y [lastName]
- * siempre están presentes (para mostrar); [userId], [email] y [profileImageUrl]
- * solo en autores internos. [authorId] identifica la entrada de autoría.
+ * Autor de una publicación devuelto en las respuestas. [firstName] y [lastName] siempre están
+ * presentes (para mostrar); [userId], [email] y [profileImageUrl] solo en autores internos.
+ * [authorId] identifica la entrada de autoría.
  */
 data class PublicationAuthorDto(
     val authorId: UUID,

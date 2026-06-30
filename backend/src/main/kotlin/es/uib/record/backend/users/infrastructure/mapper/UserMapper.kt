@@ -63,10 +63,4 @@ fun User.toOpenDto() =
     UserOpenDto(this.id!!, this.firstName, this.lastName, this.email, this.profileImageUrl)
 
 fun User.toSummaryResponse() =
-    UserSummaryResponse(
-        this.id!!,
-        this.firstName,
-        this.lastName,
-        this.email,
-        this.profileImageUrl,
-    )
+    UserSummaryResponse(this.id!!, this.firstName, this.lastName, this.email, this.profileImageUrl)

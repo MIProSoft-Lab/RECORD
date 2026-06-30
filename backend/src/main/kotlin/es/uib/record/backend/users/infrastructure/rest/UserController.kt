@@ -34,6 +34,7 @@ class UserController(
         val users = this.searchUserUseCase.execute(query)
         return ResponseEntity.ok(users.map { it.toSummaryResponse() })
     }
+
     override fun getCurrentUser(): ResponseEntity<UserResponse> {
         val authentication = SecurityContextHolder.getContext().authentication
         val email = authentication.name

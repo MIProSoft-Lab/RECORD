@@ -8,8 +8,8 @@ import java.util.UUID
 import org.springframework.stereotype.Component
 
 /**
- * Marca una revista como de interés para el usuario. Idempotente; lanza [JournalNotFoundException] si
- * la revista no existe.
+ * Marca una revista como de interés para el usuario. Idempotente; lanza [JournalNotFoundException]
+ * si la revista no existe.
  */
 @Component
 class MarkJournalInterestUseCase(

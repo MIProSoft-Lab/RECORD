@@ -53,7 +53,9 @@ class ChangePublicationStatusUseCaseTest {
         // Given: a SUBMITTED publication can transition to UNDER_REVIEW.
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED)
+            )
         given(userFacade.getUsersByIds(listOf(USER_ID))).willReturn(listOf(userOpenDto(USER_ID)))
         givenSaveReturnsArgument()
         givenJournalLookup("Nature")
@@ -107,7 +109,9 @@ class ChangePublicationStatusUseCaseTest {
         // Given: PLANNED cannot jump straight to PUBLISHED.
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.PLANNED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.PLANNED)
+            )
 
         // When / Then
         assertThrows<InvalidPublicationStatusTransitionException> {
@@ -166,7 +170,9 @@ class ChangePublicationStatusUseCaseTest {
         // Given: a SUBMITTED publication (its history starts with one seeded SUBMITTED entry).
         given(userFacade.getUserIdByEmail(EMAIL)).willReturn(USER_ID)
         given(publicationRepository.findById(PUBLICATION_ID))
-            .willReturn(existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED))
+            .willReturn(
+                existingPublication(createdBy = USER_ID, status = PublicationStatus.SUBMITTED)
+            )
         given(userFacade.getUsersByIds(listOf(USER_ID))).willReturn(listOf(userOpenDto(USER_ID)))
         givenSaveReturnsArgument()
         givenJournalLookup("Nature")
@@ -211,8 +217,10 @@ class ChangePublicationStatusUseCaseTest {
                 authors =
                     p.authors.map { author ->
                         when (author) {
-                            is PublicationAuthor.InternalAuthor -> author.copy(id = UUID.randomUUID())
-                            is PublicationAuthor.ExternalAuthor -> author.copy(id = UUID.randomUUID())
+                            is PublicationAuthor.InternalAuthor ->
+                                author.copy(id = UUID.randomUUID())
+                            is PublicationAuthor.ExternalAuthor ->
+                                author.copy(id = UUID.randomUUID())
                         }
                     },
                 statusHistory = p.statusHistory,

@@ -8,6 +8,7 @@ import es.uib.record.backend.journals.application.usecase.MarkJournalInterestUse
 import es.uib.record.backend.journals.application.usecase.SearchJournalsUseCase
 import es.uib.record.backend.journals.application.usecase.TriggerJournalSyncUseCase
 import es.uib.record.backend.journals.application.usecase.UnmarkJournalInterestUseCase
+import es.uib.record.backend.journals.domain.model.Quartile as DomainQuartile
 import es.uib.record.backend.journals.infrastructure.mapper.toResponse
 import es.uib.record.backend.model.CategoryResponse
 import es.uib.record.backend.model.JournalDetailResponse
@@ -19,7 +20,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.RestController
-import es.uib.record.backend.journals.domain.model.Quartile as DomainQuartile
 
 /**
  * Único controller del módulo de journals: implementa la interfaz generada [JournalsApi]. Debe ser
@@ -65,12 +65,16 @@ class JournalController(
     }
 
     override fun listJournalCategories(): ResponseEntity<List<CategoryResponse>> {
-        return ResponseEntity.ok(this.listJournalCategoriesUseCase.execute().map { it.toResponse() })
+        return ResponseEntity.ok(
+            this.listJournalCategoriesUseCase.execute().map { it.toResponse() }
+        )
     }
 
     override fun getJournalDetail(journalId: UUID): ResponseEntity<JournalDetailResponse> {
         val email = SecurityContextHolder.getContext().authentication.name
-        return ResponseEntity.ok(this.getJournalDetailUseCase.execute(email, journalId).toResponse())
+        return ResponseEntity.ok(
+            this.getJournalDetailUseCase.execute(email, journalId).toResponse()
+        )
     }
 
     override fun listInterestJournals(

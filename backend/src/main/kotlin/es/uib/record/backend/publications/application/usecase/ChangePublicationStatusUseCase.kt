@@ -53,6 +53,5 @@ class ChangePublicationStatusUseCase(
     }
 
     private fun canEdit(publication: Publication, userId: UUID): Boolean =
-        publication.createdBy == userId ||
-            publication.authors.any { it.internalUserId() == userId }
+        publication.createdBy == userId || publication.authors.any { it.internalUserId() == userId }
 }
