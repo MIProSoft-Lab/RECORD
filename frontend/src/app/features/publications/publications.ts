@@ -1,19 +1,36 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, inject, signal, viewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
+import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { Button } from 'primeng/button';
+import { Checkbox } from 'primeng/checkbox';
+import { InputNumber } from 'primeng/inputnumber';
+import { InputText } from 'primeng/inputtext';
 import { Menu } from 'primeng/menu';
+import { Paginator, PaginatorState } from 'primeng/paginator';
+import { Select } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
-import { PublicationStatus, PublicationSummaryResponse, PublicationsService } from '@core/api';
+import {
+  JournalSummaryResponse,
+  JournalsService,
+  PublicationStatus,
+  PublicationSummaryResponse,
+  PublicationsService,
+} from '@core/api';
 import { DaysSincePipe } from '@shared/pipes/days-since.pipe';
 import { allowedStatusTransitions, publicationStatusSeverity } from './publication-status';
 import { ChangeStatusDialog } from './change-status/change-status-dialog';
+import { PublicationFilterState } from './publication-filter-state';
 import { ResubmitPublicationDialog } from './resubmit/resubmit-publication-dialog';
 
+const DEBOUNCE_MS = 300;
+const PAGE_SIZE = 20;
+const JOURNAL_SUGGESTIONS_PAGE_SIZE = 10;
 /** Show the loading indicator only if the request is still pending after this delay. */
 const LOADER_DELAY_MS = 250;
 
@@ -23,8 +40,15 @@ const LOADER_DELAY_MS = 250;
     TranslatePipe,
     DatePipe,
     DaysSincePipe,
+    FormsModule,
+    AutoComplete,
     Button,
+    Checkbox,
+    InputNumber,
+    InputText,
     Menu,
+    Paginator,
+    Select,
     TableModule,
     Tag,
     Tooltip,
@@ -35,18 +59,34 @@ const LOADER_DELAY_MS = 250;
 })
 export class Publications implements OnInit {
   private readonly publicationsService = inject(PublicationsService);
+  private readonly journalsService = inject(JournalsService);
   private readonly router = inject(Router);
   private readonly translate = inject(TranslateService);
   private readonly confirmationService = inject(ConfirmationService);
   private readonly messageService = inject(MessageService);
+  private readonly state = inject(PublicationFilterState);
 
   private readonly statusMenu = viewChild.required<Menu>('statusMenu');
 
   publications = signal<PublicationSummaryResponse[]>([]);
-  isLoading = signal(false);
+  totalRecords = signal(0);
+  first = signal(0);
   showLoader = signal(false);
   hasLoaded = signal(false);
   statusMenuItems = signal<MenuItem[]>([]);
+
+  readonly pageSize = PAGE_SIZE;
+
+  /** Committed filter state (what the next request uses). Restored from the shared state. */
+  title = '';
+  journal: JournalSummaryResponse | null = null;
+  status: PublicationStatus | null = null;
+  minDaysInStatus: number | null = null;
+  onlyAsMainAuthor = false;
+
+  readonly journalSuggestions = signal<JournalSummaryResponse[]>([]);
+
+  readonly statusValues = Object.values(PublicationStatus);
 
   /** Publicación rechazada seleccionada para reenviar (alimenta el diálogo). */
   resubmitTarget = signal<PublicationSummaryResponse | null>(null);
@@ -57,32 +97,148 @@ export class Publications implements OnInit {
   changeStatusTargetStatus = signal<PublicationStatus | null>(null);
   changeStatusDialogVisible = signal(false);
 
+  private debounceTimer?: ReturnType<typeof setTimeout>;
+  private loaderTimer?: ReturnType<typeof setTimeout>;
+
   ngOnInit() {
-    this.loadPublications();
+    // Restore filters and page from a previous visit (e.g. after returning from the detail page).
+    const filters = this.state.filters;
+    this.title = filters.title;
+    this.journal = filters.journal;
+    this.status = filters.status;
+    this.minDaysInStatus = filters.minDaysInStatus;
+    this.onlyAsMainAuthor = filters.onlyAsMainAuthor;
+    this.first.set(filters.first);
+
+    this.load();
   }
 
-  loadPublications() {
-    this.isLoading.set(true);
-    const loaderTimer = setTimeout(() => {
-      if (this.isLoading()) this.showLoader.set(true);
-    }, LOADER_DELAY_MS);
+  // --- Filtros ---
 
-    this.publicationsService.listMyPublications().subscribe({
-      next: (publications) => {
-        clearTimeout(loaderTimer);
-        this.publications.set(publications);
-        this.isLoading.set(false);
-        this.showLoader.set(false);
-        this.hasLoaded.set(true);
-      },
-      error: () => {
-        clearTimeout(loaderTimer);
-        this.isLoading.set(false);
-        this.showLoader.set(false);
-        this.hasLoaded.set(true);
-      },
-    });
+  onTitleChange(value: string) {
+    this.title = value;
+    this.debounceResetAndLoad();
   }
+
+  onJournalSearch(event: AutoCompleteCompleteEvent) {
+    this.journalsService
+      .searchJournals(event.query, undefined, undefined, 0, JOURNAL_SUGGESTIONS_PAGE_SIZE)
+      .subscribe({
+        next: (page) => this.journalSuggestions.set(page.content),
+        error: () => this.journalSuggestions.set([]),
+      });
+  }
+
+  onJournalSelect() {
+    this.resetAndLoad();
+  }
+
+  onJournalClear() {
+    this.journal = null;
+    this.resetAndLoad();
+  }
+
+  onStatusChange(status: PublicationStatus | null) {
+    this.status = status;
+    this.resetAndLoad();
+  }
+
+  onMinDaysChange(value: number | null) {
+    this.minDaysInStatus = value;
+    this.debounceResetAndLoad();
+  }
+
+  onMainAuthorChange(value: boolean) {
+    this.onlyAsMainAuthor = value;
+    this.resetAndLoad();
+  }
+
+  clearFilters() {
+    this.title = '';
+    this.journal = null;
+    this.status = null;
+    this.minDaysInStatus = null;
+    this.onlyAsMainAuthor = false;
+    this.resetAndLoad();
+  }
+
+  hasActiveFilters(): boolean {
+    return (
+      this.title.trim().length > 0 ||
+      this.journal !== null ||
+      this.status !== null ||
+      this.minDaysInStatus !== null ||
+      this.onlyAsMainAuthor
+    );
+  }
+
+  onPageChange(event: PaginatorState) {
+    this.first.set(event.first ?? 0);
+    this.load();
+  }
+
+  private debounceResetAndLoad() {
+    clearTimeout(this.debounceTimer);
+    this.debounceTimer = setTimeout(() => this.resetAndLoad(), DEBOUNCE_MS);
+  }
+
+  private resetAndLoad() {
+    this.first.set(0);
+    this.load();
+  }
+
+  load() {
+    this.persistState();
+    const page = Math.floor(this.first() / this.pageSize);
+    this.startLoader();
+
+    this.publicationsService
+      .listMyPublications(
+        this.title.trim() || undefined,
+        this.journal?.id ?? undefined,
+        this.status ?? undefined,
+        this.minDaysInStatus ?? undefined,
+        this.onlyAsMainAuthor || undefined,
+        page,
+        this.pageSize,
+      )
+      .subscribe({
+        next: (response) => {
+          this.publications.set(response.content);
+          this.totalRecords.set(response.totalElements);
+          this.stopLoader();
+          this.hasLoaded.set(true);
+        },
+        error: () => {
+          this.publications.set([]);
+          this.totalRecords.set(0);
+          this.stopLoader();
+          this.hasLoaded.set(true);
+        },
+      });
+  }
+
+  private persistState() {
+    const filters = this.state.filters;
+    filters.title = this.title;
+    filters.journal = this.journal;
+    filters.status = this.status;
+    filters.minDaysInStatus = this.minDaysInStatus;
+    filters.onlyAsMainAuthor = this.onlyAsMainAuthor;
+    filters.first = this.first();
+  }
+
+  private startLoader() {
+    clearTimeout(this.loaderTimer);
+    this.loaderTimer = setTimeout(() => this.showLoader.set(true), LOADER_DELAY_MS);
+  }
+
+  private stopLoader() {
+    clearTimeout(this.loaderTimer);
+    this.showLoader.set(false);
+  }
+
+  // --- Navegación y acciones ---
 
   openCreate() {
     this.router.navigate(['/publications/create']);
@@ -121,7 +277,7 @@ export class Publications implements OnInit {
           summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
           detail: this.translate.instant('PUBLICATIONS.DELETE.SUCCESS'),
         });
-        this.loadPublications();
+        this.load();
       },
       error: () => {
         this.messageService.add({
@@ -157,7 +313,7 @@ export class Publications implements OnInit {
   }
 
   onResubmitted() {
-    this.loadPublications();
+    this.load();
   }
 
   // Acción rápida por fila: abre el menú con las transiciones válidas para esa publicación.
@@ -180,6 +336,6 @@ export class Publications implements OnInit {
   }
 
   onStatusChanged() {
-    this.loadPublications();
+    this.load();
   }
 }

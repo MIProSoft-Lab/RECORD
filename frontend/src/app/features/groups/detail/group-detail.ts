@@ -10,16 +10,12 @@ import { Select } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { TabsModule } from 'primeng/tabs';
 import { Tag } from 'primeng/tag';
-import {
-  GroupDetailResponse,
-  GroupMemberDetail,
-  GroupRole,
-  GroupsService,
-} from '@core/api';
+import { GroupDetailResponse, GroupMemberDetail, GroupRole, GroupsService } from '@core/api';
 import { UserState } from '@core/services/user-state';
 import { BreadcrumbService } from '@shared/services/breadcrumb.service';
 import { EditGroupDialog } from './edit-group-dialog';
 import { GroupJournalInterests } from './group-journal-interests';
+import { GroupPublications } from './group-publications';
 import { InviteUsersDialog } from './invite-users-dialog';
 
 interface RoleOption {
@@ -41,6 +37,7 @@ interface RoleOption {
     InviteUsersDialog,
     EditGroupDialog,
     GroupJournalInterests,
+    GroupPublications,
   ],
   templateUrl: './group-detail.html',
 })
@@ -95,7 +92,23 @@ export class GroupDetail implements OnInit, OnDestroy {
       this.router.navigate(['/groups']);
       return;
     }
+    // Restaura la pestaña activa desde la URL (p. ej. al volver desde una publicación).
+    const tab = this.route.snapshot.queryParamMap.get('tab');
+    if (tab) this.activeTab.set(tab);
     this.loadGroup(groupId);
+  }
+
+  /** Refleja la pestaña activa en la URL para que se conserve al volver (sin crear historial). */
+  onTabChange(tab: string | number | undefined) {
+    if (tab === undefined) return;
+    const value = String(tab);
+    this.activeTab.set(value);
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { tab: value },
+      queryParamsHandling: 'merge',
+      replaceUrl: true,
+    });
   }
 
   loadGroup(groupId: string) {
@@ -104,7 +117,8 @@ export class GroupDetail implements OnInit, OnDestroy {
       next: (group) => {
         this.group.set(group);
         this.isLoading.set(false);
-        this.breadcrumbUrl = this.router.url;
+        // La clave del breadcrumb es la ruta sin query string (la pestaña va como query param).
+        this.breadcrumbUrl = this.router.url.split('?')[0];
         this.breadcrumbService.setDynamicLabel(this.breadcrumbUrl, group.name);
       },
       error: (err: HttpErrorResponse) => {
@@ -157,41 +171,39 @@ export class GroupDetail implements OnInit, OnDestroy {
     if (!groupId) return;
 
     this.updatingMemberId.set(member.userId);
-    this.groupsService
-      .updateGroupMemberRole(groupId, member.userId, { role: newRole })
-      .subscribe({
-        next: () => {
-          this.messageService.add({
-            severity: 'success',
-            summary: this.translate.instant(
-              'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_SUCCESS_SUMMARY',
-            ),
-            detail: this.translate.instant(
-              'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_SUCCESS_DETAIL',
-            ),
-          });
-          this.updatingMemberId.set(null);
-          this.loadGroup(groupId);
-        },
-        error: (err: HttpErrorResponse) => {
-          this.updatingMemberId.set(null);
-          this.revertRole(member, previousRole);
-          const code = (err.error as { code?: string } | null)?.code;
-          const detailKey =
-            code === 'GROUP_LAST_ADMIN'
-              ? 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_LAST_ADMIN'
-              : code === 'GROUP_MEMBER_NOT_ADMIN'
-                ? 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_FORBIDDEN'
-                : 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_GENERIC';
-          this.messageService.add({
-            severity: 'error',
-            summary: this.translate.instant(
-              'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_SUMMARY',
-            ),
-            detail: this.translate.instant(detailKey),
-          });
-        },
-      });
+    this.groupsService.updateGroupMemberRole(groupId, member.userId, { role: newRole }).subscribe({
+      next: () => {
+        this.messageService.add({
+          severity: 'success',
+          summary: this.translate.instant(
+            'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_SUCCESS_SUMMARY',
+          ),
+          detail: this.translate.instant(
+            'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_SUCCESS_DETAIL',
+          ),
+        });
+        this.updatingMemberId.set(null);
+        this.loadGroup(groupId);
+      },
+      error: (err: HttpErrorResponse) => {
+        this.updatingMemberId.set(null);
+        this.revertRole(member, previousRole);
+        const code = (err.error as { code?: string } | null)?.code;
+        const detailKey =
+          code === 'GROUP_LAST_ADMIN'
+            ? 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_LAST_ADMIN'
+            : code === 'GROUP_MEMBER_NOT_ADMIN'
+              ? 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_FORBIDDEN'
+              : 'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_GENERIC';
+        this.messageService.add({
+          severity: 'error',
+          summary: this.translate.instant(
+            'GROUPS.DETAIL.ADMINISTRATION.MEMBERS.TOAST_ERROR_SUMMARY',
+          ),
+          detail: this.translate.instant(detailKey),
+        });
+      },
+    });
   }
 
   onKickMember(member: GroupMemberDetail) {

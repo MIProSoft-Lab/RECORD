@@ -1,9 +1,5 @@
 import { Injectable, Signal, inject, signal } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  NavigationEnd,
-  Router,
-} from '@angular/router';
+import { ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 export interface BreadcrumbItem {
@@ -14,6 +10,8 @@ export interface BreadcrumbItem {
   labelKey: string;
   url: string;
   dynamic: boolean;
+  /** Query params to attach to the link (e.g. the group tab to restore on return). */
+  queryParams?: Record<string, string>;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -55,9 +53,11 @@ export class BreadcrumbService {
     const items: BreadcrumbItem[] = [];
     const overrides = this.overrides();
     let route: ActivatedRouteSnapshot | null = this.router.routerState.snapshot.root;
+    let leaf: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
     const segments: string[] = [];
 
     while (route) {
+      leaf = route;
       const path = route.url.map((s) => s.path).join('/');
       if (path) segments.push(path);
 
@@ -77,6 +77,34 @@ export class BreadcrumbService {
       route = route.firstChild;
     }
 
+    // Contexto de origen: cuando se llega a una página con `returnUrl` + `originLabel` (p. ej. una
+    // publicación abierta desde la pestaña de un grupo), el rastro refleja de dónde se vino —
+    // "Grupos › NombreGrupo › <página actual>"— en lugar de su sección por defecto. Así el
+    // breadcrumb devuelve al grupo (con su pestaña) y no al listado de publicaciones.
+    const origin = this.buildOriginTrail(leaf.queryParams);
+    if (origin) {
+      const current = items[items.length - 1];
+      this._trail.set(current ? [...origin, current] : origin);
+      return;
+    }
+
     this._trail.set(items);
+  }
+
+  /** Construye el rastro de origen a partir de los query params `returnUrl` y `originLabel`. */
+  private buildOriginTrail(queryParams: Record<string, unknown>): BreadcrumbItem[] | null {
+    const returnUrl = queryParams['returnUrl'] as string | undefined;
+    const originLabel = queryParams['originLabel'] as string | undefined;
+    if (!returnUrl || !originLabel) return null;
+
+    const [path, queryString] = returnUrl.split('?');
+    const queryParamsMap = queryString
+      ? Object.fromEntries(new URLSearchParams(queryString))
+      : undefined;
+
+    return [
+      { labelKey: 'GROUPS.TITLE', url: '/groups', dynamic: false },
+      { labelKey: originLabel, url: path, dynamic: true, queryParams: queryParamsMap },
+    ];
   }
 }

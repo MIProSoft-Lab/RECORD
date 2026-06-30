@@ -166,7 +166,11 @@
         }
       },
       "POSTS": {
-        "COMING_SOON": "Coming soon."
+        "MEMBERS_FILTER_TITLE": "Members",
+        "YOU": "You",
+        "CREATOR": "Creator",
+        "NO_MEMBERS_SELECTED": "Select at least one member to see their publications.",
+        "EMPTY_STATE": "No publications match the filters."
       },
       "ADMINISTRATION": {
         "COMING_SOON": "Coming soon.",
@@ -321,6 +325,15 @@
     "TITLE": "Publications",
     "CREATE_BUTTON": "Create publication",
     "EMPTY_STATE": "No publications yet. Create one to get started.",
+    "FILTERS": {
+      "TITLE_PLACEHOLDER": "Search by title…",
+      "JOURNAL_PLACEHOLDER": "Filter by journal",
+      "STATUS_PLACEHOLDER": "Status",
+      "MIN_DAYS_IN_STATUS": "Days in status",
+      "MIN_DAYS_IN_STATUS_HINT": "That many days or more (excludes final statuses)",
+      "ONLY_MAIN_AUTHOR": "I'm the main author",
+      "CLEAR": "Clear filters"
+    },
     "TABLE": {
       "TITLE": "Title",
       "STATUS": "Status",

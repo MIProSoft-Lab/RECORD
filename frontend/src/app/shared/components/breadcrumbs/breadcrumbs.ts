@@ -24,6 +24,7 @@ export class Breadcrumbs {
     return this.breadcrumbService.trail().map((item) => ({
       label: item.dynamic ? item.labelKey : this.translate.instant(item.labelKey),
       routerLink: item.url,
+      queryParams: item.queryParams,
     }));
   });
 

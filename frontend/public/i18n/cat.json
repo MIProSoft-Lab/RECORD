@@ -166,7 +166,11 @@
         }
       },
       "POSTS": {
-        "COMING_SOON": "Pròximament."
+        "MEMBERS_FILTER_TITLE": "Membres",
+        "YOU": "Tu",
+        "CREATOR": "Creador",
+        "NO_MEMBERS_SELECTED": "Selecciona almenys un membre per veure les seves publicacions.",
+        "EMPTY_STATE": "No hi ha publicacions que coincideixin amb els filtres."
       },
       "ADMINISTRATION": {
         "COMING_SOON": "Pròximament.",
@@ -321,6 +325,15 @@
     "TITLE": "Publicacions",
     "CREATE_BUTTON": "Crear publicació",
     "EMPTY_STATE": "Encara no hi ha publicacions. Crea'n una per començar.",
+    "FILTERS": {
+      "TITLE_PLACEHOLDER": "Cerca per títol…",
+      "JOURNAL_PLACEHOLDER": "Filtra per journal",
+      "STATUS_PLACEHOLDER": "Estat",
+      "MIN_DAYS_IN_STATUS": "Dies en l'estat",
+      "MIN_DAYS_IN_STATUS_HINT": "Aquest nombre de dies o més (exclou estats finals)",
+      "ONLY_MAIN_AUTHOR": "Soc autor principal",
+      "CLEAR": "Neteja filtres"
+    },
     "TABLE": {
       "TITLE": "Títol",
       "STATUS": "Estat",

@@ -100,6 +100,10 @@ export class PublicationDetail implements OnInit, OnDestroy {
 
   private breadcrumbUrl: string | null = null;
 
+  /** Contexto de origen (p. ej. al abrir desde la pestaña de publicaciones de un grupo). */
+  private returnUrl: string | null = null;
+  private originLabel: string | null = null;
+
   publication = signal<PublicationResponse | null>(null);
   /** Detalle del journal asociado, cargado aparte para enriquecer la vista. */
   journal = signal<JournalDetailResponse | null>(null);
@@ -171,11 +175,15 @@ export class PublicationDetail implements OnInit, OnDestroy {
       return;
     }
 
+    this.returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+    this.originLabel = this.route.snapshot.queryParamMap.get('originLabel');
+
     this.publicationsService.getPublicationDetail(publicationId).subscribe({
       next: (publication) => {
         this.publication.set(publication);
         this.isLoading.set(false);
-        this.breadcrumbUrl = this.router.url;
+        // La clave del breadcrumb es la ruta sin query string (el origen va como query param).
+        this.breadcrumbUrl = this.router.url.split('?')[0];
         this.breadcrumbService.setDynamicLabel(this.breadcrumbUrl, publication.title);
         this.loadJournal(publication.journalId);
       },
@@ -201,7 +209,18 @@ export class PublicationDetail implements OnInit, OnDestroy {
 
   goToEdit() {
     const pub = this.publication();
-    if (pub) this.router.navigate(['/publications', pub.id, 'edit']);
+    if (pub) {
+      // Se propaga el contexto de origen para que la edición y la vuelta sigan ligadas al grupo.
+      this.router.navigate(['/publications', pub.id, 'edit'], {
+        queryParams: this.originQueryParams(),
+      });
+    }
+  }
+
+  /** Query params de origen a propagar, o undefined si la publicación no se abrió con contexto. */
+  private originQueryParams(): Record<string, string> | undefined {
+    if (!this.returnUrl || !this.originLabel) return undefined;
+    return { returnUrl: this.returnUrl, originLabel: this.originLabel };
   }
 
   // Borrado definitivo con confirmación previa. Solo accesible al creador y autores (canEdit).
@@ -221,7 +240,12 @@ export class PublicationDetail implements OnInit, OnDestroy {
               summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
               detail: this.translate.instant('PUBLICATIONS.DELETE.SUCCESS'),
             });
-            this.router.navigate(['/publications']);
+            // Tras borrar se vuelve al origen (el grupo) si se abrió desde ahí; si no, al listado.
+            if (this.returnUrl) {
+              this.router.navigateByUrl(this.returnUrl);
+            } else {
+              this.router.navigate(['/publications']);
+            }
           },
           error: () => {
             this.messageService.add({

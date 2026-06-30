@@ -20,7 +20,7 @@
       (saved)="loadGroup(g.id)"
     />
 
-    <p-tabs [(value)]="activeTab">
+    <p-tabs [value]="activeTab()" (valueChange)="onTabChange($event)">
       <p-tablist>
         <p-tab value="about">{{ 'GROUPS.DETAIL.TABS.ABOUT' | translate }}</p-tab>
         <p-tab value="journals">{{ 'GROUPS.DETAIL.TABS.JOURNALS' | translate }}</p-tab>
@@ -127,10 +127,13 @@
         </p-tabpanel>
 
         <p-tabpanel value="posts">
-          <div class="flex align-items-center justify-content-center p-6 text-color-secondary">
-            <i class="pi pi-info-circle mr-2"></i>
-            {{ 'GROUPS.DETAIL.POSTS.COMING_SOON' | translate }}
-          </div>
+          @if (activeTab() === 'posts') {
+            <record-group-publications
+              [groupId]="g.id"
+              [groupName]="g.name"
+              [members]="members()"
+            />
+          }
         </p-tabpanel>
 
         <p-tabpanel value="administration">

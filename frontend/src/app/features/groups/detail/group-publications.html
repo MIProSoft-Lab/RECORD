@@ -1,0 +1,205 @@
+<div class="pt-3">
+  <div class="flex align-items-center justify-content-end mb-3">
+    <p-button
+      [label]="'PUBLICATIONS.CREATE_BUTTON' | translate"
+      icon="pi pi-plus"
+      (onClick)="openCreate()"
+    />
+  </div>
+
+  <div class="flex flex-column md:flex-row gap-4 align-items-start">
+    <!-- Barra lateral: un checkbox por miembro (todos marcados por defecto). -->
+    <div class="surface-card border-round p-3 w-full md:w-16rem flex-shrink-0">
+      <h3 class="mt-0 mb-3 text-base">
+        {{ 'GROUPS.DETAIL.POSTS.MEMBERS_FILTER_TITLE' | translate }}
+      </h3>
+      <div class="flex flex-column gap-2">
+        @for (member of members(); track member.userId) {
+          <div class="flex align-items-center gap-2">
+            <p-checkbox
+              [inputId]="'member-' + member.userId"
+              [binary]="true"
+              [ngModel]="isMemberSelected(member.userId)"
+              (ngModelChange)="onMemberToggle(member.userId, $event)"
+            />
+            <label [for]="'member-' + member.userId" class="cursor-pointer flex-1">
+              {{ member.firstName }} {{ member.lastName }}
+              @if (member.userId === currentUserId()) {
+                <span class="text-color-secondary">
+                  ({{ 'GROUPS.DETAIL.POSTS.YOU' | translate }})
+                </span>
+              }
+            </label>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Filtros + tabla -->
+    <div class="flex-1 w-full">
+      <div
+        class="flex flex-column md:flex-row flex-wrap gap-3 mb-4 align-items-stretch md:align-items-center"
+      >
+        <input
+          pInputText
+          type="text"
+          [ngModel]="title"
+          (ngModelChange)="onTitleChange($event)"
+          [placeholder]="'PUBLICATIONS.FILTERS.TITLE_PLACEHOLDER' | translate"
+          class="w-full flex-1"
+        />
+
+        <p-autoComplete
+          [(ngModel)]="journal"
+          [suggestions]="journalSuggestions()"
+          (completeMethod)="onJournalSearch($event)"
+          (onSelect)="onJournalSelect()"
+          (onClear)="onJournalClear()"
+          optionLabel="name"
+          [forceSelection]="true"
+          [showClear]="true"
+          [placeholder]="'PUBLICATIONS.FILTERS.JOURNAL_PLACEHOLDER' | translate"
+          styleClass="w-full md:w-18rem"
+          inputStyleClass="w-full"
+        />
+
+        <p-select
+          [options]="statusValues"
+          [ngModel]="status"
+          (ngModelChange)="onStatusChange($event)"
+          [showClear]="true"
+          [placeholder]="'PUBLICATIONS.FILTERS.STATUS_PLACEHOLDER' | translate"
+          styleClass="w-full md:w-12rem"
+        >
+          <ng-template let-status #selectedItem>
+            {{ 'PUBLICATIONS.STATUS.' + status | translate }}
+          </ng-template>
+          <ng-template let-status #item>
+            {{ 'PUBLICATIONS.STATUS.' + status | translate }}
+          </ng-template>
+        </p-select>
+
+        <div class="flex align-items-center gap-2">
+          <p-inputNumber
+            [ngModel]="minDaysInStatus"
+            (ngModelChange)="onMinDaysChange($event)"
+            [min]="1"
+            [showButtons]="false"
+            [placeholder]="'PUBLICATIONS.FILTERS.MIN_DAYS_IN_STATUS' | translate"
+            inputStyleClass="w-full"
+            styleClass="w-full md:w-12rem"
+          />
+          <i
+            class="pi pi-info-circle text-color-secondary cursor-pointer"
+            [pTooltip]="'PUBLICATIONS.FILTERS.MIN_DAYS_IN_STATUS_HINT' | translate"
+            tooltipPosition="top"
+          ></i>
+        </div>
+
+        @if (hasActiveFilters()) {
+          <p-button
+            [label]="'PUBLICATIONS.FILTERS.CLEAR' | translate"
+            icon="pi pi-filter-slash"
+            severity="secondary"
+            [outlined]="true"
+            (onClick)="clearFilters()"
+          />
+        }
+      </div>
+
+      <p-table
+        [value]="publications()"
+        [loading]="showLoader()"
+        [rowHover]="true"
+        dataKey="id"
+        class="p-datatable-sm"
+      >
+        <ng-template #header>
+          <tr>
+            <th>{{ 'PUBLICATIONS.TABLE.TITLE' | translate }}</th>
+            <th style="width: 14rem">{{ 'GROUPS.DETAIL.POSTS.CREATOR' | translate }}</th>
+            <th>{{ 'PUBLICATIONS.TABLE.JOURNAL' | translate }}</th>
+            <th style="width: 10rem">{{ 'PUBLICATIONS.TABLE.STATUS' | translate }}</th>
+            <th style="width: 14rem">{{ 'PUBLICATIONS.TABLE.STATUS_SINCE' | translate }}</th>
+          </tr>
+        </ng-template>
+        <ng-template #body let-publication>
+          <tr (click)="openDetail(publication.id)" style="cursor: pointer">
+            <td>
+              <div class="font-medium">{{ publication.title }}</div>
+            </td>
+            <td>
+              <div class="flex align-items-center gap-2">
+                @if (publication.creator.profileImageUrl) {
+                  <img
+                    [src]="publication.creator.profileImageUrl"
+                    [alt]="publication.creator.firstName + ' ' + publication.creator.lastName"
+                    class="border-circle border-1 surface-border object-cover"
+                    style="width: 1.75rem; height: 1.75rem"
+                  />
+                } @else {
+                  <div
+                    class="border-circle surface-200 flex align-items-center justify-content-center text-xs"
+                    style="width: 1.75rem; height: 1.75rem"
+                  >
+                    {{ initials(publication.creator) }}
+                  </div>
+                }
+                <span>
+                  {{ publication.creator.firstName }} {{ publication.creator.lastName }}
+                  @if (publication.creator.userId === currentUserId()) {
+                    <span class="text-color-secondary">
+                      ({{ 'GROUPS.DETAIL.POSTS.YOU' | translate }})
+                    </span>
+                  }
+                </span>
+              </div>
+            </td>
+            <td>{{ publication.journalName || '—' }}</td>
+            <td>
+              <p-tag
+                [value]="'PUBLICATIONS.STATUS.' + publication.status | translate"
+                [severity]="statusSeverity(publication.status)"
+              />
+            </td>
+            <td>
+              <div class="flex flex-column">
+                <span class="inline-flex align-items-center gap-1">
+                  <i class="pi pi-calendar text-xs text-color-secondary"></i>
+                  {{ publication.statusChangedAt | date: 'mediumDate' }}
+                </span>
+                <span class="text-color-secondary text-sm">
+                  {{
+                    'PUBLICATIONS.TABLE.DAYS_IN_STATUS'
+                      | translate: { count: publication.statusChangedAt | daysSince }
+                  }}
+                </span>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template #emptymessage>
+          <tr>
+            <td colspan="5" class="text-center text-color-secondary p-4">
+              @if (hasLoaded() && !showLoader()) {
+                @if (noMembersSelected()) {
+                  {{ 'GROUPS.DETAIL.POSTS.NO_MEMBERS_SELECTED' | translate }}
+                } @else {
+                  {{ 'GROUPS.DETAIL.POSTS.EMPTY_STATE' | translate }}
+                }
+              }
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        [first]="first()"
+        [rows]="pageSize"
+        [totalRecords]="totalRecords()"
+        (onPageChange)="onPageChange($event)"
+        styleClass="mt-3 surface-card"
+      />
+    </div>
+  </div>
+</div>

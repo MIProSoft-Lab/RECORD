@@ -82,6 +82,10 @@ export class CreatePublication implements OnInit {
   /** Id de la publicación a editar (presente solo en modo edición). */
   readonly editingId = this.route.snapshot.paramMap.get('id');
 
+  /** Contexto de origen (p. ej. al crear/editar desde la pestaña de un grupo). */
+  private readonly returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+  private readonly originLabel = this.route.snapshot.queryParamMap.get('originLabel');
+
   groups = signal<GroupSummaryResponse[]>([]);
   journalSuggestions = signal<JournalSummaryResponse[]>([]);
   authorSuggestions = signal<AuthorOption[]>([]);
@@ -153,7 +157,17 @@ export class CreatePublication implements OnInit {
       }
     });
 
-    if (this.editingId) this.loadForEdit(this.editingId);
+    if (this.editingId) {
+      this.loadForEdit(this.editingId);
+    } else {
+      // Al crear desde la pestaña de un grupo, el grupo llega preseleccionado y bloqueado:
+      // la publicación queda asociada a ese grupo y no se puede cambiar.
+      const groupId = this.route.snapshot.queryParamMap.get('groupId');
+      if (groupId) {
+        this.createForm.patchValue({ groupId }, { emitEvent: false });
+        this.createForm.controls.groupId.disable({ emitEvent: false });
+      }
+    }
   }
 
   /**
@@ -300,7 +314,9 @@ export class CreatePublication implements OnInit {
     if (this.createForm.invalid) return;
 
     this.isSaving.set(true);
-    const value = this.createForm.value;
+    // getRawValue (no value) para incluir el grupo cuando llega bloqueado desde la pestaña de grupo:
+    // un control deshabilitado se excluye de `.value` y dejaría la creación sin groupId.
+    const value = this.createForm.getRawValue();
     const authors: PublicationAuthorInput[] = this.selectedAuthors().map((author) =>
       author.type === 'INTERNAL'
         ? { userId: author.userId }
@@ -332,7 +348,9 @@ export class CreatePublication implements OnInit {
             summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
             detail: this.translate.instant('PUBLICATIONS.TOASTS.CREATED'),
           });
-          this.router.navigate(['/publications', created.id]);
+          this.router.navigate(['/publications', created.id], {
+            queryParams: this.originQueryParams(),
+          });
         },
         error: () => {
           this.isSaving.set(false);
@@ -357,13 +375,26 @@ export class CreatePublication implements OnInit {
             summary: this.translate.instant('PUBLICATIONS.TOASTS.SUCCESS'),
             detail: this.translate.instant('PUBLICATIONS.TOASTS.UPDATED'),
           });
-          this.router.navigate(['/publications', updated.id]);
+          this.router.navigate(['/publications', updated.id], {
+            queryParams: this.originQueryParams(),
+          });
         },
         error: () => this.isSaving.set(false),
       });
   }
 
+  /** Query params de origen a propagar, o undefined si no se abrió con contexto de grupo. */
+  private originQueryParams(): Record<string, string> | undefined {
+    if (!this.returnUrl || !this.originLabel) return undefined;
+    return { returnUrl: this.returnUrl, originLabel: this.originLabel };
+  }
+
   onDiscard() {
-    this.router.navigate(['/publications']);
+    // Si se abrió con contexto de origen (grupo), se vuelve allí; si no, al listado general.
+    if (this.returnUrl) {
+      this.router.navigateByUrl(this.returnUrl);
+    } else {
+      this.router.navigate(['/publications']);
+    }
   }
 }
