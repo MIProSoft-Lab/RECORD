@@ -1,12 +1,34 @@
 get:
-  summary: List the publications of the current user
+  summary: List the publications of a research group
   description: >
-    Devuelve una página del historial de publicaciones del usuario (creadas por él o
-    en las que figura como autor). Todos los filtros son opcionales y combinables.
-  operationId: listMyPublications
+    Devuelve una página de las publicaciones que pertenecen al grupo (de todos sus
+    miembros). Disponible solo para miembros del grupo. El filtro `memberIds`
+    permite acotar el listado a las publicaciones en las que esos miembros figuran
+    como autores (creador o co-autor); si se omite, se incluyen las de todos los
+    miembros. El resto de filtros son opcionales y combinables.
+  operationId: listGroupPublications
   tags:
     - Publications
   parameters:
+    - name: groupId
+      in: path
+      required: true
+      description: "Identificador del grupo de investigación."
+      schema:
+        type: string
+        format: uuid
+    - name: memberIds
+      in: query
+      required: false
+      description: >
+        Miembros cuyas publicaciones se quieren incluir (el miembro figura como autor,
+        creador o co-autor). Si se omite, se incluyen las publicaciones de todos los
+        miembros del grupo.
+      schema:
+        type: array
+        items:
+          type: string
+          format: uuid
     - name: title
       in: query
       required: false
@@ -37,13 +59,6 @@ get:
       schema:
         type: integer
         minimum: 1
-    - name: onlyAsMainAuthor
-      in: query
-      required: false
-      description: "Solo publicaciones en las que el usuario es el autor principal (primer autor)."
-      schema:
-        type: boolean
-        default: false
     - name: page
       in: query
       required: false
@@ -63,13 +78,19 @@ get:
         default: 20
   responses:
     "200":
-      description: Successfully retrieved the page of publications
+      description: Successfully retrieved the page of group publications
       content:
         application/json:
           schema:
-            $ref: "./components.yaml#/schemas/PublicationListPageResponse"
+            $ref: "./components.yaml#/schemas/GroupPublicationListPageResponse"
     "401":
       description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. The user is not a member of the group.
       content:
         application/json:
           schema:

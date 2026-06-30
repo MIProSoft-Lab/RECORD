@@ -251,6 +251,38 @@ schemas:
       - createdAt
       - statusHistory
 
+  PublicationListPageResponse:
+    type: object
+    description: "Página de resultados del historial de publicaciones."
+    properties:
+      content:
+        type: array
+        items:
+          $ref: "#/schemas/PublicationSummaryResponse"
+      totalElements:
+        type: integer
+        format: int64
+        description: "Número total de publicaciones que cumplen los filtros."
+        example: 42
+      totalPages:
+        type: integer
+        description: "Número total de páginas."
+        example: 3
+      page:
+        type: integer
+        description: "Índice de página actual (base 0)."
+        example: 0
+      size:
+        type: integer
+        description: "Tamaño de página solicitado."
+        example: 20
+    required:
+      - content
+      - totalElements
+      - totalPages
+      - page
+      - size
+
   PublicationSummaryResponse:
     type: object
     properties:
@@ -285,3 +317,95 @@ schemas:
       - status
       - createdAt
       - statusChangedAt
+
+  PublicationCreatorResponse:
+    type: object
+    description: "Creador (dueño) de la publicación."
+    properties:
+      userId:
+        type: string
+        format: uuid
+      firstName:
+        type: string
+      lastName:
+        type: string
+      profileImageUrl:
+        type: string
+        description: "URL de la imagen de perfil del creador."
+    required:
+      - userId
+      - firstName
+      - lastName
+
+  GroupPublicationSummaryResponse:
+    type: object
+    description: >-
+      Publicación dentro del listado de un grupo. Igual que PublicationSummaryResponse
+      pero enriquecida con el creador (dueño) para mostrar de quién es cada publicación.
+    properties:
+      id:
+        type: string
+        format: uuid
+      title:
+        type: string
+      groupId:
+        type: string
+        format: uuid
+      journalId:
+        type: string
+        format: uuid
+      journalName:
+        type: string
+        description: "Nombre del journal asociado."
+      status:
+        $ref: "#/schemas/PublicationStatus"
+      createdAt:
+        type: string
+        format: date-time
+      statusChangedAt:
+        type: string
+        format: date-time
+        description: "Fecha en que la publicación pasó a su estado actual."
+      creator:
+        $ref: "#/schemas/PublicationCreatorResponse"
+    required:
+      - id
+      - title
+      - groupId
+      - journalId
+      - status
+      - createdAt
+      - statusChangedAt
+      - creator
+
+  GroupPublicationListPageResponse:
+    type: object
+    description: "Página de resultados del listado de publicaciones de un grupo."
+    properties:
+      content:
+        type: array
+        items:
+          $ref: "#/schemas/GroupPublicationSummaryResponse"
+      totalElements:
+        type: integer
+        format: int64
+        description: "Número total de publicaciones que cumplen los filtros."
+        example: 42
+      totalPages:
+        type: integer
+        description: "Número total de páginas."
+        example: 3
+      page:
+        type: integer
+        description: "Índice de página actual (base 0)."
+        example: 0
+      size:
+        type: integer
+        description: "Tamaño de página solicitado."
+        example: 20
+    required:
+      - content
+      - totalElements
+      - totalPages
+      - page
+      - size

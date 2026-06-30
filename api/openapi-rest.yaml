@@ -95,6 +95,9 @@ paths:
   /publications/me:
     $ref: "./publications/list-publications.yaml"
 
+  /publications/groups/{groupId}:
+    $ref: "./publications/list-group-publications.yaml"
+
   /publications/{publicationId}:
     $ref: "./publications/publication-detail.yaml"
 
