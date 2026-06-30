@@ -18,7 +18,8 @@ import org.springframework.stereotype.Component
  * Búsqueda paginada de las publicaciones que pertenecen a un grupo (de todos sus miembros). Solo
  * disponible para miembros del grupo. [memberIds] acota el listado a las publicaciones en las que
  * esos miembros figuran como autores (creador o co-autor); si es `null`, incluye las de todos los
- * miembros. El resto de filtros son opcionales y combinables, igual que en [SearchMyPublicationsUseCase].
+ * miembros. El resto de filtros son opcionales y combinables, igual que en
+ * [SearchMyPublicationsUseCase].
  */
 @Component
 class SearchGroupPublicationsUseCase(
@@ -43,12 +44,23 @@ class SearchGroupPublicationsUseCase(
             throw UserNotGroupMemberException(groupId, userId)
         }
 
-        // Si se piden miembros concretos, se intersectan con los del grupo (descarta ids ajenos).
-        // Una selección vacía tras la intersección significa "ningún miembro" → página vacía.
+        // Privacidad: los dueños que ocultan su historial al usuario actual no se incluyen, salvo
+        // que el usuario sea administrador del grupo (siempre lo ve todo). Una publicación se
+        // muestra mientras alguno de sus autores no oculte al usuario (se filtra por autor).
+        val hiddenOwners: Set<UUID> =
+            if (this.groupFacade.isAdmin(groupId, userId)) emptySet()
+            else this.groupFacade.getOwnersHiddenFromViewer(groupId, userId)
+
+        // Filtro efectivo de autores: (miembros pedidos ?? todos) ∩ visibles. Si no hay miembros
+        // pedidos ni dueños ocultos, se deja `null` para que el backend devuelva todas las del
+        // grupo. Una selección vacía tras el filtro significa "ningún miembro" → página vacía.
         val authorIds: List<UUID>? =
-            memberIds?.let { requested ->
+            if (memberIds == null && hiddenOwners.isEmpty()) {
+                null
+            } else {
                 val groupMemberIds = this.groupFacade.getMemberIds(groupId).toSet()
-                requested.filter { it in groupMemberIds }
+                val requested = memberIds ?: groupMemberIds.toList()
+                requested.filter { it in groupMemberIds && it !in hiddenOwners }
             }
         if (authorIds != null && authorIds.isEmpty()) {
             return PageResult(emptyList(), totalElements = 0, page = page, size = size)

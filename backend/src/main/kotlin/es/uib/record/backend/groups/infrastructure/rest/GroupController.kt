@@ -6,14 +6,19 @@ import es.uib.record.backend.groups.application.usecase.group.DeleteGroupUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupDetailUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupJournalInterestsUseCase
 import es.uib.record.backend.groups.application.usecase.group.GetGroupsListByMemberIdUseCase
+import es.uib.record.backend.groups.application.usecase.group.GetMembersHiddenFromMeUseCase
+import es.uib.record.backend.groups.application.usecase.group.GetPublicationVisibilityUseCase
 import es.uib.record.backend.groups.application.usecase.group.KickGroupMemberUseCase
 import es.uib.record.backend.groups.application.usecase.group.LeaveGroupUseCase
 import es.uib.record.backend.groups.application.usecase.group.SearchInvitableUsersUseCase
 import es.uib.record.backend.groups.application.usecase.group.SendInvitationUseCase
 import es.uib.record.backend.groups.application.usecase.group.UpdateGroupMemberRoleUseCase
 import es.uib.record.backend.groups.application.usecase.group.UpdateGroupUseCase
+import es.uib.record.backend.groups.application.usecase.group.UpdatePublicationVisibilityUseCase
 import es.uib.record.backend.groups.infrastructure.mapper.toDomain
 import es.uib.record.backend.groups.infrastructure.mapper.toDto
+import es.uib.record.backend.groups.infrastructure.mapper.toMembersHiddenFromMeResponse
+import es.uib.record.backend.groups.infrastructure.mapper.toPublicationVisibilityResponse
 import es.uib.record.backend.groups.infrastructure.mapper.toResponse
 import es.uib.record.backend.model.CreateGroupRequest
 import es.uib.record.backend.model.GroupDetailResponse
@@ -21,9 +26,12 @@ import es.uib.record.backend.model.GroupJournalInterestPageResponse
 import es.uib.record.backend.model.GroupResponse
 import es.uib.record.backend.model.GroupSummaryResponse
 import es.uib.record.backend.model.InvitableUserResponse
+import es.uib.record.backend.model.MembersHiddenFromMeResponse
+import es.uib.record.backend.model.PublicationVisibilitySettingsResponse
 import es.uib.record.backend.model.SendInvitationRequest
 import es.uib.record.backend.model.UpdateGroupMemberRoleRequest
 import es.uib.record.backend.model.UpdateGroupRequest
+import es.uib.record.backend.model.UpdatePublicationVisibilityRequest
 import java.util.UUID
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -43,6 +51,9 @@ class GroupController(
     private val kickGroupMemberUseCase: KickGroupMemberUseCase,
     private val leaveGroupUseCase: LeaveGroupUseCase,
     private val getGroupJournalInterestsUseCase: GetGroupJournalInterestsUseCase,
+    private val getPublicationVisibilityUseCase: GetPublicationVisibilityUseCase,
+    private val updatePublicationVisibilityUseCase: UpdatePublicationVisibilityUseCase,
+    private val getMembersHiddenFromMeUseCase: GetMembersHiddenFromMeUseCase,
 ) : GroupsApi {
 
     override fun createGroup(
@@ -132,6 +143,40 @@ class GroupController(
         val email = SecurityContextHolder.getContext().authentication.name
         this.leaveGroupUseCase.execute(email, groupId)
         return ResponseEntity.noContent().build()
+    }
+
+    override fun getPublicationVisibility(
+        groupId: UUID
+    ): ResponseEntity<PublicationVisibilitySettingsResponse> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        val members = this.getPublicationVisibilityUseCase.execute(email, groupId)
+
+        return ResponseEntity.ok(members.toPublicationVisibilityResponse())
+    }
+
+    override fun updatePublicationVisibility(
+        groupId: UUID,
+        memberId: UUID,
+        updatePublicationVisibilityRequest: UpdatePublicationVisibilityRequest,
+    ): ResponseEntity<Unit> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        this.updatePublicationVisibilityUseCase.execute(
+            email,
+            groupId,
+            memberId,
+            updatePublicationVisibilityRequest.canSee,
+        )
+
+        return ResponseEntity.noContent().build()
+    }
+
+    override fun getMembersHiddenFromMe(
+        groupId: UUID
+    ): ResponseEntity<MembersHiddenFromMeResponse> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        val hidden = this.getMembersHiddenFromMeUseCase.execute(email, groupId)
+
+        return ResponseEntity.ok(hidden.toMembersHiddenFromMeResponse())
     }
 
     override fun updateGroupMemberRole(

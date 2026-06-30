@@ -6,6 +6,7 @@ import es.uib.record.backend.groups.domain.exception.LastGroupAdminException
 import es.uib.record.backend.groups.domain.exception.NotGroupMemberException
 import es.uib.record.backend.groups.domain.model.GroupRole
 import es.uib.record.backend.groups.domain.repository.GroupRepository
+import es.uib.record.backend.groups.domain.repository.PublicationVisibilityRepository
 import es.uib.record.backend.users.open.UserFacade
 import java.util.UUID
 import org.springframework.stereotype.Component
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component
 @Component
 class KickGroupMemberUseCase(
     private val groupRepository: GroupRepository,
+    private val publicationVisibilityRepository: PublicationVisibilityRepository,
     private val userFacade: UserFacade,
 ) {
     fun execute(email: String, groupId: UUID, targetUserId: UUID) {
@@ -31,5 +33,6 @@ class KickGroupMemberUseCase(
 
         group.removeMember(targetUserId)
         groupRepository.save(group)
+        publicationVisibilityRepository.deleteAllForUser(groupId, targetUserId)
     }
 }

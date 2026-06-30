@@ -8,6 +8,7 @@ import es.uib.record.backend.groups.application.usecase.group.dto.GroupJournalIn
 import es.uib.record.backend.groups.application.usecase.group.dto.GroupMemberDetailDto
 import es.uib.record.backend.groups.application.usecase.group.dto.GroupSummaryResponseDto
 import es.uib.record.backend.groups.application.usecase.group.dto.InvitableUserResponseDto
+import es.uib.record.backend.groups.application.usecase.group.dto.PublicationVisibilityMemberDto
 import es.uib.record.backend.groups.domain.model.Group
 import es.uib.record.backend.groups.domain.model.GroupRole
 import es.uib.record.backend.model.CreateGroupRequest
@@ -20,9 +21,13 @@ import es.uib.record.backend.model.GroupResponse
 import es.uib.record.backend.model.GroupSummaryResponse
 import es.uib.record.backend.model.InvitableUserResponse
 import es.uib.record.backend.model.JournalCategoryQuartileSummary
+import es.uib.record.backend.model.MembersHiddenFromMeResponse
+import es.uib.record.backend.model.PublicationVisibilityMember
+import es.uib.record.backend.model.PublicationVisibilitySettingsResponse
 import es.uib.record.backend.model.Quartile as ApiQuartile
 import es.uib.record.backend.shared.domain.PageResult
 import java.time.ZoneOffset
+import java.util.UUID
 
 fun CreateGroupRequest.toDto() =
     CreateGroupRequestDto(name = this.name, description = this.description)
@@ -77,6 +82,26 @@ fun GroupMemberDetailDto.toResponse() =
         isCreator = this.isCreator,
         profileImageUrl = this.profileImageUrl,
     )
+
+fun PublicationVisibilityMemberDto.toResponse() =
+    PublicationVisibilityMember(
+        userId = this.userId,
+        firstName = this.firstName,
+        lastName = this.lastName,
+        email = this.email,
+        role = this.role.toResponse(),
+        profileImageUrl = this.profileImageUrl,
+        canSee = this.canSee,
+        locked = this.locked,
+    )
+
+fun List<PublicationVisibilityMemberDto>.toPublicationVisibilityResponse() =
+    PublicationVisibilitySettingsResponse(
+        members = this.map(PublicationVisibilityMemberDto::toResponse)
+    )
+
+fun Set<UUID>.toMembersHiddenFromMeResponse() =
+    MembersHiddenFromMeResponse(hiddenMemberIds = this.toList())
 
 fun InvitableUserResponseDto.toResponse() =
     InvitableUserResponse(

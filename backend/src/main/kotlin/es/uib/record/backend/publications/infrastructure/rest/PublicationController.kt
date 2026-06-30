@@ -148,7 +148,8 @@ class PublicationController(
     }
 
     override fun getPublicationDetail(publicationId: UUID): ResponseEntity<PublicationResponse> {
-        val publication = this.getPublicationDetailUseCase.execute(publicationId)
+        val email = SecurityContextHolder.getContext().authentication.name
+        val publication = this.getPublicationDetailUseCase.execute(publicationId, email)
 
         return ResponseEntity.ok(publication.toResponse())
     }
