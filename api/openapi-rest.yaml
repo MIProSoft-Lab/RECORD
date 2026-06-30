@@ -71,6 +71,15 @@ paths:
   /groups/{groupId}/members/{memberId}/role:
     $ref: "./groups/update-member-role.yaml"
 
+  /groups/{groupId}/publication-visibility:
+    $ref: "./groups/publication-visibility.yaml"
+
+  /groups/{groupId}/publication-visibility/hidden-from-me:
+    $ref: "./groups/members-hidden-from-me.yaml"
+
+  /groups/{groupId}/publication-visibility/{memberId}:
+    $ref: "./groups/update-publication-visibility.yaml"
+
   /journals:
     $ref: "./journals/search.yaml"
 

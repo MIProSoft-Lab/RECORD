@@ -1,0 +1,49 @@
+get:
+  summary: Get my publication visibility settings in a group
+  description: >
+    Returns, for each other member of the group, whether they can currently see the
+    authenticated user's publication history. By default everyone can see it; only
+    explicit "hidden" exceptions are stored. Group administrators are always able to see
+    it (returned with locked = true).
+  operationId: getPublicationVisibility
+  tags:
+    - Groups
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      description: Unique identifier of the group.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Publication visibility settings retrieved successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/PublicationVisibilitySettingsResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. User is not a member of the group.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Group not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

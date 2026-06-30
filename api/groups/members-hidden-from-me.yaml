@@ -1,0 +1,49 @@
+get:
+  summary: Get the group members who hide their publications from me
+  description: >
+    Returns the ids of the group members who have hidden their publication history from the
+    authenticated user. Used by the group publications tab to render those members as
+    locked (their publications are not shown). Group administrators always see everything,
+    so for an administrator this list is always empty.
+  operationId: getMembersHiddenFromMe
+  tags:
+    - Groups
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      description: Unique identifier of the group.
+      schema:
+        type: string
+        format: uuid
+  responses:
+    "200":
+      description: Hidden members retrieved successfully.
+      content:
+        application/json:
+          schema:
+            $ref: "./components.yaml#/schemas/MembersHiddenFromMeResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. User is not a member of the group.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Group not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

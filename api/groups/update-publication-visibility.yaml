@@ -1,0 +1,66 @@
+put:
+  summary: Update publication visibility for a group member
+  description: >
+    Sets whether the given member can see the authenticated user's publication history in
+    this group. Sending canSee = false hides the user's publications from that member;
+    canSee = true restores visibility (the default). Changes apply immediately. A member
+    cannot hide their publications from a group administrator.
+  operationId: updatePublicationVisibility
+  tags:
+    - Groups
+  parameters:
+    - name: groupId
+      in: path
+      required: true
+      description: Unique identifier of the group.
+      schema:
+        type: string
+        format: uuid
+    - name: memberId
+      in: path
+      required: true
+      description: Unique identifier of the member whose visibility is being updated.
+      schema:
+        type: string
+        format: uuid
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "./components.yaml#/schemas/UpdatePublicationVisibilityRequest"
+  responses:
+    "204":
+      description: Publication visibility updated successfully.
+    "400":
+      description: Bad request. Invalid input data, or the target member is the user itself.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "401":
+      description: Unauthorized. User not authenticated.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: >
+        Forbidden. The acting user is not a member of the group, the target user is not a
+        member of the group, or the user tried to hide their publications from an administrator.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "404":
+      description: Group not found.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
+    "500":
+      description: Internal server error.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"

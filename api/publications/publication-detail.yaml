@@ -1,5 +1,10 @@
 get:
   summary: Get publication detail
+  description: >
+    Returns a publication's detail. Only members of the publication's group can access it.
+    For non-administrators, the publication is only visible if at least one of its authors
+    (creator or co-authors) has not hidden their publication history from the requester;
+    otherwise it is reported as not found.
   operationId: getPublicationDetail
   tags:
     - Publications
@@ -24,8 +29,14 @@ get:
         application/json:
           schema:
             $ref: "../common.yaml#/schemas/ErrorResponse"
+    "403":
+      description: Forbidden. The user is not a member of the publication's group.
+      content:
+        application/json:
+          schema:
+            $ref: "../common.yaml#/schemas/ErrorResponse"
     "404":
-      description: Publication not found.
+      description: Publication not found, or hidden from the requester.
       content:
         application/json:
           schema:
