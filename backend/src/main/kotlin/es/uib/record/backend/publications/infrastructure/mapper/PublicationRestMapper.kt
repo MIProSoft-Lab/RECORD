@@ -1,24 +1,31 @@
 package es.uib.record.backend.publications.infrastructure.mapper
 
 import es.uib.record.backend.model.CreatePublicationRequest
+import es.uib.record.backend.model.GroupPublicationListPageResponse
+import es.uib.record.backend.model.GroupPublicationSummaryResponse
 import es.uib.record.backend.model.PublicationAuthorInput
 import es.uib.record.backend.model.PublicationAuthorResponse
+import es.uib.record.backend.model.PublicationAuthorType as ApiPublicationAuthorType
+import es.uib.record.backend.model.PublicationCreatorResponse
+import es.uib.record.backend.model.PublicationListPageResponse
 import es.uib.record.backend.model.PublicationResponse
+import es.uib.record.backend.model.PublicationStatus as ApiPublicationStatus
 import es.uib.record.backend.model.PublicationStatusHistoryEntry
 import es.uib.record.backend.model.PublicationSummaryResponse
 import es.uib.record.backend.model.UpdatePublicationRequest
 import es.uib.record.backend.publications.application.usecase.dto.CreatePublicationRequestDto
+import es.uib.record.backend.publications.application.usecase.dto.GroupPublicationSummaryDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorInputDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationAuthorType
+import es.uib.record.backend.publications.application.usecase.dto.PublicationCreatorDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationDetailDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationStatusHistoryDto
 import es.uib.record.backend.publications.application.usecase.dto.PublicationSummaryDto
 import es.uib.record.backend.publications.application.usecase.dto.UpdatePublicationRequestDto
 import es.uib.record.backend.publications.domain.model.PublicationStatus
+import es.uib.record.backend.shared.domain.PageResult
 import java.time.ZoneOffset
-import es.uib.record.backend.model.PublicationAuthorType as ApiPublicationAuthorType
-import es.uib.record.backend.model.PublicationStatus as ApiPublicationStatus
 
 fun CreatePublicationRequest.toDto() =
     CreatePublicationRequestDto(
@@ -88,6 +95,15 @@ fun PublicationStatusHistoryDto.toResponse() =
         comment = this.comment,
     )
 
+fun PageResult<PublicationSummaryDto>.toResponse() =
+    PublicationListPageResponse(
+        content = this.items.map { it.toResponse() },
+        totalElements = this.totalElements,
+        totalPages = this.totalPages,
+        page = this.page,
+        propertySize = this.size,
+    )
+
 fun PublicationSummaryDto.toResponse() =
     PublicationSummaryResponse(
         id = this.id,
@@ -98,6 +114,36 @@ fun PublicationSummaryDto.toResponse() =
         createdAt = this.createdAt.atOffset(ZoneOffset.UTC),
         statusChangedAt = this.statusChangedAt.atOffset(ZoneOffset.UTC),
         journalName = this.journalName,
+    )
+
+fun PageResult<GroupPublicationSummaryDto>.toGroupResponse() =
+    GroupPublicationListPageResponse(
+        content = this.items.map { it.toResponse() },
+        totalElements = this.totalElements,
+        totalPages = this.totalPages,
+        page = this.page,
+        propertySize = this.size,
+    )
+
+fun GroupPublicationSummaryDto.toResponse() =
+    GroupPublicationSummaryResponse(
+        id = this.id,
+        title = this.title,
+        groupId = this.groupId,
+        journalId = this.journalId,
+        status = this.status.toResponse(),
+        createdAt = this.createdAt.atOffset(ZoneOffset.UTC),
+        statusChangedAt = this.statusChangedAt.atOffset(ZoneOffset.UTC),
+        creator = this.creator.toResponse(),
+        journalName = this.journalName,
+    )
+
+fun PublicationCreatorDto.toResponse() =
+    PublicationCreatorResponse(
+        userId = this.userId,
+        firstName = this.firstName,
+        lastName = this.lastName,
+        profileImageUrl = this.profileImageUrl,
     )
 
 fun PublicationStatus.toResponse(): ApiPublicationStatus =

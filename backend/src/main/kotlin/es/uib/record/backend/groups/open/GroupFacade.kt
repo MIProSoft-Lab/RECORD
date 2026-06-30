@@ -9,4 +9,7 @@ interface GroupFacade {
 
     /** Indica si el usuario [userId] es miembro del grupo [groupId]. */
     fun isMember(groupId: UUID, userId: UUID): Boolean
+
+    /** Devuelve los identificadores de los miembros del grupo [groupId] (vacío si no existe). */
+    fun getMemberIds(groupId: UUID): List<UUID>
 }

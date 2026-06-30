@@ -15,4 +15,8 @@ class GroupFacadeImpl(private val groupRepository: GroupRepository) : GroupFacad
     override fun isMember(groupId: UUID, userId: UUID): Boolean {
         return this.groupRepository.findById(groupId)?.isMember(userId) ?: false
     }
+
+    override fun getMemberIds(groupId: UUID): List<UUID> {
+        return this.groupRepository.findById(groupId)?.getMembersIds() ?: emptyList()
+    }
 }

@@ -3,19 +3,23 @@ package es.uib.record.backend.publications.infrastructure.rest
 import es.uib.record.backend.api.PublicationsApi
 import es.uib.record.backend.model.ChangePublicationStatusRequest
 import es.uib.record.backend.model.CreatePublicationRequest
+import es.uib.record.backend.model.GroupPublicationListPageResponse
+import es.uib.record.backend.model.PublicationListPageResponse
 import es.uib.record.backend.model.PublicationResponse
-import es.uib.record.backend.model.PublicationSummaryResponse
+import es.uib.record.backend.model.PublicationStatus as ApiPublicationStatus
 import es.uib.record.backend.model.ResubmitPublicationRequest
 import es.uib.record.backend.model.UpdatePublicationRequest
 import es.uib.record.backend.publications.application.usecase.ChangePublicationStatusUseCase
 import es.uib.record.backend.publications.application.usecase.CreatePublicationUseCase
 import es.uib.record.backend.publications.application.usecase.DeletePublicationUseCase
-import es.uib.record.backend.publications.application.usecase.GetMyPublicationsUseCase
 import es.uib.record.backend.publications.application.usecase.GetPublicationDetailUseCase
 import es.uib.record.backend.publications.application.usecase.ResubmitPublicationUseCase
+import es.uib.record.backend.publications.application.usecase.SearchGroupPublicationsUseCase
+import es.uib.record.backend.publications.application.usecase.SearchMyPublicationsUseCase
 import es.uib.record.backend.publications.application.usecase.UpdatePublicationUseCase
 import es.uib.record.backend.publications.infrastructure.mapper.toDomain
 import es.uib.record.backend.publications.infrastructure.mapper.toDto
+import es.uib.record.backend.publications.infrastructure.mapper.toGroupResponse
 import es.uib.record.backend.publications.infrastructure.mapper.toResponse
 import java.util.UUID
 import org.springframework.http.ResponseEntity
@@ -25,7 +29,8 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 class PublicationController(
     private val createPublicationUseCase: CreatePublicationUseCase,
-    private val getMyPublicationsUseCase: GetMyPublicationsUseCase,
+    private val searchMyPublicationsUseCase: SearchMyPublicationsUseCase,
+    private val searchGroupPublicationsUseCase: SearchGroupPublicationsUseCase,
     private val getPublicationDetailUseCase: GetPublicationDetailUseCase,
     private val updatePublicationUseCase: UpdatePublicationUseCase,
     private val changePublicationStatusUseCase: ChangePublicationStatusUseCase,
@@ -90,16 +95,59 @@ class PublicationController(
         return ResponseEntity.ok(updatedPublication.toResponse())
     }
 
-    override fun listMyPublications(): ResponseEntity<List<PublicationSummaryResponse>> {
+    override fun listMyPublications(
+        title: String?,
+        journalId: UUID?,
+        status: ApiPublicationStatus?,
+        minDaysInStatus: Int?,
+        onlyAsMainAuthor: Boolean,
+        page: Int,
+        size: Int,
+    ): ResponseEntity<PublicationListPageResponse> {
         val email = SecurityContextHolder.getContext().authentication.name
-        val publications = this.getMyPublicationsUseCase.execute(email)
+        val result =
+            this.searchMyPublicationsUseCase.execute(
+                email = email,
+                title = title,
+                journalId = journalId,
+                status = status?.toDomain(),
+                minDaysInStatus = minDaysInStatus,
+                onlyAsMainAuthor = onlyAsMainAuthor,
+                page = page,
+                size = size,
+            )
 
-        return ResponseEntity.ok(publications.map { it.toResponse() })
+        return ResponseEntity.ok(result.toResponse())
     }
 
-    override fun getPublicationDetail(
-        publicationId: UUID
-    ): ResponseEntity<PublicationResponse> {
+    override fun listGroupPublications(
+        groupId: UUID,
+        memberIds: List<UUID>?,
+        title: String?,
+        journalId: UUID?,
+        status: ApiPublicationStatus?,
+        minDaysInStatus: Int?,
+        page: Int,
+        size: Int,
+    ): ResponseEntity<GroupPublicationListPageResponse> {
+        val email = SecurityContextHolder.getContext().authentication.name
+        val result =
+            this.searchGroupPublicationsUseCase.execute(
+                email = email,
+                groupId = groupId,
+                memberIds = memberIds,
+                title = title,
+                journalId = journalId,
+                status = status?.toDomain(),
+                minDaysInStatus = minDaysInStatus,
+                page = page,
+                size = size,
+            )
+
+        return ResponseEntity.ok(result.toGroupResponse())
+    }
+
+    override fun getPublicationDetail(publicationId: UUID): ResponseEntity<PublicationResponse> {
         val publication = this.getPublicationDetailUseCase.execute(publicationId)
 
         return ResponseEntity.ok(publication.toResponse())

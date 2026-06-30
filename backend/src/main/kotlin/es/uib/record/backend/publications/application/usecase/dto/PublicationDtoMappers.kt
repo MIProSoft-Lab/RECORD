@@ -6,11 +6,11 @@ import es.uib.record.backend.users.open.UserOpenDto
 import java.util.UUID
 
 /**
- * Construye los DTOs de autor preservando el orden: los internos se enriquecen con
- * la información del usuario en [usersById]; los externos usan sus nombres guardados.
+ * Construye los DTOs de autor preservando el orden: los internos se enriquecen con la información
+ * del usuario en [usersById]; los externos usan sus nombres guardados.
  */
 fun List<PublicationAuthor>.toAuthorDtos(
-    usersById: Map<UUID, UserOpenDto>,
+    usersById: Map<UUID, UserOpenDto>
 ): List<PublicationAuthorDto> =
     this.map { author ->
         when (author) {
@@ -78,4 +78,27 @@ fun Publication.toSummaryDto(journalName: String?) =
         createdAt = this.createdAt,
         // Fecha de entrada al estado actual: última transición registrada (fallback a la creación).
         statusChangedAt = this.statusHistory.lastOrNull()?.changedAt ?: this.createdAt,
+    )
+
+/**
+ * Variante del resumen para el listado de un grupo: añade los datos del creador (dueño). [creator]
+ * puede ser `null` si el usuario ya no es resoluble; en ese caso se rellena con nombre vacío.
+ */
+fun Publication.toGroupSummaryDto(journalName: String?, creator: UserOpenDto?) =
+    GroupPublicationSummaryDto(
+        id = this.id!!,
+        title = this.title,
+        journalId = this.journalId,
+        journalName = journalName,
+        groupId = this.groupId,
+        status = this.status,
+        createdAt = this.createdAt,
+        statusChangedAt = this.statusHistory.lastOrNull()?.changedAt ?: this.createdAt,
+        creator =
+            PublicationCreatorDto(
+                userId = this.createdBy,
+                firstName = creator?.firstName ?: "",
+                lastName = creator?.lastName ?: "",
+                profileImageUrl = creator?.profileImageUrl,
+            ),
     )
